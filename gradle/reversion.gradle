@@ -1,7 +1,10 @@
 apply plugin: 'org.ajoberstar.grgit'
 
 def loadReVersion() {
-    return grgit.head().getAbbreviatedId()
+    if(grgit.head() != null){
+        return grgit.head().getAbbreviatedId()
+    }
+    return ""
 }
 
 ext.reversion = loadReVersion()

@@ -1,4 +1,4 @@
-package crp.common.graphql;
+package qwlabs.common.graphql;
 
 import graphql.PublicApi;
 

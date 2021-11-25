@@ -1,4 +1,4 @@
-package crp.common.jpa.naming;
+package qwlabs.common.jpa.naming;
 
 import org.hibernate.boot.model.naming.Identifier;
 import org.hibernate.boot.model.naming.ImplicitJoinTableNameSource;

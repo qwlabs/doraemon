@@ -1,4 +1,4 @@
-package crp.common.auditing;
+package qwlabs.common.auditing;
 
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;

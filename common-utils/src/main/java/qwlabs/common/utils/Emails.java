@@ -1,4 +1,4 @@
-package crp.common.utils;
+package qwlabs.common.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

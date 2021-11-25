@@ -1,5 +1,5 @@
 dependencies {
-    implementation project("common-panache")
+    implementation project(":common-panache")
     implementation "io.quarkus:quarkus-hibernate-orm-panache"
     implementation "io.quarkus:quarkus-smallrye-graphql"
 }

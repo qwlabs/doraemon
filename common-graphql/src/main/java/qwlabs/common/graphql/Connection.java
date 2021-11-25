@@ -1,4 +1,4 @@
-package crp.common.graphql;
+package qwlabs.common.graphql;
 
 import com.google.common.collect.ImmutableList;
 import graphql.PublicApi;

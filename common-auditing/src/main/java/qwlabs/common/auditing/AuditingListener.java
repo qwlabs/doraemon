@@ -1,4 +1,4 @@
-package crp.common.auditing;
+package qwlabs.common.auditing;
 
 import io.quarkus.arc.Unremovable;
 import io.quarkus.security.identity.SecurityIdentity;

@@ -1,7 +1,7 @@
-package crp.common.graphql;
+package qwlabs.common.graphql;
 
 import com.google.common.primitives.Ints;
-import crp.common.panache.Ranged;
+import qwlabs.common.panache.Ranged;
 import io.quarkus.panache.common.Range;
 import io.smallrye.common.constraint.Nullable;
 

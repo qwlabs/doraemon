@@ -1,4 +1,4 @@
-package crp.common.panache;
+package qwlabs.common.panache;
 
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Range;

@@ -43,6 +43,9 @@ subprojects {
 
     dependencies {
         implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+        implementation "com.google.guava:guava"
+        implementation "org.slf4j:slf4j-api"
+        implementation "jakarta.validation:jakarta.validation-api"
 
         testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
         testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
