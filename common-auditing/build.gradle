@@ -1,0 +1,4 @@
+dependencies {
+    implementation "io.quarkus:quarkus-hibernate-orm-panache"
+    implementation "io.quarkus.security:quarkus-security"
+}

@@ -1,0 +1,50 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
+plugins {
+    id 'io.quarkus' apply false
+    id 'org.kordamp.gradle.jandex' apply false
+    id 'org.ajoberstar.grgit' apply false
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'org.kordamp.gradle.jandex'
+    apply from: "${rootProject.rootDir}/gradle/version.gradle"
+    apply from: "${rootProject.rootDir}/gradle/reversion.gradle"
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+
+    compileJava {
+        options.encoding = 'UTF-8'
+        options.compilerArgs << '-parameters'
+    }
+
+    compileTestJava {
+        options.encoding = 'UTF-8'
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    dependencies {
+        implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+
+        testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+        testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    }
+}

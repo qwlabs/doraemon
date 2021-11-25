@@ -1,0 +1,13 @@
+def loadVersion() {
+    File file = new File("${rootProject.rootDir}/.version")
+    if (!file.exists()) {
+        return '0.0.999'
+    }
+    def pipelineId =  System.getenv('PIPELINE_ID')
+    if(pipelineId == null){
+        return '0.0.999'
+    }
+    return file.text + '.' + pipelineId
+}
+
+version = loadVersion()
