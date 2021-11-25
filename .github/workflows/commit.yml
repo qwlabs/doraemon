@@ -1,9 +1,11 @@
 name: Commit
 
+#on:
+#  push:
+#    branches:
+#      - 'master'
 on:
-  push:
-    branches:
-      - 'master'
+  workflow_dispatch:
 
 env:
   COMMIT_OWNER: ${{ github.event.pusher.name }}

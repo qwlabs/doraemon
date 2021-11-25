@@ -29,7 +29,6 @@ jobs:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           OSSRH_TOKEN_USERNAME: ${{ secrets.OSSRH_TOKEN_USERNAME }}
           OSSRH_TOKEN_PASSWORD: ${{ secrets.OSSRH_TOKEN_PASSWORD }}
-          PIPELINE_ID: ${{ GITHUB_RUN_NUMBER }}
       - name: Track error step
         uses: spring-projects/track-build-errors-action@v1
         if: ${{ failure() }}
