@@ -16,6 +16,8 @@ subprojects {
     apply plugin: 'org.kordamp.gradle.jandex'
     apply from: "${rootProject.rootDir}/gradle/version.gradle"
     apply from: "${rootProject.rootDir}/gradle/reversion.gradle"
+    apply from: "${rootProject.rootDir}/gradle/check.gradle"
+    apply from: "${rootProject.rootDir}/gradle/publication.gradle"
 
     repositories {
         mavenCentral()

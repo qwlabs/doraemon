@@ -6,7 +6,7 @@ import java.time.Instant;
 
 @MappedSuperclass
 @EntityListeners(AuditingListener.class)
-public class AuditedEntity extends CreatedAuditedEntity{
+public class AuditedEntity extends CreatedAuditedEntity {
     private Instant updatedAt;
     private String updatedBy;
 

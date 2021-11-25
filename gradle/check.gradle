@@ -1,0 +1,52 @@
+apply plugin: 'checkstyle'
+apply plugin: 'jacoco'
+
+checkstyle {
+    toolVersion = checkstyleToolVersion
+}
+
+checkstyleMain {
+    configFile = file("${rootProject.projectDir}/gradle/config/checkstyle/checkstyle.xml")
+}
+
+checkstyleTest {
+    configFile = file("${rootProject.projectDir}/gradle/config/checkstyle/checkstyle-test.xml")
+}
+
+task checkstyle(dependsOn: [checkstyleMain, checkstyleTest]) {
+}
+
+task prepush(dependsOn: [clean, "checkstyle", test, jacocoTestCoverageVerification]) {
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+    maxParallelForks = Runtime.runtime.availableProcessors()
+}
+
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.destination file("${buildDir}/reports/jacoco")
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            limit {
+                counter = 'LINE'
+                minimum = new BigDecimal(coverageLineMin)
+            }
+            limit {
+                counter = 'BRANCH'
+                minimum = new BigDecimal(coverageBranchMin)
+            }
+        }
+    }
+}

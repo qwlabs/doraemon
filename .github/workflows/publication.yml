@@ -1,0 +1,42 @@
+name: Publication
+
+on:
+  workflow_dispatch:
+
+env:
+  COMMIT_OWNER: ${{ github.event.pusher.name }}
+  COMMIT_SHA: ${{ github.sha }}
+  PIPELINE_ID: ${{ github.run_number }}
+
+jobs:
+  deploy_artifacts:
+    name: Deploy Artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+      - name: Deploy artifacts
+        run: |
+          export VERSION_HEADER=$'Version: GnuPG v2\n\n'
+          export ORG_GRADLE_PROJECT_signingKey=${GPG_PRIVATE_KEY#"$VERSION_HEADER"}
+          export ORG_GRADLE_PROJECT_signingPassword="$GPG_PASSPHRASE"
+          ./gradlew publish --stacktrace --no-parallel
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          OSSRH_TOKEN_USERNAME: ${{ secrets.OSSRH_TOKEN_USERNAME }}
+          OSSRH_TOKEN_PASSWORD: ${{ secrets.OSSRH_TOKEN_PASSWORD }}
+      - name: Track error step
+        uses: spring-projects/track-build-errors-action@v1
+        if: ${{ failure() }}
+        with:
+          job-name: ${{ github.job }}
+      - name: Export errors file
+        uses: actions/upload-artifact@v2
+        if: ${{ failure() }}
+        with:
+          name: errors
+          path: job-${{ github.job }}.txt

@@ -1,0 +1,64 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set("sources")
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar) {
+    archiveClassifier.set("javadoc")
+    from javadoc
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = project.group
+            artifactId = project.name
+            version = project.version
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            pom {
+                name = project.name
+                description = 'Common lang for Java'
+                url = "https://github.com/qwlabs/${rootProject.name}"
+                licenses {
+                    license {
+                        name = 'GNU GENERAL PUBLIC LICENSE, Version 3'
+                        url = 'https://www.gnu.org/licenses/gpl-3.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        name = 'pipinet'
+                        email = 'pipinet@vip.qq.com'
+                    }
+                }
+                scm {
+                    url = "https://github.com/qwlabs/${rootProject.name}"
+                    connection = "scm:git:git://github.com/qwlabs/${rootProject.name}.git"
+                    developerConnection = "scm:git:ssh://github.com/qwlabs/${rootProject.name}.git"
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username System.getenv("OSSRH_TOKEN_USERNAME") ?: ""
+                password System.getenv("OSSRH_TOKEN_PASSWORD") ?: ""
+            }
+        }
+    }
+}
+
+signing {
+    def signingKey = findProperty("signingKey")
+    def signingPassword = findProperty("signingPassword")
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign publishing.publications.mavenJava
+}
