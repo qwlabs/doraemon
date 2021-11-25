@@ -5,7 +5,6 @@ pluginManagement {
         gradlePluginPortal()
     }
     plugins {
-        id "${quarkusPluginId}" version "${quarkusPluginVersion}"
         id "${jandexPluginId}" version "${jandexPluginVersion}"
         id "${grgitPluginId}" version "${grgitPluginVersion}"
     }

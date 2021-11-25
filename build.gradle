@@ -6,7 +6,6 @@ buildscript {
 }
 
 plugins {
-    id 'io.quarkus' apply false
     id 'org.kordamp.gradle.jandex' apply false
     id 'org.ajoberstar.grgit' apply false
 }
@@ -44,10 +43,9 @@ subprojects {
     }
 
     dependencies {
-        implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
-        implementation "com.google.guava:guava"
-        implementation "org.slf4j:slf4j-api"
-        implementation "jakarta.validation:jakarta.validation-api"
+        implementation "com.google.guava:guava:${guavaVersion}"
+        implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+        implementation "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
 
         testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
         testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
