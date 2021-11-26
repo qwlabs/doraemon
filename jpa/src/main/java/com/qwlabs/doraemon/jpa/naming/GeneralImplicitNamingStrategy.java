@@ -1,4 +1,4 @@
-package qwlabs.doraemon.jpa.naming;
+package com.qwlabs.doraemon.jpa.naming;
 
 import org.hibernate.boot.model.naming.Identifier;
 import org.hibernate.boot.model.naming.ImplicitJoinTableNameSource;
