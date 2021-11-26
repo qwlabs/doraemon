@@ -1,0 +1,5 @@
+dependencies {
+    implementation project(":panache")
+    implementation "io.quarkus:quarkus-hibernate-orm-panache:${quarkusVersion}"
+    implementation "io.quarkus:quarkus-smallrye-graphql:${quarkusVersion}"
+}

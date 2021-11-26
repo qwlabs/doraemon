@@ -12,10 +12,10 @@ pluginManagement {
 
 rootProject.name = 'doraemon'
 
-include 'common-lang'
-include 'common-panache'
-include 'common-auditing'
-include 'common-jpa'
-include 'common-graphql'
+include 'lang'
+include 'panache'
+include 'auditing'
+include 'jpa'
+include 'graphql'
 
 
