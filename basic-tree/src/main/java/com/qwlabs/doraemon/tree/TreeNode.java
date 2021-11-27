@@ -96,10 +96,16 @@ public class TreeNode<S> implements Iterable<TreeNode<S>> {
     }
 
     public <R> List<R> mapDeep(Function<S, R> mapper) {
+        return mapDeep(mapper, false);
+    }
+
+    public <R> List<R> mapDeep(Function<S, R> mapper, boolean withSelf) {
         List<R> result = Lists.newArrayList();
+        if (withSelf) {
+            result.add(mapper.apply(source));
+        }
         children.forEach(child -> {
-            result.add(mapper.apply(child.source));
-            result.addAll(child.mapDeep(mapper));
+            result.addAll(child.mapDeep(mapper, true));
         });
         return result;
     }

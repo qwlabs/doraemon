@@ -1,6 +1,5 @@
 package com.qwlabs.doraemon.tree;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.base.Suppliers;
@@ -47,6 +46,16 @@ public final class Tree<S> extends TreeNode<S> {
         } while (maxParent != null);
         Collections.reverse(parents);
         return parents;
+    }
+
+    @Override
+    public <R> List<R> mapDeep(Function<S, R> mapper) {
+        return super.mapDeep(mapper, false);
+    }
+
+    @Override
+    public <R> List<R> mapDeep(Function<S, R> mapper, boolean withSelf) {
+        return super.mapDeep(mapper, false);
     }
 
     private Map<Object, S> loadParentMapping() {
