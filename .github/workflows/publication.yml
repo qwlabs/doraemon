@@ -1,7 +1,9 @@
 name: Publication
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - 'master'
 
 env:
   COMMIT_OWNER: ${{ github.event.pusher.name }}
