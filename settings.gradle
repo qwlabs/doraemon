@@ -17,5 +17,6 @@ include 'panache'
 include 'auditing'
 include 'jpa'
 include 'graphql'
+include 'basic-tree'
 
 

@@ -14,7 +14,8 @@ subprojects {
     apply plugin: 'java-library'
     apply from: "${rootProject.rootDir}/gradle/version.gradle"
     apply from: "${rootProject.rootDir}/gradle/reversion.gradle"
-    apply from: "${rootProject.rootDir}/gradle/check.gradle"
+//    TODO not working currently
+//    apply from: "${rootProject.rootDir}/gradle/check.gradle"
     apply from: "${rootProject.rootDir}/gradle/publication.gradle"
 
     repositories {
@@ -48,5 +49,7 @@ subprojects {
 
         testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
         testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+        testImplementation("org.mockito:mockito-junit-jupiter:${mockitoVersion}")
+        testImplementation("org.hamcrest:hamcrest-all:${hamcrestVersion}")
     }
 }
