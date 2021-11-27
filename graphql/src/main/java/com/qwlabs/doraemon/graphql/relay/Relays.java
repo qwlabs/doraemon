@@ -1,4 +1,4 @@
-package com.qwlabs.doraemon.graphql;
+package com.qwlabs.doraemon.graphql.relay;
 
 import com.google.common.primitives.Ints;
 import com.qwlabs.doraemon.panache.Ranged;

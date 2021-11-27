@@ -1,4 +1,4 @@
-package com.qwlabs.doraemon.graphql;
+package com.qwlabs.doraemon.graphql.relay;
 
 import graphql.PublicApi;
 
