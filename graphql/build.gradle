@@ -1,5 +1,7 @@
 dependencies {
     implementation project(":panache")
+    implementation "com.google.guava:guava:${guavaVersion}"
+    implementation "com.graphql-java:graphql-java:${graphqlJavaVersion}"
+    implementation "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
     implementation "io.quarkus:quarkus-hibernate-orm-panache:${quarkusVersion}"
-    implementation "io.quarkus:quarkus-smallrye-graphql:${quarkusVersion}"
 }

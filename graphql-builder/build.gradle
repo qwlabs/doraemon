@@ -1,5 +1,5 @@
 dependencies {
+    implementation project(":lang")
     implementation "com.google.guava:guava:${guavaVersion}"
     implementation "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
-    implementation("com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}")
 }

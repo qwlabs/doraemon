@@ -44,10 +44,6 @@ subprojects {
     }
 
     dependencies {
-        implementation "com.google.guava:guava:${guavaVersion}"
-        implementation "org.slf4j:slf4j-api:${slf4jVersion}"
-        implementation "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
-
         testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
         testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
         testImplementation("org.mockito:mockito-junit-jupiter:${mockitoVersion}")

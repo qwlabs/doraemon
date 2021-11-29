@@ -24,5 +24,10 @@ Useful java tools
 implementation 'com.qwlabs.doraemon:lang:0.1.*'
 ```
 
-# Modules
-lang/panache/auditing/jpa/graphql/basic-tree
+# Document
+- [lang](lang/README.md)
+- [panache](panache/README.md)
+- [auditing](auditing/README.md)
+- [jpa](jpa/README.md)
+- [graphql](graphql/README.md)
+- [basic-tree](basic-tree/README.md)
