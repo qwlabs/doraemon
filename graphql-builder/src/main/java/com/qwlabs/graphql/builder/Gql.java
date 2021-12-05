@@ -122,8 +122,4 @@ public final class Gql implements GqlVariablesAware<Gql>, GqlFieldsAware<Gql> {
     public static GqlRefArgument ref(@NotNull String ref) {
         return new GqlRefArgument(ref);
     }
-
-    public static GqlField relayNode() {
-        return new GqlField("edges").fields("node");
-    }
 }

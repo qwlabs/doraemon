@@ -8,7 +8,6 @@ import static com.qwlabs.graphql.builder.Gql.compressedFormatter;
 import static com.qwlabs.graphql.builder.Gql.field;
 import static com.qwlabs.graphql.builder.Gql.prettifyFormatter;
 import static com.qwlabs.graphql.builder.Gql.ref;
-import static com.qwlabs.graphql.builder.Gql.relayNode;
 import static com.qwlabs.graphql.builder.Gql.var;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -27,18 +26,20 @@ public class GqlTest {
                         field("departments")
                                 .alias("query1")
                                 .args(ref("after"), ref("first"))
-                                .fields(relayNode()
+                                .fields(field("edges").fields(field("node")
                                         .fields("id", "name",
                                                 field("members")
                                                         .args(ref("condition"))
                                                         .fields("id", "name")
-                                        )),
+                                        ))),
                         field("pageInfo").fields("hasPreviousPage", "hasNextPage"),
                         "totalCount"
                 );
         String reault = gql.build(prettifyFormatter(), Map.of("after", "1", "first", 2));
-        assertThat(reault, is("{\"operationName\":\"DEPARTMENTS\",\"query\":\"query DEPARTMENTS($after: String!, $first: Int! = 10, $condition: MemberSearchCondition!) {\\n\\tquery1 : departments(after: $after, first: $first) {\\n\\t\\tedges {\\n\\t\\t\\tid \\n\\t\\t\\tname \\n\\t\\t\\tmembers(condition: $condition) {\\n\\t\\t\\t\\tid \\n\\t\\t\\t\\tname\\n\\t\\t\\t}\\n\\t\\t}\\n\\t} \\n\\tpageInfo {\\n\\t\\thasPreviousPage \\n\\t\\thasNextPage\\n\\t} \\n\\ttotalCount\\n}\",\"variables\":{\"after\":\"1\",\"first\":2}}"));
+//        System.out.println(reault);
+        assertThat(reault, is("{\"operationName\":\"DEPARTMENTS\",\"query\":\"query DEPARTMENTS($after: String!, $first: Int! = 10, $condition: MemberSearchCondition!) {\\n\\tquery1 : departments(after: $after, first: $first) {\\n\\t\\tedges {\\n\\t\\t\\tnode {\\n\\t\\t\\t\\tid \\n\\t\\t\\t\\tname \\n\\t\\t\\t\\tmembers(condition: $condition) {\\n\\t\\t\\t\\t\\tid \\n\\t\\t\\t\\t\\tname\\n\\t\\t\\t\\t}\\n\\t\\t\\t}\\n\\t\\t}\\n\\t} \\n\\tpageInfo {\\n\\t\\thasPreviousPage \\n\\t\\thasNextPage\\n\\t} \\n\\ttotalCount\\n}\",\"variables\":{\"first\":2,\"after\":\"1\"}}"));
         reault = gql.build(compressedFormatter(), Map.of("after", "1", "first", 2));
-        assertThat(reault, is("{\"operationName\":\"DEPARTMENTS\",\"query\":\"query DEPARTMENTS($after:String!,$first:Int!=10,$condition:MemberSearchCondition!){query1:departments(after:$after,first:$first){edges{id name members(condition:$condition){id name}}} pageInfo{hasPreviousPage hasNextPage} totalCount}\",\"variables\":{\"after\":\"1\",\"first\":2}}"));
+//        System.out.println(reault);
+        assertThat(reault, is("{\"operationName\":\"DEPARTMENTS\",\"query\":\"query DEPARTMENTS($after:String!,$first:Int!=10,$condition:MemberSearchCondition!){query1:departments(after:$after,first:$first){edges{node{id name members(condition:$condition){id name}}}} pageInfo{hasPreviousPage hasNextPage} totalCount}\",\"variables\":{\"first\":2,\"after\":\"1\"}}"));
     }
 }
