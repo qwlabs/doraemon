@@ -75,6 +75,18 @@ public class TreeNode<S> implements Iterable<TreeNode<S>> {
         return this;
     }
 
+    public TreeNode<S> addAll(@Nullable Iterable<@NotNull TreeNode<S>> children) {
+        if (children == null) {
+            return this;
+        }
+        children.forEach(child -> {
+            if (Objects.nonNull(child.getSource())) {
+                this.children.add(child);
+            }
+        });
+        return this;
+    }
+
     public void acceptDeep(BiConsumer<S, S> consumer) {
         children.forEach(child -> {
             consumer.accept(source, child.getSource());
