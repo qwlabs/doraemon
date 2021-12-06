@@ -8,10 +8,12 @@ import com.google.common.collect.Maps;
 
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 @SuppressWarnings("HiddenField")
 public final class Tree<S> extends TreeNode<S> {
@@ -69,12 +71,24 @@ public final class Tree<S> extends TreeNode<S> {
         return parentMapping;
     }
 
+    public static <S, I extends Comparable<I>> Tree<S> toTree(@NotNull Stream<S> sortedSources,
+                                                              @NotNull Function<S, I> identityFunction,
+                                                              @NotNull Function<S, I> parentFunction) {
+        return toTree(sortedSources.iterator(), identityFunction, parentFunction);
+    }
+
     public static <S, I extends Comparable<I>> Tree<S> toTree(@NotNull Iterable<S> sortedSources,
+                                                              @NotNull Function<S, I> identityFunction,
+                                                              @NotNull Function<S, I> parentFunction) {
+        return toTree(sortedSources.iterator(), identityFunction, parentFunction);
+    }
+
+    public static <S, I extends Comparable<I>> Tree<S> toTree(@NotNull Iterator<S> sortedSources,
                                                               @NotNull Function<S, I> identityFunction,
                                                               @NotNull Function<S, I> parentFunction) {
         Tree<S> tree = new Tree<>(identityFunction::apply);
         Map<I, TreeNode<S>> nodeMapping = Maps.newHashMap();
-        sortedSources.forEach(source -> nodeMapping.put(identityFunction.apply(source), of(source)));
+        sortedSources.forEachRemaining(source -> nodeMapping.put(identityFunction.apply(source), of(source)));
         nodeMapping.forEach((sourceIdentity, node) -> {
             I parentIdentity = parentFunction.apply(node.getSource());
             if (parentIdentity == null) {
