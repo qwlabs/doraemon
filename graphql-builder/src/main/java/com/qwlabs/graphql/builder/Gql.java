@@ -55,6 +55,14 @@ public final class Gql implements GqlVariablesAware<Gql>, GqlFieldsAware<Gql> {
         return builder.toString();
     }
 
+    public String build() {
+        return build(compressedFormatter());
+    }
+
+    public String build(@NotNull GqlFormatter formatter) {
+        return build(formatter, null);
+    }
+
     public String build(Map<String, Object> variables) {
         return build(compressedFormatter(), variables);
     }
@@ -63,7 +71,7 @@ public final class Gql implements GqlVariablesAware<Gql>, GqlFieldsAware<Gql> {
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("operationName", this.name);
         result.put("query", this.buildQuery(formatter));
-        result.put("variables", variables);
+        Optional.ofNullable(variables).ifPresent(vars->result.put("variables", vars));
         try {
             return objectMapper.writeValueAsString(result);
         } catch (JsonProcessingException e) {
