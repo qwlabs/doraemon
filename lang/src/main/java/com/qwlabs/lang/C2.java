@@ -33,12 +33,20 @@ public final class C2 {
         return map == null || map.isEmpty();
     }
 
+    public static <E> boolean isEmpty(E[] array) {
+        return array == null || array.length <= 0;
+    }
+
     public static <E> boolean isNotEmpty(Collection<E> c) {
         return !isEmpty(c);
     }
 
     public static <K, V> boolean isNotEmpty(Map<K, V> map) {
         return !isEmpty(map);
+    }
+
+    public static <E> boolean isNotEmpty(E[] array) {
+        return !isEmpty(array);
     }
 
     public static <E> void ifEmpty(Collection<E> c, EmptyConsumer consumer) {
