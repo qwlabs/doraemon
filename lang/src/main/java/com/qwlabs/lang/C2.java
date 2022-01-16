@@ -3,6 +3,7 @@ package com.qwlabs.lang;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Streams;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -127,11 +128,37 @@ public final class C2 {
         return Optional.empty();
     }
 
+    public static <E> Stream<E> stream(E[] input) {
+        if (input == null) {
+            return Stream.empty();
+        }
+        return Arrays.stream(input);
+    }
+
     public static <E> Stream<E> stream(Iterable<E> input) {
         if (input == null) {
             return Stream.empty();
         }
         return Streams.stream(input);
+    }
+
+    public static <E> Set<E> set(E[] input) {
+        return set(input, Function.identity());
+    }
+
+    public static <E, R> Set<R> set(E[] input, Function<E, R> mapper) {
+        return set(input, mapper, v -> true);
+    }
+
+    public static <E, R> Set<R> set(E[] input,
+                                    Function<E, R> mapper,
+                                    Predicate<? super R> filter) {
+        Objects.requireNonNull(mapper, "Mapper can not be null.");
+        Objects.requireNonNull(filter, "Filter can not be null.");
+        if (input == null) {
+            return Collections.emptySet();
+        }
+        return doSet(stream(input), mapper, filter);
     }
 
     public static <E> Set<E> set(Iterable<E> input) {
@@ -178,6 +205,25 @@ public final class C2 {
 
     public static <E> List<E> list(Stream<E> input) {
         return list(input, Function.identity());
+    }
+
+    public static <E> List<E> list(E[] input) {
+        return list(input, Function.identity());
+    }
+
+    public static <E, R> List<R> list(E[] input, Function<E, R> mapper) {
+        return list(input, mapper, v -> true);
+    }
+
+    public static <E, R> List<R> list(E[] input,
+                                      Function<E, R> mapper,
+                                      Predicate<? super R> filter) {
+        Objects.requireNonNull(mapper, "Mapper can not be null.");
+        Objects.requireNonNull(filter, "Filter can not be null.");
+        if (input == null) {
+            return Collections.emptyList();
+        }
+        return doList(Arrays.stream(input), mapper, filter);
     }
 
     public static <E> List<E> list(Iterable<E> input) {
