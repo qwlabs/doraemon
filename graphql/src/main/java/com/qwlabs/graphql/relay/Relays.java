@@ -74,7 +74,7 @@ public final class Relays {
     }
 
     private static Connection createEmptyConnection() {
-        PageInfo pageInfo = new PageInfo(null, null, false, false);
+        PageInfo pageInfo = new PageInfo("0", "0", false, false);
         return new Connection<>(Collections.emptyList(), pageInfo, 0L);
     }
 
