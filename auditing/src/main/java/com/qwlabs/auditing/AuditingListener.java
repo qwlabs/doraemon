@@ -10,6 +10,9 @@ import java.time.Instant;
 import java.util.Optional;
 
 public class AuditingListener {
+    public AuditingListener() {
+    }
+
     @PrePersist
     public void prePersist(Object entity) {
         if (entity instanceof CreatedAuditedEntity) {
