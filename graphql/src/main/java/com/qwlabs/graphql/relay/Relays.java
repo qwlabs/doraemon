@@ -25,7 +25,7 @@ public final class Relays {
     }
 
     public static <T, R> Connection<R> of(@NotNull Ranged<T> ranged,
-                                               @Nullable Function<T, R> mapper) {
+                                          @Nullable Function<T, R> mapper) {
         Objects.requireNonNull(ranged, "paged can not be null.");
         if (ranged.getTotalCount() == 0) {
             return (Connection<R>) EMPTY;
@@ -63,7 +63,7 @@ public final class Relays {
 
     private static <T> List<Edge<T>> buildEdges(Ranged<T> ranged) {
         Range range = ranged.getRange();
-        List<Edge<T>> edges = new ArrayList<>(range.getLastIndex() - range.getStartIndex());
+        List<Edge<T>> edges = new ArrayList<>();
         int cursorIndex = range.getStartIndex() + 1;
         Iterator<T> iterator = ranged.getData().iterator();
         while (iterator.hasNext()) {
