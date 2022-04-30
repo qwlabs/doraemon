@@ -18,14 +18,14 @@ import java.util.function.Function;
 public class QueueWorker<C, E> {
     private static final int DEFAULT_MAX_SPIN_COUNT = 10;
     private final String name;
-    private final Consumer<C> beforeFunction;
-    private final Consumer<C> afterFunction;
-    private final BiConsumer<C, E> beforeEachFunction;
-    private final BiConsumer<C, E> afterEachFunction;
-    private final Function<C, E> pollFunction;
-    private final FailureConsumer<C, E> failureFunction;
-    private final BiConsumer<C, E> workFunction;
-    private final BiFunction<C, E, Boolean> continueFunction;
+    private final Consumer<C> onBefore;
+    private final Consumer<C> onAfter;
+    private final BiConsumer<C, E> onBeforeEach;
+    private final BiConsumer<C, E> onAfterEach;
+    private final Function<C, E> onPoll;
+    private final FailedConsumer<C, E> onFailed;
+    private final BiConsumer<C, E> onWork;
+    private final BiFunction<C, E, Boolean> continueWhen;
     private final Duration spinDuration;
     private final Integer maxSpin;
     private StopWatch stopWatch;
@@ -36,9 +36,9 @@ public class QueueWorker<C, E> {
 
     public void execute(C context) {
         Objects.requireNonNull(name, "name can not be null.");
-        Objects.requireNonNull(pollFunction, "PollFunction can not be null.");
-        Objects.requireNonNull(failureFunction, "FailureFunction can not be null.");
-        Objects.requireNonNull(workFunction, "WorkFunction can not be null.");
+        Objects.requireNonNull(onPoll, "onPoll can not be null.");
+        Objects.requireNonNull(onFailed, "onFailed can not be null.");
+        Objects.requireNonNull(onWork, "onWork can not be null.");
         stopWatch = new StopWatch(name);
         try {
             executeBefore(context);
@@ -52,7 +52,7 @@ public class QueueWorker<C, E> {
     private void executeAfter(C context) {
         try {
             stopWatch.start("after");
-            F2.ifPresent(afterFunction, () -> afterFunction.accept(context));
+            F2.ifPresent(onAfter, () -> onAfter.accept(context));
         } finally {
             stopWatch.stop();
         }
@@ -61,18 +61,18 @@ public class QueueWorker<C, E> {
     private void executeBefore(C context) {
         try {
             stopWatch.start("before");
-            F2.ifPresent(beforeFunction, () -> beforeFunction.accept(context));
+            F2.ifPresent(onBefore, () -> onBefore.accept(context));
         } finally {
             stopWatch.stop();
         }
     }
 
     private void executeBeforeEach(C context, E element) {
-        F2.ifPresent(beforeEachFunction, () -> beforeEachFunction.accept(context, element));
+        F2.ifPresent(onBeforeEach, () -> onBeforeEach.accept(context, element));
     }
 
     private void executeAfterEach(C context, E element) {
-        F2.ifPresent(afterEachFunction, () -> afterEachFunction.accept(context, element));
+        F2.ifPresent(onAfterEach, () -> onAfterEach.accept(context, element));
     }
 
     private void execute(C context, int spinCount) {
@@ -83,7 +83,7 @@ public class QueueWorker<C, E> {
         E element;
         try {
             stopWatch.start("poll");
-            element = pollFunction.apply(context);
+            element = onPoll.apply(context);
         } finally {
             stopWatch.stop();
         }
@@ -94,9 +94,9 @@ public class QueueWorker<C, E> {
         try {
             stopWatch.start("work");
             executeBeforeEach(context, element);
-            workFunction.accept(context, element);
+            onWork.accept(context, element);
         } catch (Exception e) {
-            failureFunction.accept(context, element, e);
+            onFailed.accept(context, element, e);
         } finally {
             executeAfterEach(context, element);
             stopWatch.stop();
@@ -125,7 +125,7 @@ public class QueueWorker<C, E> {
 
     private boolean isContinue(C context, E element) {
         return Objects.nonNull(element)
-                && Optional.ofNullable(continueFunction)
+                && Optional.ofNullable(continueWhen)
                 .map(f -> f.apply(context, element))
                 .orElse(true);
     }
@@ -135,7 +135,7 @@ public class QueueWorker<C, E> {
     }
 
     @FunctionalInterface
-    public interface FailureConsumer<C, E> {
+    public interface FailedConsumer<C, E> {
         void accept(C context, E element, Exception e);
     }
 }
