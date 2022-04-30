@@ -27,7 +27,7 @@ public class QueueWorker<C, E> {
     private final BiConsumer<C, E> onWork;
     private final BiFunction<C, E, Boolean> continueWhen;
     private final Duration spinDuration;
-    private final Integer maxSpin;
+    private final Integer maxRuns;
     private StopWatch stopWatch;
 
     public void execute() {
@@ -40,9 +40,15 @@ public class QueueWorker<C, E> {
         Objects.requireNonNull(onFailed, "onFailed can not be null.");
         Objects.requireNonNull(onWork, "onWork can not be null.");
         stopWatch = new StopWatch(name);
+        var runs = 1;
         try {
             executeBefore(context);
-            execute(context, 1);
+            while (true) {
+                if (!execute(context, runs)) {
+                    break;
+                }
+                runs++;
+            }
         } finally {
             executeAfter(context);
             LOGGER.info(stopWatch.prettyPrint());
@@ -75,10 +81,10 @@ public class QueueWorker<C, E> {
         F2.ifPresent(onAfterEach, () -> onAfterEach.accept(context, element));
     }
 
-    private void execute(C context, int spinCount) {
-        if (getMaxSpin() <= spinCount) {
-            LOGGER.warn("out of max spin count.");
-            return;
+    private boolean execute(C context, int runs) {
+        if (isOutOfMaxRuns(runs)) {
+            LOGGER.info("out of max runs.");
+            return false;
         }
         E element;
         try {
@@ -89,7 +95,7 @@ public class QueueWorker<C, E> {
         }
         if (!isContinue(context, element)) {
             LOGGER.info("not need continue.");
-            return;
+            return false;
         }
         try {
             stopWatch.start("work");
@@ -102,11 +108,15 @@ public class QueueWorker<C, E> {
             stopWatch.stop();
         }
         if (Objects.isNull(spinDuration)) {
-            LOGGER.warn("Do not need spin.");
-            return;
+            this.spin();
         }
-        this.spin();
-        this.execute(context, spinCount + 1);
+        return true;
+    }
+
+    private boolean isOutOfMaxRuns(int runs) {
+        return Optional.ofNullable(maxRuns)
+                .map(mr -> mr < runs)
+                .orElse(false);
     }
 
     private void spin() {
