@@ -140,10 +140,6 @@ public class QueueWorker<C, E> {
                 .orElse(true);
     }
 
-    public int getMaxSpin() {
-        return Optional.ofNullable(maxSpin).orElse(DEFAULT_MAX_SPIN_COUNT);
-    }
-
     @FunctionalInterface
     public interface FailedConsumer<C, E> {
         void accept(C context, E element, Exception e);
