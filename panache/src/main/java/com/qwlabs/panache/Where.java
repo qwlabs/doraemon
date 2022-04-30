@@ -82,6 +82,10 @@ public final class Where {
         return where.toString();
     }
 
+    public String getWithWhere() {
+        return isEmpty() ? "" : " where " + where.toString();
+    }
+
     public Map<String, Object> getParameters() {
         return Collections.unmodifiableMap(parameters);
     }
