@@ -3,12 +3,12 @@ package com.qwlabs.lang;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -25,7 +25,7 @@ public class QueueWorker<C, E> {
     private final Function<C, E> onPoll;
     private final FailedConsumer<C, E> onFailed;
     private final BiConsumer<C, E> onWork;
-    private final BiFunction<C, E, Boolean> continueWhen;
+    private final ContinueWhenPredicate<C, E> continueWhen;
     private final Duration spinDuration;
     private final Integer maxRuns;
     private StopWatch stopWatch;
@@ -81,6 +81,14 @@ public class QueueWorker<C, E> {
         F2.ifPresent(onAfterEach, () -> onAfterEach.accept(context, element));
     }
 
+    private void executeOnFailed(C context, E element, Exception e) {
+        try {
+            onFailed.accept(context, element, e);
+        } catch (Exception exception) {
+            LOGGER.warn("on failed handler error.", exception);
+        }
+    }
+
     private boolean execute(C context, int runs) {
         if (isOutOfMaxRuns(runs)) {
             LOGGER.info("out of max runs.");
@@ -93,7 +101,7 @@ public class QueueWorker<C, E> {
         } finally {
             stopWatch.stop();
         }
-        if (!isContinue(context, element)) {
+        if (!isContinue(context, element, null)) {
             LOGGER.info("not need continue.");
             return false;
         }
@@ -102,7 +110,11 @@ public class QueueWorker<C, E> {
             executeBeforeEach(context, element);
             onWork.accept(context, element);
         } catch (Exception e) {
-            onFailed.accept(context, element, e);
+            executeOnFailed(context, element, e);
+            if (!isContinue(context, element, e)) {
+                LOGGER.info("not need continue.");
+                return false;
+            }
         } finally {
             executeAfterEach(context, element);
             stopWatch.stop();
@@ -133,11 +145,16 @@ public class QueueWorker<C, E> {
         }
     }
 
-    private boolean isContinue(C context, E element) {
+    private boolean isContinue(C context, E element, Exception e) {
         return Objects.nonNull(element)
                 && Optional.ofNullable(continueWhen)
-                .map(f -> f.apply(context, element))
+                .map(f -> f.test(context, element, e))
                 .orElse(true);
+    }
+
+    @FunctionalInterface
+    public interface ContinueWhenPredicate<C, E> {
+        boolean test(C context, E element, @Nullable Exception e);
     }
 
     @FunctionalInterface
