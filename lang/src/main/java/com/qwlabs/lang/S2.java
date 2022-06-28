@@ -57,4 +57,34 @@ public final class S2 {
             consumer.accept(value);
         }
     }
+
+    public static String removeStartsWith(String value, String... startValues) {
+        if (value == null) {
+            return null;
+        }
+        for (String startValue : startValues) {
+            if (startValue == null) {
+                continue;
+            }
+            if (value.startsWith(startValue)) {
+                return value.substring(startValue.length());
+            }
+        }
+        return value;
+    }
+
+    public static String removeEndsWith(String value, String... endValues) {
+        if (value == null) {
+            return null;
+        }
+        for (String endValue : endValues) {
+            if (endValue == null) {
+                continue;
+            }
+            if (value.endsWith(endValue)) {
+                return value.substring(0, value.length() - endValue.length());
+            }
+        }
+        return value;
+    }
 }

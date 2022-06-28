@@ -4,7 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.function.Consumer;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -152,5 +155,40 @@ public class S2Test {
         verify(consumer2, never()).accept(any());
         verify(consumer3, never()).accept(any());
         verify(consumer4).accept("a");
+    }
+
+    @Test
+    void should_remove_starts_with() {
+        assertNull(S2.removeStartsWith(null, (String) null));
+        assertThat(S2.removeStartsWith("null", (String) null), is("null"));
+        assertThat(S2.removeStartsWith("a", "a"), is(""));
+        assertThat(S2.removeStartsWith(" a", "a"), is(" a"));
+        assertThat(S2.removeStartsWith("a ", "a"), is(" "));
+        assertThat(S2.removeStartsWith("ab", "a"), is("b"));
+        assertThat(S2.removeStartsWith("ba", "a"), is("ba"));
+        assertThat(S2.removeStartsWith("a", "aaa"), is("a"));
+
+        assertThat(S2.removeStartsWith("aiyad", "aiya"), is("d"));
+        assertThat(S2.removeStartsWith("aiyadddd", "aiya"), is("dddd"));
+        assertThat(S2.removeStartsWith("aiyadddd", "a", "b"), is("iyadddd"));
+        assertThat(S2.removeStartsWith("biyadddd", "a", "b"), is("iyadddd"));
+    }
+
+    @Test
+    void should_remove_ends_with() {
+        assertNull(S2.removeEndsWith(null, (String) null));
+        assertThat(S2.removeEndsWith("null", (String) null), is("null"));
+        assertThat(S2.removeEndsWith("a", "a"), is(""));
+        assertThat(S2.removeEndsWith(" a", "a"), is(" "));
+        assertThat(S2.removeEndsWith("a ", "a"), is("a "));
+        assertThat(S2.removeEndsWith("ab", "a"), is("ab"));
+        assertThat(S2.removeEndsWith("ba", "a"), is("b"));
+        assertThat(S2.removeEndsWith("a", "aaaa"), is("a"));
+
+
+        assertThat(S2.removeEndsWith("daiya", "aiya"), is("d"));
+        assertThat(S2.removeEndsWith("ddddaiya", "aiya"), is("dddd"));
+        assertThat(S2.removeEndsWith("ddddaiya", "a", "b"), is("ddddaiy"));
+        assertThat(S2.removeEndsWith("ddddbiyb", "a", "b"), is("ddddbiy"));
     }
 }
