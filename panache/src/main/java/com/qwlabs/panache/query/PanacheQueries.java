@@ -1,4 +1,4 @@
-package com.qwlabs.panache;
+package com.qwlabs.panache.query;
 
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
