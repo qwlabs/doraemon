@@ -1,9 +1,13 @@
 package com.qwlabs.panache;
 
+import io.quarkus.panache.common.Sort;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import static io.quarkus.panache.hibernate.common.runtime.PanacheJpaUtil.toOrderBy;
 
 public final class Where {
     private static final String AND = "and";
@@ -11,6 +15,7 @@ public final class Where {
 
     private StringBuilder where = new StringBuilder();
     private Map<String, Object> parameters = new HashMap<>();
+    private Sort sort;
 
     private Where() {
     }
@@ -39,6 +44,12 @@ public final class Where {
         Objects.requireNonNull(expression, "expression can not be null.");
         Objects.requireNonNull(name, "name can not be null.");
         return with(OR, expression, name, value);
+    }
+
+    public Where sort(Sort sort) {
+        Objects.requireNonNull(sort, "sort can not be null.");
+        this.sort = sort;
+        return this;
     }
 
     private Where with(String operator, Where where) {
@@ -79,7 +90,7 @@ public final class Where {
     }
 
     public String get() {
-        return where.toString();
+        return where.toString() + toOrderBy(sort);
     }
 
     public String getWithWhere() {
