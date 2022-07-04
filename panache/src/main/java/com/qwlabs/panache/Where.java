@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import static io.quarkus.panache.hibernate.common.runtime.PanacheJpaUtil.toOrderBy;
 
@@ -34,16 +35,40 @@ public final class Where {
         return with(OR, where);
     }
 
-    public Where and(String expression, String name, Object value) {
-        Objects.requireNonNull(expression, "expression can not be null.");
-        Objects.requireNonNull(name, "name can not be null.");
-        return with(AND, expression, name, value);
+    public <T> Where and(String expression, String name, T value) {
+        return and(expression, name, value, Objects::nonNull);
     }
 
-    public Where or(String expression, String name, Object value) {
+    public <T> Where and(String expression, String name, T value, Predicate<T> predicate) {
         Objects.requireNonNull(expression, "expression can not be null.");
         Objects.requireNonNull(name, "name can not be null.");
-        return with(OR, expression, name, value);
+        return with(AND, expression, name, value, predicate);
+    }
+
+
+    public Where and(String sql) {
+        if (sql == null || sql.isBlank()) {
+            return this;
+        }
+        return with(AND, sql);
+    }
+
+
+    public Where or(String sql) {
+        if (sql == null || sql.isBlank()) {
+            return this;
+        }
+        return with(OR, sql);
+    }
+
+    public <T> Where or(String expression, String name, T value) {
+        return or(expression, name, value, Objects::nonNull);
+    }
+
+    public <T> Where or(String expression, String name, T value, Predicate<T> predicate) {
+        Objects.requireNonNull(expression, "expression can not be null.");
+        Objects.requireNonNull(name, "name can not be null.");
+        return with(OR, expression, name, value, predicate);
     }
 
     public Where sort(Sort sort) {
@@ -76,8 +101,13 @@ public final class Where {
         return this;
     }
 
-    private Where with(String operator, String expression, String name, Object value) {
-        if (value == null) {
+    private Where with(String operator, String query) {
+        this.append(operator).where.append(query);
+        return this;
+    }
+
+    private <T> Where with(String operator, String expression, String name, T value, Predicate<T> predicate) {
+        if (!predicate.test(value)) {
             return this;
         }
         this.append(operator).where.append(expression);
