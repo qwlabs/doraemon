@@ -7,7 +7,7 @@ import io.quarkus.panache.common.Range;
 public abstract class AbstractPanacheNativeQuery<Entity> implements PanacheQuery<Entity> {
 
     private Page page;
-    private Range range;
+    protected Range range;
 
 
     @Override
