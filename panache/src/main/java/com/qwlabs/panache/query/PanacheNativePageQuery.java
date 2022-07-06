@@ -83,8 +83,12 @@ public class PanacheNativePageQuery<Entity> extends AbstractPanacheNativeQuery<E
         return nativeQuery;
     }
 
+    protected String buildLimit() {
+        return " limit " + range.getLastIndex() + " offset " + range.getStartIndex();
+    }
+
     private Query buildDataPageQuery() {
-        String limit = " limit " + range.getLastIndex() + " offset " + range.getStartIndex();
+        String limit = buildLimit();
         Query nativeQuery = em.createNativeQuery(dataQuery + limit, clazz);
         Optional.ofNullable(this.paramsArrayOrMap).ifPresent(params -> params.forEach(nativeQuery::setParameter));
         return nativeQuery;
