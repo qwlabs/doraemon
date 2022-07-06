@@ -83,6 +83,17 @@ public class PanacheNativePageQuery<Entity> extends AbstractPanacheNativeQuery<E
         return nativeQuery;
     }
 
+    protected String buildLimit() {
+        return " limit " + range.getLastIndex() + " offset " + range.getStartIndex();
+    }
+
+    private Query buildDataPageQuery() {
+        String limit = buildLimit();
+        Query nativeQuery = em.createNativeQuery(dataQuery + limit, clazz);
+        Optional.ofNullable(this.paramsArrayOrMap).ifPresent(params -> params.forEach(nativeQuery::setParameter));
+        return nativeQuery;
+    }
+
     private Query buildCountQuery() {
         Query nativeQuery = em.createNativeQuery(countQuery);
         Optional.ofNullable(this.paramsArrayOrMap).ifPresent(params -> params.forEach(nativeQuery::setParameter));
@@ -91,12 +102,18 @@ public class PanacheNativePageQuery<Entity> extends AbstractPanacheNativeQuery<E
 
     @Override
     public <T extends Entity> List<T> list() {
-        return buildDataQuery().getResultList();
+        if (range == null) {
+            return buildDataQuery().getResultList();
+        }
+        return buildDataPageQuery().getResultList();
     }
 
     @Override
     public <T extends Entity> Stream<T> stream() {
-        return buildDataQuery().getResultStream();
+        if (range == null) {
+            return buildDataQuery().getResultStream();
+        }
+        return buildDataPageQuery().getResultStream();
     }
 
     @Override
