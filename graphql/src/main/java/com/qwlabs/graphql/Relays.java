@@ -1,4 +1,4 @@
-package com.qwlabs.cdi;
+package com.qwlabs.graphql;
 
 import com.google.common.primitives.Ints;
 import com.qwlabs.panache.Ranged;

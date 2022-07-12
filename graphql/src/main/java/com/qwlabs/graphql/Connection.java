@@ -1,4 +1,4 @@
-package com.qwlabs.cdi;
+package com.qwlabs.graphql;
 
 import com.google.common.collect.ImmutableList;
 import graphql.PublicApi;

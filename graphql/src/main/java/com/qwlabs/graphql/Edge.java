@@ -1,4 +1,4 @@
-package com.qwlabs.cdi;
+package com.qwlabs.graphql;
 
 import graphql.PublicApi;
 
