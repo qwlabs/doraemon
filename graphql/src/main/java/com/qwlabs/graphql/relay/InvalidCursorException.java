@@ -1,4 +1,4 @@
-package com.qwlabs.graphql;
+package com.qwlabs.graphql.relay;
 
 import graphql.ErrorType;
 import graphql.GraphQLError;

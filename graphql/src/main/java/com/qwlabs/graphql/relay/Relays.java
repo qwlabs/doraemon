@@ -1,4 +1,4 @@
-package com.qwlabs.graphql;
+package com.qwlabs.graphql.relay;
 
 import com.google.common.primitives.Ints;
 import com.qwlabs.panache.Ranged;
