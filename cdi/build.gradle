@@ -1,0 +1,3 @@
+dependencies {
+    implementation "jakarta.enterprise:jakarta.enterprise.cdi-api:${cdiApiVersion}"
+}

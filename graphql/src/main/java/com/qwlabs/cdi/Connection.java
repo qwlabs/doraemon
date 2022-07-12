@@ -1,4 +1,4 @@
-package com.qwlabs.graphql.relay;
+package com.qwlabs.cdi;
 
 import com.google.common.collect.ImmutableList;
 import graphql.PublicApi;

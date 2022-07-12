@@ -1,4 +1,4 @@
-package com.qwlabs.graphql.relay;
+package com.qwlabs.cdi;
 
 import graphql.ErrorType;
 import graphql.GraphQLError;
@@ -11,13 +11,13 @@ import java.util.List;
 import static graphql.ErrorType.DataFetchingException;
 
 @Internal
-public class InvalidCursorException extends RuntimeException implements GraphQLError {
+public class InvalidPageSizeException extends RuntimeException implements GraphQLError {
 
-    InvalidCursorException(String message) {
+    InvalidPageSizeException(String message) {
         this(message, null);
     }
 
-    InvalidCursorException(String message, Throwable cause) {
+    InvalidPageSizeException(String message, Throwable cause) {
         super(message, cause);
     }
 
