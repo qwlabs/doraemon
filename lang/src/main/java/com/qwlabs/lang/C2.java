@@ -150,10 +150,6 @@ public final class C2 {
         return set(input, mapper, v -> true);
     }
 
-    public static <E> Set<E> set(E[] input, Predicate<E> filter) {
-        return set(input, Function.identity(), filter);
-    }
-
     public static <E, R> Set<R> set(E[] input,
                                     Function<E, R> mapper,
                                     Predicate<R> filter) {
@@ -173,10 +169,6 @@ public final class C2 {
         return set(input, mapper, v -> true);
     }
 
-    public static <E> Set<E> set(Iterable<E> input, Predicate<E> filter) {
-        return set(input, Function.identity(), filter);
-    }
-
     public static <E, R> Set<R> set(Iterable<E> input,
                                     Function<E, R> mapper,
                                     Predicate<R> filter) {
@@ -194,10 +186,6 @@ public final class C2 {
 
     public static <E, R> Set<R> set(Stream<E> input, Function<E, R> mapper) {
         return set(input, mapper, v -> true);
-    }
-
-    public static <E> Set<E> set(Stream<E> input, Predicate<E> filter) {
-        return set(input, Function.identity(), filter);
     }
 
     public static <E, R> Set<R> set(Stream<E> input,
@@ -231,10 +219,6 @@ public final class C2 {
         return list(input, mapper, v -> true);
     }
 
-    public static <E> List<E> list(E[] input, Predicate<E> filter) {
-        return list(input, Function.identity(), filter);
-    }
-
     public static <E, R> List<R> list(E[] input,
                                       Function<E, R> mapper,
                                       Predicate<R> filter) {
@@ -254,10 +238,6 @@ public final class C2 {
         return list(input, mapper, v -> true);
     }
 
-    public static <E> List<E> list(Iterable<E> input, Predicate<E> filter) {
-        return list(input, Function.identity(), filter);
-    }
-
     public static <E, R> List<R> list(Iterable<E> input,
                                       Function<E, R> mapper,
                                       Predicate<R> filter) {
@@ -271,10 +251,6 @@ public final class C2 {
 
     public static <E, R> List<R> list(Stream<E> input, Function<E, R> mapper) {
         return list(input, mapper, v -> true);
-    }
-
-    public static <E> List<E> list(Stream<E> input, Predicate<E> filter) {
-        return list(input, Function.identity(), filter);
     }
 
     public static <E, R> List<R> list(Stream<E> input,

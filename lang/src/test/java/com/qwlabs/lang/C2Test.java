@@ -326,9 +326,9 @@ class C2Test {
         assertThat(C2.set((Set<String>) null), is(Set.of()));
         assertThat(C2.set((Stream<String>) null), is(Set.of()));
 
-        assertThat(C2.set(new String[]{"1", null, "2"}, Objects::nonNull), is(Set.of("1", "2")));
-        assertThat(C2.set(Sets.newHashSet("1", "2", null), Objects::nonNull), is(Set.of("1", "2")));
-        assertThat(C2.set(Stream.of("1", "2", null), Objects::nonNull), is(Set.of("1", "2")));
+        assertThat(C2.set(new String[]{"1", null, "2"}, Function.identity(), Objects::nonNull), is(Set.of("1", "2")));
+        assertThat(C2.set(Sets.newHashSet("1", "2", null), Function.identity(), Objects::nonNull), is(Set.of("1", "2")));
+        assertThat(C2.set(Stream.of("1", "2", null), Function.identity(), Objects::nonNull), is(Set.of("1", "2")));
     }
 
     @Test
@@ -337,8 +337,8 @@ class C2Test {
         assertThat(C2.list((Set<String>) null), is(List.of()));
         assertThat(C2.list((Stream<String>) null), is(List.of()));
 
-        assertThat(C2.list(new String[]{"1", null, "2"}, Objects::nonNull), is(List.of("1", "2")));
-        assertThat(C2.list(Sets.newHashSet("1", "2", null), Objects::nonNull), is(List.of("1", "2")));
-        assertThat(C2.list(Stream.of("1", "2", null), Objects::nonNull), is(List.of("1", "2")));
+        assertThat(C2.list(new String[]{"1", null, "2"}, Function.identity(), Objects::nonNull), is(List.of("1", "2")));
+        assertThat(C2.list(Sets.newHashSet("1", "2", null), Function.identity(), Objects::nonNull), is(List.of("1", "2")));
+        assertThat(C2.list(Stream.of("1", "2", null), Function.identity(), Objects::nonNull), is(List.of("1", "2")));
     }
 }
