@@ -94,8 +94,7 @@ public abstract class AbstractPanacheNativeQuery<Entity> implements PanacheQuery
     @Override
     public <T extends Entity> PanacheQuery<T> range(int startIndex, int lastIndex) {
         this.range = Range.of(startIndex, lastIndex);
-        // reset the page to its default to be able to switch from page to range
-        this.page = null;
+        this.page = new Page(startIndex, lastIndex - startIndex + 1);
         return (PanacheQuery<T>) this;
     }
 

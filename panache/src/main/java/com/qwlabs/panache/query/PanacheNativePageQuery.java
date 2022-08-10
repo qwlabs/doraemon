@@ -84,7 +84,7 @@ public class PanacheNativePageQuery<Entity> extends AbstractPanacheNativeQuery<E
     }
 
     protected String buildLimit() {
-        return " limit " + range.getLastIndex() + " offset " + range.getStartIndex();
+        return " limit " + page().size + " offset " + page().index;
     }
 
     private Query buildDataPageQuery() {
