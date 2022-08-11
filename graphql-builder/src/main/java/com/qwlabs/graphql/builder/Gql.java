@@ -119,6 +119,10 @@ public final class Gql implements GqlVariablesAware<Gql>, GqlFieldsAware<Gql> {
         return new GqlField(name);
     }
 
+    public static GqlArgument sArg(@NotNull String name, String value) {
+        return new GqlArgument(name, String.format("\"%s\"", value));
+    }
+
     public static GqlArgument arg(@NotNull String name, Object value) {
         return new GqlArgument(name, value);
     }

@@ -152,7 +152,7 @@ public final class C2 {
 
     public static <E, R> Set<R> set(E[] input,
                                     Function<E, R> mapper,
-                                    Predicate<? super R> filter) {
+                                    Predicate<R> filter) {
         Objects.requireNonNull(mapper, "Mapper can not be null.");
         Objects.requireNonNull(filter, "Filter can not be null.");
         if (input == null) {
@@ -171,7 +171,7 @@ public final class C2 {
 
     public static <E, R> Set<R> set(Iterable<E> input,
                                     Function<E, R> mapper,
-                                    Predicate<? super R> filter) {
+                                    Predicate<R> filter) {
         Objects.requireNonNull(mapper, "Mapper can not be null.");
         Objects.requireNonNull(filter, "Filter can not be null.");
         if (input == null) {
@@ -180,13 +180,17 @@ public final class C2 {
         return doSet(stream(input), mapper, filter);
     }
 
+    public static <E> Set<E> set(Stream<E> input) {
+        return set(input, Function.identity(), v -> true);
+    }
+
     public static <E, R> Set<R> set(Stream<E> input, Function<E, R> mapper) {
         return set(input, mapper, v -> true);
     }
 
     public static <E, R> Set<R> set(Stream<E> input,
                                     Function<E, R> mapper,
-                                    Predicate<? super R> filter) {
+                                    Predicate<R> filter) {
         Objects.requireNonNull(mapper, "Mapper can not be null.");
         Objects.requireNonNull(filter, "Filter can not be null.");
         if (input == null) {
@@ -197,7 +201,7 @@ public final class C2 {
 
     private static <E, R> Set<R> doSet(Stream<E> input,
                                        Function<E, R> mapper,
-                                       Predicate<? super R> predicate) {
+                                       Predicate<R> predicate) {
         return input.map(mapper)
                 .filter(predicate)
                 .collect(Collectors.toSet());
@@ -217,7 +221,7 @@ public final class C2 {
 
     public static <E, R> List<R> list(E[] input,
                                       Function<E, R> mapper,
-                                      Predicate<? super R> filter) {
+                                      Predicate<R> filter) {
         Objects.requireNonNull(mapper, "Mapper can not be null.");
         Objects.requireNonNull(filter, "Filter can not be null.");
         if (input == null) {
@@ -236,7 +240,7 @@ public final class C2 {
 
     public static <E, R> List<R> list(Iterable<E> input,
                                       Function<E, R> mapper,
-                                      Predicate<? super R> filter) {
+                                      Predicate<R> filter) {
         Objects.requireNonNull(mapper, "Mapper can not be null.");
         Objects.requireNonNull(filter, "Filter can not be null.");
         if (input == null) {
@@ -251,7 +255,7 @@ public final class C2 {
 
     public static <E, R> List<R> list(Stream<E> input,
                                       Function<E, R> mapper,
-                                      Predicate<? super R> filter) {
+                                      Predicate<R> filter) {
         Objects.requireNonNull(mapper, "Mapper can not be null.");
         Objects.requireNonNull(filter, "Filter can not be null.");
         if (input == null) {
@@ -262,7 +266,7 @@ public final class C2 {
 
     private static <E, R> List<R> doList(Stream<E> input,
                                          Function<E, R> mapper,
-                                         Predicate<? super R> predicate) {
+                                         Predicate<R> predicate) {
         return input.map(mapper)
                 .filter(predicate)
                 .collect(Collectors.toList());

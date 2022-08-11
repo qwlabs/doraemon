@@ -120,7 +120,8 @@ public final class Where {
     }
 
     public String get() {
-        return where.toString() + toOrderBy(sort);
+        String sortHql = toOrderBy(sort);
+        return where.toString() + (sortHql == null ? "" : sortHql);
     }
 
     public String getWithWhere() {

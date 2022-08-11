@@ -1,4 +1,3 @@
 dependencies {
     implementation "com.google.guava:guava:${guavaVersion}"
-    implementation "org.slf4j:slf4j-api:${slf4jVersion}"
 }

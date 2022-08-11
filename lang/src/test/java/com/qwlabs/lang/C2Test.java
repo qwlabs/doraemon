@@ -1,15 +1,18 @@
 package com.qwlabs.lang;
 
+import com.google.common.collect.Sets;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -315,5 +318,27 @@ class C2Test {
         assertThat(result3.size(), is(2));
         assertThat(result3.get("1"), is("1-"));
         assertThat(result3.get("2"), is("2-"));
+    }
+
+    @Test
+    void should_set() {
+        assertThat(C2.set((String[]) null), is(Set.of()));
+        assertThat(C2.set((Set<String>) null), is(Set.of()));
+        assertThat(C2.set((Stream<String>) null), is(Set.of()));
+
+        assertThat(C2.set(new String[]{"1", null, "2"}, Function.identity(), Objects::nonNull), is(Set.of("1", "2")));
+        assertThat(C2.set(Sets.newHashSet("1", "2", null), Function.identity(), Objects::nonNull), is(Set.of("1", "2")));
+        assertThat(C2.set(Stream.of("1", "2", null), Function.identity(), Objects::nonNull), is(Set.of("1", "2")));
+    }
+
+    @Test
+    void should_list() {
+        assertThat(C2.list((String[]) null), is(List.of()));
+        assertThat(C2.list((Set<String>) null), is(List.of()));
+        assertThat(C2.list((Stream<String>) null), is(List.of()));
+
+        assertThat(C2.list(new String[]{"1", null, "2"}, Function.identity(), Objects::nonNull), is(List.of("1", "2")));
+        assertThat(C2.list(Sets.newHashSet("1", "2", null), Function.identity(), Objects::nonNull), is(List.of("1", "2")));
+        assertThat(C2.list(Stream.of("1", "2", null), Function.identity(), Objects::nonNull), is(List.of("1", "2")));
     }
 }

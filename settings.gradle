@@ -18,8 +18,10 @@ include 'panache'
 include 'auditing'
 include 'jpa'
 include 'graphql'
+include 'cdi'
 include 'graphql-builder'
 include 'basic-tree'
 include 'mptt-tree'
+include 'quarkus-cache'
 
 

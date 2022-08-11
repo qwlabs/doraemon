@@ -3,6 +3,7 @@ package com.qwlabs.auditing;
 import io.quarkus.security.identity.SecurityIdentity;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.spi.CDI;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 @ApplicationScoped
 public class AuditingListener {
+    private static final AuditorIdProvider DEFAULT_AUDITOR_ID_PROVIDER = new DefaultAuditorIdProvider();
 
     @PrePersist
     public void prePersist(Object entity) {
@@ -44,10 +46,22 @@ public class AuditingListener {
     }
 
     private static Optional<String> getAuditorId() {
-        SecurityIdentity identity = CDI.current().select(SecurityIdentity.class).get();
-        if (identity.isAnonymous()) {
-            return Optional.empty();
+        return getAuditorIdProvider().get();
+    }
+
+    private static AuditorIdProvider getAuditorIdProvider() {
+        Instance<AuditorIdProvider> instance = CDI.current().select(AuditorIdProvider.class);
+        return instance.stream().findFirst().orElse(DEFAULT_AUDITOR_ID_PROVIDER);
+    }
+
+    private static class DefaultAuditorIdProvider implements AuditorIdProvider {
+        @Override
+        public Optional<String> get() {
+            SecurityIdentity identity = CDI.current().select(SecurityIdentity.class).get();
+            if (identity.isAnonymous()) {
+                return Optional.empty();
+            }
+            return Optional.ofNullable(identity.getPrincipal().getName());
         }
-        return Optional.ofNullable(identity.getPrincipal().getName());
     }
 }

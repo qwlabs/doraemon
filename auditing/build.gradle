@@ -1,4 +1,4 @@
 dependencies {
-    implementation "io.quarkus:quarkus-hibernate-orm-panache:${quarkusVersion}"
+    implementation "jakarta.persistence:jakarta.persistence-api:${persistenceApiVersion}"
     implementation "io.quarkus:quarkus-security:${quarkusVersion}"
 }
