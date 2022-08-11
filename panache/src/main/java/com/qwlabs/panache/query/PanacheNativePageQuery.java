@@ -102,7 +102,7 @@ public class PanacheNativePageQuery<Entity> extends AbstractPanacheNativeQuery<E
 
     @Override
     public <T extends Entity> List<T> list() {
-        if (range == null) {
+        if (page() == null) {
             return buildDataQuery().getResultList();
         }
         return buildDataPageQuery().getResultList();
@@ -110,7 +110,7 @@ public class PanacheNativePageQuery<Entity> extends AbstractPanacheNativeQuery<E
 
     @Override
     public <T extends Entity> Stream<T> stream() {
-        if (range == null) {
+        if (page() == null) {
             return buildDataQuery().getResultStream();
         }
         return buildDataPageQuery().getResultStream();
