@@ -5,7 +5,7 @@ import io.quarkus.panache.common.Page;
 
 public abstract class AbstractPanacheNativeQuery<Entity> implements PanacheQuery<Entity> {
 
-    private Page page;
+    protected Page page;
 
     @Override
     public <T extends Entity> PanacheQuery<T> page(Page page) {
