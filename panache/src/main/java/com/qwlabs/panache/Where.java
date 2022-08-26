@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import static io.quarkus.panache.hibernate.common.runtime.PanacheJpaUtil.toOrderBy;
@@ -120,12 +121,19 @@ public final class Where {
     }
 
     public String get() {
-        String sortHql = toOrderBy(sort);
-        return where.toString() + (sortHql == null ? "" : sortHql);
+        return where.toString() + getSort().orElse("");
     }
 
     public String getWithWhere() {
         return isEmpty() ? "" : " where " + where.toString();
+    }
+
+    public Optional<String> getSort() {
+        return Optional.ofNullable(toOrderBy(sort));
+    }
+
+    public String getAll() {
+        return getWithWhere() + getSort().orElse("");
     }
 
     public Map<String, Object> getParameters() {
