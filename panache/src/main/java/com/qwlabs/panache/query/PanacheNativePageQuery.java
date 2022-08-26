@@ -35,7 +35,7 @@ public class PanacheNativePageQuery<Entity> extends AbstractPanacheNativeQuery<E
                                   Where where,
                                   Class<Entity> clazz) {
         this.em = em;
-        this.dataQuery = " select * from " + table + where.getWithWhere();
+        this.dataQuery = " select * from " + table + where.getAll();
         this.countQuery = " select count(*) from " + table + where.getWithWhere();
         this.paramsArrayOrMap = where.getParameters();
         this.clazz = clazz;
