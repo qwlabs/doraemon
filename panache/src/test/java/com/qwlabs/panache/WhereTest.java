@@ -24,6 +24,15 @@ public class WhereTest {
     }
 
     @Test
+    public void test_and_where() {
+        var mainWhere = Where.create();
+        var where1 = Where.create().and("name=:name", "name", "name");
+        var where2 = Where.create().or("name=:name2", "name2", "name2");
+        mainWhere.and(where1).and(where2);
+        Assertions.assertEquals("(name=:name)and(name=:name2)", mainWhere.get());
+    }
+
+    @Test
     public void test_getAll() {
         Assertions.assertEquals("", Where.create().getAll());
 

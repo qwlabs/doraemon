@@ -83,9 +83,10 @@ public final class Where {
             return this;
         }
         if (this.isEmpty()) {
-            return where;
+            this.where = where.where;
+        } else {
+            this.pack().where.append(operator).append(where.pack().where);
         }
-        this.pack().where.append(operator).append(where.pack().where);
         this.parameters.putAll(where.parameters);
         return this;
     }
