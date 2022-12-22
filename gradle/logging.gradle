@@ -1,0 +1,7 @@
+dependencies {
+    annotationProcessor("org.jboss.logging:jboss-logging-processor:${jbossLoggingProcessorVersion}")
+    annotationProcessor("org.jboss.logging:jboss-logging:${jbossLoggingVersion}")
+
+    implementation "org.jboss.logging:jboss-logging:${jbossLoggingVersion}"
+    implementation "org.jboss.logging:jboss-logging-annotations:${jbossLoggingAnnotationsVersion}"
+}

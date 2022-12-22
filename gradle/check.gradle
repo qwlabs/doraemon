@@ -1,5 +1,5 @@
 apply plugin: 'checkstyle'
-apply plugin: 'jacoco'
+apply plugin: 'project-report'
 
 checkstyle {
     toolVersion = checkstyleToolVersion
@@ -16,36 +16,13 @@ checkstyleTest {
 task checkstyle(dependsOn: [checkstyleMain, checkstyleTest]) {
 }
 
-task prepush(dependsOn: [clean, "checkstyle", test, jacocoTestCoverageVerification]) {
-}
-
 test {
     useJUnitPlatform()
-    finalizedBy jacocoTestReport
-    maxParallelForks = Runtime.runtime.availableProcessors()
+    systemProperties['junit.jupiter.execution.parallel.enabled'] = true
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+    forkEvery = 1
 }
 
-jacocoTestReport {
-    dependsOn test
-    reports {
-        xml.required = true
-        csv.required = false
-        html.destination file("${buildDir}/reports/jacoco")
-    }
+task prepush(dependsOn: ["checkstyle", test, check]) {
 }
-
-jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            enabled = true
-            limit {
-                counter = 'LINE'
-                minimum = new BigDecimal(coverageLineMin)
-            }
-            limit {
-                counter = 'BRANCH'
-                minimum = new BigDecimal(coverageBranchMin)
-            }
-        }
-    }
-}
+prepush.mustRunAfter clean

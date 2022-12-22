@@ -14,6 +14,7 @@ pluginManagement {
 rootProject.name = 'doraemon'
 
 include 'lang'
+include 'exceptions'
 include 'panache'
 include 'auditing'
 include 'jpa'
@@ -23,5 +24,8 @@ include 'graphql-builder'
 include 'basic-tree'
 include 'mptt-tree'
 include 'quarkus-cache'
+include 'storage'
+include 'storage-minio'
+include 'storage-s3'
 
 

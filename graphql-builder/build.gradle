@@ -1,6 +1,6 @@
 dependencies {
     implementation project(":lang")
-    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     implementation "com.google.guava:guava:${guavaVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
     implementation "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
 }

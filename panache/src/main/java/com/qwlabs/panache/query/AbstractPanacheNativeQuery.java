@@ -3,6 +3,7 @@ package com.qwlabs.panache.query;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Page;
 
+@SuppressWarnings("checkstyle:VisibilityModifier")
 public abstract class AbstractPanacheNativeQuery<Entity> implements PanacheQuery<Entity> {
 
     protected Page page;
@@ -78,8 +79,8 @@ public abstract class AbstractPanacheNativeQuery<Entity> implements PanacheQuery
 
     private void checkPagination() {
         if (page == null) {
-            throw new UnsupportedOperationException("Cannot call a page related method, " +
-                    "call page(Page) or page(int, int) to initiate pagination first");
+            throw new UnsupportedOperationException("Cannot call a page related method, "
+                    + "call page(Page) or page(int, int) to initiate pagination first");
         }
     }
 

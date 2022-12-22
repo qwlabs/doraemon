@@ -1,0 +1,8 @@
+dependencies {
+    implementation project(":lang")
+    implementation project(":cdi")
+    implementation project(":storage")
+    implementation project(":exceptions")
+    implementation "io.minio:minio:${minioVersion}"
+    implementation "com.google.guava:guava:${guavaVersion}"
+}
