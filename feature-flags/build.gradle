@@ -1,0 +1,10 @@
+dependencies {
+    implementation project(":lang")
+    implementation project(":exceptions")
+    implementation project(":quarkus-cache")
+    implementation "io.quarkus:quarkus-cache:${quarkusVersion}"
+    implementation "jakarta.enterprise:jakarta.enterprise.cdi-api:${cdiApiVersion}"
+    implementation "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
+    implementation "org.eclipse.microprofile.config:microprofile-config-api:${microprofileConfigApiVersion}"
+    implementation "org.checkerframework:checker-qual:${checkerframeworkVersion}"
+}
