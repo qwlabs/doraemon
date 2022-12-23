@@ -1,4 +1,4 @@
 dependencies {
-    implementation project(":cdi")
-    implementation "io.quarkus:quarkus-cache:${quarkusVersion}"
+    api project(":cdi")
+    api "io.quarkus:quarkus-cache:${quarkusVersion}"
 }

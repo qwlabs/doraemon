@@ -28,5 +28,6 @@ include 'storage'
 include 'storage-minio'
 include 'storage-s3'
 include 'feature-flags'
+include 'test-builder'
 
 

@@ -21,7 +21,7 @@ Useful java tools
 ## Gradle
 
 ```gradle
-implementation 'com.qwlabs.doraemon:lang:0.1.*'
+api 'com.qwlabs.doraemon:lang:0.1.*'
 ```
 
 # Document

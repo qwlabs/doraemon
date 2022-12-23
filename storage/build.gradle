@@ -1,7 +1,6 @@
 dependencies {
-    implementation project(":cdi")
-    implementation project(":exceptions")
+    api project(":cdi")
+    api project(":exceptions")
     implementation "com.google.guava:guava:${guavaVersion}"
-    implementation "jakarta.enterprise:jakarta.enterprise.cdi-api:${cdiApiVersion}"
     implementation "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
 }

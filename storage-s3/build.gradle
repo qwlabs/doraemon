@@ -1,8 +1,7 @@
 dependencies {
-    implementation project(":lang")
-    implementation project(":cdi")
-    implementation project(":storage")
-    implementation project(":exceptions")
-    implementation "software.amazon.awssdk:s3:${s3Version}"
-    implementation "com.google.guava:guava:${guavaVersion}"
+    api project(":lang")
+    api project(":cdi")
+    api project(":storage")
+    api project(":exceptions")
+    api "software.amazon.awssdk:s3:${s3Version}"
 }
