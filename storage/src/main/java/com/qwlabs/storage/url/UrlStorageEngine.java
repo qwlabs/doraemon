@@ -11,6 +11,7 @@ import com.qwlabs.storage.models.PutObjectCommand;
 import com.qwlabs.storage.models.StorageObject;
 import com.qwlabs.storage.models.UploadUrls;
 import com.qwlabs.storage.services.StorageEngine;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.io.InputStream;
@@ -46,7 +47,7 @@ public class UrlStorageEngine implements StorageEngine, Dispatchable<String> {
     }
 
     @Override
-    public boolean dispatchable(String context) {
+    public boolean dispatchable(@Nullable String context) {
         return Objects.equals(PROVIDER, context);
     }
 }

@@ -2,7 +2,7 @@ package com.qwlabs.cdi;
 
 
 import lombok.extern.slf4j.Slf4j;
-
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import javax.enterprise.inject.Instance;
 import java.util.Optional;
@@ -24,8 +24,15 @@ public final class DispatchInstance<C, D> {
         return ((Dispatchable<C>) dispatcher).dispatchable(context);
     }
 
+    private Stream<D> stream() {
+        return Optional.ofNullable(this.instance)
+                .map(Instance::stream)
+                .orElseGet(Stream::empty);
+    }
+
+
     public Optional<D> getOptional(C context) {
-        return this.instance.stream()
+        return stream()
                 .filter(dispatcher -> matches(dispatcher, context))
                 .findFirst();
     }
@@ -35,12 +42,12 @@ public final class DispatchInstance<C, D> {
                 .orElseThrow(() -> new RuntimeException("Instance not found."));
     }
 
-    public static <C, D> DispatchInstance<C, D> of(Instance<D> instance) {
+    public Stream<D> stream(C context) {
+        return stream().filter(dispatcher -> matches(dispatcher, context));
+    }
+
+    public static <C, D> DispatchInstance<C, D> of(@Nullable Instance<D> instance) {
         return new DispatchInstance<>(instance);
     }
 
-    public Stream<D> stream(C context) {
-        return this.instance.stream()
-                .filter(dispatcher -> matches(dispatcher, context));
-    }
 }
