@@ -13,7 +13,7 @@ public interface Caller {
 
     @Nullable String type();
 
-    default boolean is(String type){
+    default boolean is(String type) {
         return Objects.equals(type, type());
     }
 
@@ -25,7 +25,7 @@ public interface Caller {
 
     @NotNull CallerPermissions permissions();
 
-    default boolean isAnonymous(){
+    default boolean isAnonymous() {
         return !authenticated();
     }
 
