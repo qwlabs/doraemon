@@ -19,7 +19,7 @@ public interface Caller {
 
     @NotNull CallerAttributes attributes();
 
-    default @Nullable CallerAttributes attribute(String name) {
+    default @Nullable <A> A attribute(String name) {
         return attributes().get(name);
     }
 
