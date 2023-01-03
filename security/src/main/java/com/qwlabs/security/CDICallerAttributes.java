@@ -4,18 +4,18 @@ import com.google.common.collect.Maps;
 import com.qwlabs.cdi.DispatchInstance;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.enterprise.inject.Instance;
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 public class CDICallerAttributes implements CallerAttributes {
     private final Caller caller;
     private final Map<String, Object> cachedAttributes;
-    private final DispatchInstance<String, CallerAttributeLoader> loaders;
+    private final DispatchInstance<String, CallerAttributeLoader<?>> loaders;
 
-    public CDICallerAttributes(Caller caller, @Nullable Instance<CallerAttributeLoader> loader) {
+    public CDICallerAttributes(Caller caller, @NotNull DispatchInstance<String, CallerAttributeLoader<?>> loader) {
         this.caller = caller;
         this.cachedAttributes = Maps.newConcurrentMap();
-        this.loaders = DispatchInstance.of(loader);
+        this.loaders = loader;
     }
 
     @Override

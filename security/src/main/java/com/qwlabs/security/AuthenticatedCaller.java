@@ -2,7 +2,6 @@ package com.qwlabs.security;
 
 import com.google.common.base.Suppliers;
 import com.qwlabs.cdi.DispatchInstance;
-import com.qwlabs.cdi.SafeCDI;
 import io.quarkus.security.identity.SecurityIdentity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,24 +15,20 @@ public class AuthenticatedCaller implements Caller {
     private final String id;
     private final String type;
     private final SecurityIdentity securityIdentity;
+    private final DispatchInstance<String, CallerAttributeLoader<?>> attributeLoader;
+    private final DispatchInstance<Caller, CallerPermissionsLoader> permissionsLoader;
     private final Supplier<CallerAttributes> attributes = Suppliers.memoize(this::loadAttributes);
-    private final Supplier<DispatchInstance<Caller, CallerPermissionsLoader>> permissionsLoader = Suppliers.memoize(this::loadPermissionsLoader);
     private final Supplier<CallerPermissions> permissions = Suppliers.memoize(this::loadPermissions);
 
     private CallerPermissions loadPermissions() {
-        return permissionsLoader.get()
+        return permissionsLoader
                 .getOptional(this)
                 .map(loader -> loader.permissions(this))
                 .orElseGet(null);
     }
 
-    private DispatchInstance<Caller, CallerPermissionsLoader> loadPermissionsLoader() {
-        return DispatchInstance.of(SafeCDI.select(CallerPermissionsLoader.class).orElse(null));
-    }
-
     private CallerAttributes loadAttributes() {
-        return new CDICallerAttributes(this,
-                SafeCDI.select(CallerAttributeLoader.class).orElse(null));
+        return new CDICallerAttributes(this, attributeLoader);
     }
 
     @Override
