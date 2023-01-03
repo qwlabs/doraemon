@@ -37,6 +37,7 @@ public class CallerIdentityAugmentor implements SecurityIdentityAugmentor {
         return AuthenticatedCaller.builder()
                 .id(callerPrincipal.id())
                 .type(callerPrincipal.type())
+                .securityIdentity(identity)
                 .build();
     }
 }

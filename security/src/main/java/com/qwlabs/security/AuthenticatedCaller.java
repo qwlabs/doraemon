@@ -3,6 +3,7 @@ package com.qwlabs.security;
 import com.google.common.base.Suppliers;
 import com.qwlabs.cdi.DispatchInstance;
 import com.qwlabs.cdi.SafeCDI;
+import io.quarkus.security.identity.SecurityIdentity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -14,6 +15,7 @@ import java.util.function.Supplier;
 public class AuthenticatedCaller implements Caller {
     private final String id;
     private final String type;
+    private final SecurityIdentity securityIdentity;
     private final Supplier<CallerAttributes> attributes = Suppliers.memoize(this::loadAttributes);
     private final Supplier<DispatchInstance<Caller, CallerPermissionsLoader>> permissionsLoader = Suppliers.memoize(this::loadPermissionsLoader);
     private final Supplier<CallerPermissions> permissions = Suppliers.memoize(this::loadPermissions);
@@ -52,6 +54,11 @@ public class AuthenticatedCaller implements Caller {
     @Override
     public CallerPermissions permissions() {
         return permissions.get();
+    }
+
+    @Override
+    public @Nullable SecurityIdentity identity() {
+        return securityIdentity;
     }
 
     @Override

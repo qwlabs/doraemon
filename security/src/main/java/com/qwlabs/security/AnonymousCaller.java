@@ -1,5 +1,6 @@
 package com.qwlabs.security;
 
+import io.quarkus.security.identity.SecurityIdentity;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import javax.validation.constraints.NotNull;
@@ -55,6 +56,11 @@ public class AnonymousCaller implements Caller {
     @Override
     public CallerPermissions permissions() {
         return PERMISSIONS;
+    }
+
+    @Override
+    public SecurityIdentity identity() {
+        return null;
     }
 
     @Override

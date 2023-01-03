@@ -25,6 +25,8 @@ public interface Caller {
 
     @NotNull CallerPermissions permissions();
 
+    @Nullable SecurityIdentity identity();
+
     default boolean isAnonymous() {
         return !authenticated();
     }
