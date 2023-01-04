@@ -1,12 +1,10 @@
 package com.qwlabs.security;
 
 import io.quarkus.security.identity.SecurityIdentity;
-import io.quarkus.security.runtime.QuarkusSecurityIdentity;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
-import java.util.Optional;
 
 public interface Caller {
     @Nullable String id();
@@ -27,6 +25,9 @@ public interface Caller {
 
     @Nullable SecurityIdentity identity();
 
+    default void identity(@Nullable SecurityIdentity identity){
+    }
+
     default boolean isAnonymous() {
         return !authenticated();
     }
@@ -35,17 +36,5 @@ public interface Caller {
 
     static Caller load(SecurityIdentity securityIdentity) {
         return securityIdentity.getAttribute(Caller.class.getName());
-    }
-
-    static void set(QuarkusSecurityIdentity.Builder builder, Caller caller) {
-        set(builder, caller, null);
-    }
-
-    static void set(QuarkusSecurityIdentity.Builder builder, Caller caller, @Nullable String scope) {
-        var roles = Optional.ofNullable(scope)
-                .map(s -> caller.permissions().raw(s))
-                .orElseGet(() -> caller.permissions().raw());
-        builder.addRoles(roles);
-        builder.addAttribute(Caller.class.getName(), caller);
     }
 }

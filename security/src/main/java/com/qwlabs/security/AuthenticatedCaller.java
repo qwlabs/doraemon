@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 public class AuthenticatedCaller implements Caller {
     private final String id;
     private final String type;
-    private final SecurityIdentity securityIdentity;
+    private SecurityIdentity identity;
     private final DispatchInstance<String, CallerAttributeLoader<?>> attributeLoader;
     private final DispatchInstance<Caller, CallerPermissionsLoader> permissionsLoader;
     private final Supplier<CallerAttributes> attributes = Suppliers.memoize(this::loadAttributes);
@@ -53,7 +53,12 @@ public class AuthenticatedCaller implements Caller {
 
     @Override
     public @Nullable SecurityIdentity identity() {
-        return securityIdentity;
+        return identity;
+    }
+
+    @Override
+    public void identity(@Nullable SecurityIdentity identity) {
+        this.identity = identity;
     }
 
     @Override
