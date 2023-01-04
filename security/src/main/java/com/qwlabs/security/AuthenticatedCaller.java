@@ -58,6 +58,6 @@ public class AuthenticatedCaller implements Caller {
 
     @Override
     public boolean authenticated() {
-        return false;
+        return true;
     }
 }
