@@ -6,9 +6,10 @@ import java.lang.reflect.Type;
 
 public class Annotations {
 
-    public static <T> Class<T>  actualTypeArgument(Class<?> element) {
+    public static <T> Class<T> actualTypeArgument(Class<?> element) {
         return actualTypeArgument(element, 0);
     }
+
     public static <T> Class<T> actualTypeArgument(Class<?> element, int index) {
         if (element == null) {
             return null;
@@ -16,7 +17,7 @@ public class Annotations {
         Type genericSuperclass = element.getGenericSuperclass();
         ParameterizedType parameterizedType = (ParameterizedType) genericSuperclass;
         Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-        if(actualTypeArguments.length <= index){
+        if (actualTypeArguments.length <= index) {
             return null;
         }
         Type genericType = actualTypeArguments[index];
