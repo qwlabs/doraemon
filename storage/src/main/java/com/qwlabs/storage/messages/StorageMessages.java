@@ -3,6 +3,7 @@ package com.qwlabs.storage.messages;
 
 import com.qwlabs.exceptions.BadRequestException;
 import com.qwlabs.exceptions.CodeException;
+import com.qwlabs.exceptions.NotImplementedException;
 import org.jboss.logging.annotations.Message;
 import org.jboss.logging.annotations.MessageBundle;
 
@@ -39,4 +40,7 @@ public interface StorageMessages {
 
     @Message(value = "获取文件异常: bucketName:{0} objectName:{1}:message:{2}", format = Message.Format.MESSAGE_FORMAT)
     BadRequestException failedToGetFile(String bucketName, String objectName, String message);
+
+    @Message(value = "未实现", format = Message.Format.MESSAGE_FORMAT)
+    NotImplementedException notImplemented();
 }
