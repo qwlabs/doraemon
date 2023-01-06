@@ -15,13 +15,19 @@ public class Annotations {
             return null;
         }
         Type genericSuperclass = element.getGenericSuperclass();
-        ParameterizedType parameterizedType = (ParameterizedType) genericSuperclass;
-        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-        if (actualTypeArguments.length <= index) {
+        if (genericSuperclass instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) genericSuperclass;
+            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+            if (actualTypeArguments.length > index) {
+                Type genericType = actualTypeArguments[index];
+                return (Class<T>) genericType;
+            }
+        }
+        Class<?> superClass = element.getSuperclass();
+        if (superClass == null) {
             return null;
         }
-        Type genericType = actualTypeArguments[index];
-        return (Class<T>) genericType;
+        return actualTypeArgument(superClass, index);
     }
 
     public static boolean isAnnotationPresent(Class<?> element, Class<? extends Annotation> annotationType) {
@@ -31,9 +37,10 @@ public class Annotations {
         if (element.isAnnotationPresent(annotationType)) {
             return true;
         }
-        if (element.getSuperclass() == null) {
+        Class<?> superClass = element.getSuperclass();
+        if (superClass == null) {
             return false;
         }
-        return isAnnotationPresent(element.getSuperclass().getSuperclass(), annotationType);
+        return isAnnotationPresent(superClass, annotationType);
     }
 }
