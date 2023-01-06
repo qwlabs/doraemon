@@ -9,8 +9,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.function.Function;
 
 public class S3StorageEngine implements StorageEngine, Dispatchable<String> {
-    private final CustomS3Client s3Client;
     private final Function<String, Boolean> dispatchable;
+    protected final CustomS3Client s3Client;
 
     public S3StorageEngine(CustomS3Client s3Client,
                            Function<String, Boolean> dispatchable) {

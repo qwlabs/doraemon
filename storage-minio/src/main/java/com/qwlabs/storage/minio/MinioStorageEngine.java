@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.function.Function;
 
 public class MinioStorageEngine implements StorageEngine, Dispatchable<String> {
-    private final CustomMinioClient minioClient;
     private final Function<String, Boolean> dispatchable;
+    protected final CustomMinioClient minioClient;
 
     public MinioStorageEngine(CustomMinioClient minioClient,
                               Function<String, Boolean> dispatchable) {
