@@ -1,11 +1,9 @@
 package com.qwlabs.q.cdi;
 
-import com.qwlabs.q.QEngine;
 import com.qwlabs.q.conditions.AndQCondition;
 import com.qwlabs.q.conditions.OrQCondition;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,24 +24,20 @@ class TypedQFormatterTest {
             .build();
 
     @Test
-    void test_dispatchable(@Mock QEngine engine) {
-        var formatter = new AFormatter(engine);
+    void test_dispatchable() {
+        var formatter = new AFormatter();
         assertTrue(formatter.dispatchable(andContext));
         assertFalse(formatter.dispatchable(orContext));
     }
 
     @Test
-    void should_format(@Mock QEngine engine) {
-        var formatter = new AFormatter(engine);
+    void should_format() {
+        var formatter = new AFormatter();
         String value = formatter.format(AndQCondition.builder().build());
         assertThat(value, is("from AFormatter"));
     }
 
     private static class AFormatter extends TypedQFormatter<AndQCondition> {
-
-        public AFormatter(QEngine engine) {
-            super(engine);
-        }
 
         @Override
         protected String dialect() {
