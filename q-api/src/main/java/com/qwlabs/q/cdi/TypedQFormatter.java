@@ -3,12 +3,14 @@ package com.qwlabs.q.cdi;
 import com.google.common.base.Suppliers;
 import com.qwlabs.cdi.Dispatchable;
 import com.qwlabs.lang.Annotations;
+import com.qwlabs.q.QEngine;
 import com.qwlabs.q.conditions.QCondition;
 import com.qwlabs.q.formatters.QFormatter;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public abstract class TypedQFormatter<C extends QCondition>
@@ -16,6 +18,21 @@ public abstract class TypedQFormatter<C extends QCondition>
         QFormatter,
         QEngineAware {
     private final Supplier<QFormatContext> context = Suppliers.memoize(this::buildContext);
+    private final Supplier<QEngine> engine = Suppliers.memoize(this::loadEngine);
+    private final QEngine presetEngine;
+
+    public TypedQFormatter() {
+        this(null);
+    }
+
+    public TypedQFormatter(QEngine presetEngine) {
+        this.presetEngine = presetEngine;
+    }
+
+    private QEngine loadEngine() {
+        return Optional.ofNullable(presetEngine)
+                .orElseGet(this::engine);
+    }
 
     private QFormatContext buildContext() {
         return QFormatContext.builder()
@@ -25,7 +42,7 @@ public abstract class TypedQFormatter<C extends QCondition>
     }
 
     @Override
-    public final @NotNull String format(@NotNull QCondition condition) {
+    public @NotNull String format(@NotNull QCondition condition) {
         return doFormat((C) condition);
     }
 
@@ -36,7 +53,7 @@ public abstract class TypedQFormatter<C extends QCondition>
 
     @NotNull
     protected String continueFormat(@NotNull QCondition condition) {
-        return engine().format(dialect(), condition);
+        return engine.get().format(dialect(), condition);
     }
 
     protected abstract String dialect();
