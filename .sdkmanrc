@@ -1,1 +1,2 @@
-java=11.0.15.9.1-amzn
+java=11.0.2-open
+gradle=7.6

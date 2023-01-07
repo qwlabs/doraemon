@@ -10,6 +10,7 @@ import com.qwlabs.storage.models.StoragePlan;
 import com.qwlabs.storage.models.UploadUrls;
 import com.qwlabs.storage.services.StorageContext;
 import com.qwlabs.storage.services.StorageEngine;
+import com.qwlabs.storage.services.StoragePlanner;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
@@ -18,11 +19,11 @@ import java.io.InputStream;
 
 @ApplicationScoped
 public class StorageService {
-    private final Instance<StoragePlannerDispatcher> storagePlanner;
+    private final Instance<StoragePlanner> storagePlanner;
     private final Instance<StorageEngine> storageEngines;
 
     @Inject
-    public StorageService(Instance<StoragePlannerDispatcher> storagePlanner,
+    public StorageService(@Primary Instance<StoragePlanner> storagePlanner,
                           @Primary Instance<StorageEngine> storageEngines) {
         this.storagePlanner = storagePlanner;
         this.storageEngines = storageEngines;
@@ -31,8 +32,8 @@ public class StorageService {
     public UploadUrls createUploadUrls(StorageContext storageContext) {
         StoragePlan plan = storagePlanner.get().plan(storageContext);
         GetUploadUrlsCommand command = new GetUploadUrlsCommand(plan.getProvider(),
-            plan.getBucket(), plan.getObjectName(),
-            storageContext.getFilePartCount(), storageContext.getFileContentType());
+                plan.getBucket(), plan.getObjectName(),
+                storageContext.getFilePartCount(), storageContext.getFileContentType());
         StorageEngine engine = storageEngines.get();
         return engine.createUploadUrls(command);
     }

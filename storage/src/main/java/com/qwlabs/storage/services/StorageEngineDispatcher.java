@@ -24,7 +24,7 @@ public class StorageEngineDispatcher implements StorageEngine {
 
     @Inject
     public StorageEngineDispatcher(Instance<StorageEngine> instance) {
-        this.dispatcher = DispatchInstance.of(instance);
+        this.dispatcher = DispatchInstance.ofCache(instance);
     }
 
     private StorageEngine get(String provider) {

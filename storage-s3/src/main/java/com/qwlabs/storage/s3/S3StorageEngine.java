@@ -4,28 +4,17 @@ package com.qwlabs.storage.s3;
 import com.qwlabs.cdi.Dispatchable;
 import com.qwlabs.storage.models.GetDownloadUrlCommand;
 import com.qwlabs.storage.services.StorageEngine;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.function.Function;
 
-public class S3StorageEngine implements StorageEngine, Dispatchable<String> {
+public abstract class S3StorageEngine implements StorageEngine, Dispatchable<String> {
     protected final CustomS3Client s3Client;
-    private final Function<String, Boolean> dispatchable;
 
-    public S3StorageEngine(CustomS3Client s3Client,
-                           Function<String, Boolean> dispatchable) {
+    public S3StorageEngine(CustomS3Client s3Client) {
         this.s3Client = s3Client;
-        this.dispatchable = dispatchable;
     }
 
     @Override
     public String getDownloadUrl(GetDownloadUrlCommand command) {
         return this.s3Client.createDownloadUrl(command.getBucket(), command.getObjectName());
-    }
-
-
-    @Override
-    public boolean dispatchable(@Nullable String context) {
-        return dispatchable.apply(context);
     }
 }

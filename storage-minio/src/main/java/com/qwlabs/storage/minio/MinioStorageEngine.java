@@ -14,20 +14,15 @@ import com.qwlabs.storage.models.UploadUrls;
 import com.qwlabs.storage.services.StorageEngine;
 import io.minio.messages.ListPartsResult;
 import io.minio.messages.Part;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.InputStream;
 import java.util.List;
-import java.util.function.Function;
 
-public class MinioStorageEngine implements StorageEngine, Dispatchable<String> {
+public abstract class MinioStorageEngine implements StorageEngine, Dispatchable<String> {
     protected final CustomMinioClient minioClient;
-    private final Function<String, Boolean> dispatchable;
 
-    public MinioStorageEngine(CustomMinioClient minioClient,
-                              Function<String, Boolean> dispatchable) {
+    public MinioStorageEngine(CustomMinioClient minioClient) {
         this.minioClient = minioClient;
-        this.dispatchable = dispatchable;
     }
 
     @Override
@@ -78,10 +73,5 @@ public class MinioStorageEngine implements StorageEngine, Dispatchable<String> {
         if (!minioClient.bucketExists(bucket)) {
             minioClient.makeBucket(bucket);
         }
-    }
-
-    @Override
-    public boolean dispatchable(@Nullable String context) {
-        return dispatchable.apply(context);
     }
 }
