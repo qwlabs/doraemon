@@ -13,9 +13,11 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 import java.net.URI;
 
-public abstract class S3StorageBootstrap {
+public final class S3StorageHelper {
+    private S3StorageHelper() {
+    }
 
-    protected CustomS3Client createS3Client(S3Config config) {
+    public static CustomS3Client createS3Client(S3Config config) {
         return new CustomS3Client(
                 createS3SyncClient(config),
                 createS3AsyncClient(config),
@@ -23,26 +25,26 @@ public abstract class S3StorageBootstrap {
         );
     }
 
-    private S3Client createS3SyncClient(S3Config config) {
+    private static S3Client createS3SyncClient(S3Config config) {
         S3ClientBuilder builder = S3Client.builder();
         configure(builder, config);
         return builder.build();
     }
 
-    private S3AsyncClient createS3AsyncClient(S3Config config) {
+    private static S3AsyncClient createS3AsyncClient(S3Config config) {
         S3AsyncClientBuilder builder = S3AsyncClient.builder();
         configure(builder, config);
         return builder.build();
     }
 
-    private S3Presigner createS3Presigner(S3Config config) {
+    private static S3Presigner createS3Presigner(S3Config config) {
         S3Presigner.Builder builder = S3Presigner.builder();
         configure(builder, config);
         return builder.build();
     }
 
-    private void configure(S3Presigner.Builder builder,
-                           S3Config config) {
+    private static void configure(S3Presigner.Builder builder,
+                                  S3Config config) {
         config.validate();
         builder.credentialsProvider(StaticCredentialsProvider.create(
                 AwsBasicCredentials.create(config.getAccessKey(), config.getSecretKey())));
@@ -52,8 +54,8 @@ public abstract class S3StorageBootstrap {
         builder.endpointOverride(URI.create(config.getUrl()));
     }
 
-    private void configure(S3BaseClientBuilder builder,
-                           S3Config config) {
+    private static void configure(S3BaseClientBuilder builder,
+                                  S3Config config) {
         config.validate();
         builder.credentialsProvider(StaticCredentialsProvider.create(
                 AwsBasicCredentials.create(config.getAccessKey(), config.getSecretKey())));

@@ -2,9 +2,11 @@ package com.qwlabs.storage.minio;
 
 import io.minio.MinioAsyncClient;
 
-public abstract class MinioStorageBootstrap {
+public final class MinioStorageHelper {
+    private MinioStorageHelper() {
+    }
 
-    protected MinioAsyncClient createMinioClient(MinioConfig config) {
+    public static MinioAsyncClient createMinioClient(MinioConfig config) {
         config.validate();
         return MinioAsyncClient.builder()
                 .endpoint(config.getUrl())
