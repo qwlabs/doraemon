@@ -2,7 +2,6 @@ package com.qwlabs.storage.minio;
 
 
 import com.google.common.collect.Lists;
-import com.qwlabs.cdi.Dispatchable;
 import com.qwlabs.storage.messages.StorageMessages;
 import com.qwlabs.storage.models.CompleteUploadCommand;
 import com.qwlabs.storage.models.GetDownloadUrlCommand;
@@ -18,7 +17,7 @@ import io.minio.messages.Part;
 import java.io.InputStream;
 import java.util.List;
 
-public abstract class MinioStorageEngine implements StorageEngine, Dispatchable<String> {
+public class MinioStorageEngine implements StorageEngine {
     protected final CustomMinioClient minioClient;
 
     public MinioStorageEngine(CustomMinioClient minioClient) {
