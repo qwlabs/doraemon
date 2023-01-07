@@ -1,4 +1,5 @@
 dependencies {
+    api "io.quarkus.arc:arc:${quarkusVersion}"
     api "jakarta.enterprise:jakarta.enterprise.cdi-api:${cdiApiVersion}"
     api "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
     api "org.checkerframework:checker-qual:${checkerframeworkVersion}"

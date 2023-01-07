@@ -30,11 +30,11 @@ public final class DispatchInstance<C, D> {
     }
 
     private boolean matches(D dispatcher, C context) {
-        if (!(dispatcher instanceof Dispatchable)) {
-            LOGGER.warn("Class {} is not Dispatchable", dispatcher.getClass().getName());
-            return false;
+        if (Dispatchables.isDispatchable(dispatcher)) {
+            return ((Dispatchable<C>) dispatcher).dispatchable(context);
         }
-        return ((Dispatchable<C>) dispatcher).dispatchable(context);
+        LOGGER.warn("Class {} is not Dispatchable", dispatcher.getClass().getName());
+        return false;
     }
 
     private Stream<D> stream() {
