@@ -1,16 +1,16 @@
 package com.qwlabs.storage.services;
 
 import com.qwlabs.cdi.DispatchInstance;
+import com.qwlabs.cdi.Primary;
 import com.qwlabs.storage.messages.StorageMessages;
 import com.qwlabs.storage.models.StoragePlan;
-import com.qwlabs.storage.services.StorageContext;
-import com.qwlabs.storage.services.StoragePlanner;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.Objects;
 
+@Primary
 @ApplicationScoped
 public class StoragePlannerDispatcher implements StoragePlanner {
     private final DispatchInstance<StorageContext, StoragePlanner> dispatcher;
