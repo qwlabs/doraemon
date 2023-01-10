@@ -17,7 +17,7 @@ subprojects {
     apply from: "${rootProject.rootDir}/gradle/reversion.gradle"
     apply from: "${rootProject.rootDir}/gradle/lombok.gradle"
     apply from: "${rootProject.rootDir}/gradle/logging.gradle"
-//    apply from: "${rootProject.rootDir}/gradle/check.gradle"
+    apply from: "${rootProject.rootDir}/gradle/check.gradle"
     apply from: "${rootProject.rootDir}/gradle/publication.gradle"
 
     repositories {

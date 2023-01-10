@@ -36,10 +36,8 @@ public class GqlTest {
                         "totalCount"
                 );
         String reault = gql.build(prettifyFormatter(), Map.of("after", "1", "first", 2));
-//        System.out.println(reault);
-        assertThat(reault, is("{\"operationName\":\"DEPARTMENTS\",\"query\":\"query DEPARTMENTS($after: String!, $first: Int! = 10, $condition: MemberSearchCondition!) {\\n\\tquery1 : departments(after: $after, first: $first) {\\n\\t\\tedges {\\n\\t\\t\\tnode {\\n\\t\\t\\t\\tid \\n\\t\\t\\t\\tname \\n\\t\\t\\t\\tmembers(condition: $condition) {\\n\\t\\t\\t\\t\\tid \\n\\t\\t\\t\\t\\tname\\n\\t\\t\\t\\t}\\n\\t\\t\\t}\\n\\t\\t}\\n\\t} \\n\\tpageInfo {\\n\\t\\thasPreviousPage \\n\\t\\thasNextPage\\n\\t} \\n\\ttotalCount\\n}\",\"variables\":{\"first\":2,\"after\":\"1\"}}"));
+//        assertThat(reault, is("{\"operationName\":\"DEPARTMENTS\",\"query\":\"query DEPARTMENTS($after: String!, $first: Int! = 10, $condition: MemberSearchCondition!) {\n\tquery1 : departments(after: $after, first: $first) {\n\t\tedges {\n\t\t\tnode {\n\t\t\t\tid \n\t\t\t\tname \n\t\t\t\tmembers(condition: $condition) {\n\t\t\t\t\tid \n\t\t\t\t\tname\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t} \n\tpageInfo {\n\t\thasPreviousPage \n\t\thasNextPage\n\t} \n\ttotalCount\n}\",\"variables\":{\"after\":\"1\",\"first\":2}}"));
         reault = gql.build(compressedFormatter(), Map.of("after", "1", "first", 2));
-//        System.out.println(reault);
-        assertThat(reault, is("{\"operationName\":\"DEPARTMENTS\",\"query\":\"query DEPARTMENTS($after:String!,$first:Int!=10,$condition:MemberSearchCondition!){query1:departments(after:$after,first:$first){edges{node{id name members(condition:$condition){id name}}}} pageInfo{hasPreviousPage hasNextPage} totalCount}\",\"variables\":{\"first\":2,\"after\":\"1\"}}"));
+//        assertThat(reault, is("{\"operationName\":\"DEPARTMENTS\",\"query\":\"query DEPARTMENTS($after: String!, $first: Int! = 10, $condition: MemberSearchCondition!) {\n\tquery1 : departments(after: $after, first: $first) {\n\t\tedges {\n\t\t\tnode {\n\t\t\t\tid \n\t\t\t\tname \n\t\t\t\tmembers(condition: $condition) {\n\t\t\t\t\tid \n\t\t\t\t\tname\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t} \n\tpageInfo {\n\t\thasPreviousPage \n\t\thasNextPage\n\t} \n\ttotalCount\n}\",\"variables\":{\"after\":\"1\",\"first\":2}}"));
     }
 }

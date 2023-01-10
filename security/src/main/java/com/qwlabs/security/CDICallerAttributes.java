@@ -2,7 +2,6 @@ package com.qwlabs.security;
 
 import com.google.common.collect.Maps;
 import com.qwlabs.cdi.DispatchInstance;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;

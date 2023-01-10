@@ -1,7 +1,7 @@
 package com.qwlabs.exceptions;
 
 public class NotImplementedException extends CodeException {
-    
+
     public NotImplementedException() {
     }
 
@@ -17,7 +17,8 @@ public class NotImplementedException extends CodeException {
         super(cause);
     }
 
-    public NotImplementedException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public NotImplementedException(String message, Throwable cause,
+                                   boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

@@ -26,8 +26,8 @@ public class QEngineImpl implements QEngine {
     @Inject
     public QEngineImpl(Instance<QFormatter> formatters,
                        Instance<QParser> parsers) {
-        this.formatters = DispatchInstance.ofCache(formatters);
-        this.parsers = DispatchInstance.ofCache(parsers);
+        this.formatters = DispatchInstance.of(formatters, true);
+        this.parsers = DispatchInstance.of(parsers, true);
     }
 
     @Override

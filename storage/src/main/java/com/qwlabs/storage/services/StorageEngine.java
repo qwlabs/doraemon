@@ -14,30 +14,30 @@ import java.io.InputStream;
 
 public interface StorageEngine {
 
-    default UploadUrls createUploadUrls(GetUploadUrlsCommand command){
+    default UploadUrls createUploadUrls(GetUploadUrlsCommand command) {
         throw StorageMessages.INSTANCE.notImplemented();
     }
 
-    default String completeUpload(CompleteUploadCommand command){
+    default String completeUpload(CompleteUploadCommand command) {
         throw StorageMessages.INSTANCE.notImplemented();
     }
 
-    default String getDownloadUrl(GetDownloadUrlCommand command){
+    default String getDownloadUrl(GetDownloadUrlCommand command) {
         throw StorageMessages.INSTANCE.notImplemented();
     }
 
-    default InputStream getObject(GetObjectCommand command){
+    default InputStream getObject(GetObjectCommand command) {
         throw StorageMessages.INSTANCE.notImplemented();
     }
 
-    default StorageObject putObject(PutObjectCommand command){
+    default StorageObject putObject(PutObjectCommand command) {
         throw StorageMessages.INSTANCE.notImplemented();
     }
 
     default String putObjectForUrl(PutObjectCommand command) {
         return getDownloadUrl(GetDownloadUrlCommand.builder()
-            .bucket(command.getBucket())
-            .objectName(putObject(command).getObjectName())
-            .build());
+                .bucket(command.getBucket())
+                .objectName(putObject(command).getObjectName())
+                .build());
     }
 }

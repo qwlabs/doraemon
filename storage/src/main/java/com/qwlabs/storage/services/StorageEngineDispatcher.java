@@ -24,12 +24,12 @@ public class StorageEngineDispatcher implements StorageEngine {
 
     @Inject
     public StorageEngineDispatcher(Instance<StorageEngine> instance) {
-        this.dispatcher = DispatchInstance.ofCache(instance);
+        this.dispatcher = DispatchInstance.of(instance, true);
     }
 
     private StorageEngine get(String provider) {
         return dispatcher.getOptional(provider)
-            .orElseThrow(() -> StorageMessages.INSTANCE.notFoundStorageService(provider));
+                .orElseThrow(() -> StorageMessages.INSTANCE.notFoundStorageService(provider));
     }
 
     @Override
@@ -45,21 +45,21 @@ public class StorageEngineDispatcher implements StorageEngine {
     @Override
     public String getDownloadUrl(GetDownloadUrlCommand command) {
         return dispatcher.getOptional(command.getProvider())
-            .map(service -> service.getDownloadUrl(command))
-            .orElse(null);
+                .map(service -> service.getDownloadUrl(command))
+                .orElse(null);
     }
 
     @Override
     public InputStream getObject(GetObjectCommand command) {
         return dispatcher.getOptional(command.getProvider())
-            .map(service -> service.getObject(command))
-            .orElse(null);
+                .map(service -> service.getObject(command))
+                .orElse(null);
     }
 
     @Override
     public StorageObject putObject(PutObjectCommand command) {
         return dispatcher.getOptional(command.getProvider())
-            .map(service -> service.putObject(command))
-            .orElse(null);
+                .map(service -> service.putObject(command))
+                .orElse(null);
     }
 }

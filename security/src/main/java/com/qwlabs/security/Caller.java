@@ -25,7 +25,7 @@ public interface Caller {
 
     @Nullable SecurityIdentity identity();
 
-    default void identity(@Nullable SecurityIdentity identity){
+    default void identity(@Nullable SecurityIdentity identity) {
     }
 
     default boolean isAnonymous() {

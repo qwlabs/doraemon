@@ -4,7 +4,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-public class Annotations {
+public final class Annotations {
+    private Annotations() {
+    }
 
     public static <T> Class<T> actualTypeArgument(Class<?> element) {
         return actualTypeArgument(element, 0);

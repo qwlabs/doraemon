@@ -71,7 +71,7 @@ public final class Gql implements GqlVariablesAware<Gql>, GqlFieldsAware<Gql> {
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("operationName", this.name);
         result.put("query", this.buildQuery(formatter));
-        Optional.ofNullable(variables).ifPresent(vars->result.put("variables", vars));
+        Optional.ofNullable(variables).ifPresent(vars->result.put("variables", new LinkedHashMap<>(vars)));
         try {
             return objectMapper.writeValueAsString(result);
         } catch (JsonProcessingException e) {

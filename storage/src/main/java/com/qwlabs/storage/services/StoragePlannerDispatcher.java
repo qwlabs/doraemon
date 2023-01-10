@@ -17,7 +17,7 @@ public class StoragePlannerDispatcher implements StoragePlanner {
 
     @Inject
     public StoragePlannerDispatcher(Instance<StoragePlanner> instance) {
-        this.dispatcher = DispatchInstance.ofCache(instance);
+        this.dispatcher = DispatchInstance.of(instance, true);
     }
 
     @Override

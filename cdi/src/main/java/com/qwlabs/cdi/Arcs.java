@@ -4,7 +4,10 @@ import io.quarkus.arc.ClientProxy;
 
 import java.util.Optional;
 
-public class Arcs {
+public final class Arcs {
+    private Arcs() {
+    }
+
     public static <T> Optional<T> contextualInstance(Object obj) {
         Object real = obj;
         if (obj instanceof ClientProxy) {
