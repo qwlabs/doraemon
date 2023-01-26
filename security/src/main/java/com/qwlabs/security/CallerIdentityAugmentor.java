@@ -17,13 +17,13 @@ import javax.inject.Inject;
 public class CallerIdentityAugmentor implements SecurityIdentityAugmentor {
     private final CallerPrincipalLoader principalLoader;
     private final DispatchInstance<Caller, CallerPermissionsLoader> permissionsLoader;
-    private final DispatchInstance<String, CallerAttributeLoader<?>> attributeLoader;
+    private final DispatchInstance<String, CallerAttributeLoader<?, ?>> attributeLoader;
     private final CallerIdentityRolesProvider identityRolesProvider;
 
     @Inject
     public CallerIdentityAugmentor(Instance<CallerPrincipalLoader> principalLoader,
                                    Instance<CallerPermissionsLoader> permissionsLoader,
-                                   Instance<CallerAttributeLoader<?>> attributeLoader,
+                                   Instance<CallerAttributeLoader<?, ?>> attributeLoader,
                                    CallerIdentityRolesProvider identityRolesProvider) {
         this.principalLoader = principalLoader.get();
         this.permissionsLoader = DispatchInstance.of(permissionsLoader);

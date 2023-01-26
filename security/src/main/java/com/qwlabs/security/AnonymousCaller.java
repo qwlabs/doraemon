@@ -9,9 +9,8 @@ import java.util.Set;
 public class AnonymousCaller implements Caller {
     public static final AnonymousCaller INSTANCE = new AnonymousCaller();
     private static final CallerAttributes ATTRIBUTES = new CallerAttributes() {
-
         @Override
-        public <T> T get(String name) {
+        public <A, C> A get(String name, C context) {
             return null;
         }
     };

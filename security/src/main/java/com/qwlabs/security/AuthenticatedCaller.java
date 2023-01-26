@@ -15,7 +15,7 @@ public class AuthenticatedCaller implements Caller {
     private final String id;
     private final String type;
     private SecurityIdentity identity;
-    private final DispatchInstance<String, CallerAttributeLoader<?>> attributeLoader;
+    private final DispatchInstance<String, CallerAttributeLoader<?, ?>> attributeLoader;
     private final DispatchInstance<Caller, CallerPermissionsLoader> permissionsLoader;
     private final Supplier<CallerAttributes> attributes = Suppliers.memoize(this::loadAttributes);
     private final Supplier<CallerPermissions> permissions = Suppliers.memoize(this::loadPermissions);
