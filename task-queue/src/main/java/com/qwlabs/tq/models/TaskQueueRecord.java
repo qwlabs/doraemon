@@ -1,19 +1,38 @@
 package com.qwlabs.tq.models;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.Instant;
 
-@Getter
-@Setter
-public class TaskQueueRecord {
-    private String id;
-    private String topic;
-    private Integer priority;
-    private Object context;
-    private ProcessStatus processStatus;
-    private Instant processStartAt;
-    private Instant processEndAt;
-    private String failedMessage;
+
+public interface TaskQueueRecord {
+    String getId();
+
+    void setId(String id);
+
+    String getTopic();
+
+    void setTopic(String topic);
+
+    Integer getPriority();
+
+    void setPriority(Integer topic);
+
+    <C> C getContext(Class<C> clazz);
+
+    void setContext(Object context);
+
+    ProcessStatus getProcessStatus();
+
+    void setProcessStatus(ProcessStatus processStatus);
+
+    Instant getProcessStartAt();
+
+    void setProcessStartAt(Instant processStartAt);
+
+    Instant getProcessEndAt();
+
+    void setProcessEndAt(Instant processEndAt);
+
+    String getFailedMessage();
+
+    void setFailedMessage(String failedMessage);
 }

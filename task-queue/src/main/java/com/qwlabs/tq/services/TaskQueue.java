@@ -1,7 +1,6 @@
 package com.qwlabs.tq.services;
 
 import com.google.common.base.Throwables;
-
 import com.qwlabs.tq.models.ProcessStatus;
 import com.qwlabs.tq.models.TaskQueueRecord;
 import com.qwlabs.tq.repositories.TaskQueueRecordRepository;
@@ -31,12 +30,11 @@ public class TaskQueue {
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
-    public void enqueue(String topic, Object context) {
-        var record = new TaskQueueRecord();
-        record.setTopic(topic);
+    public void enqueue(TaskQueueRecord record) {
         record.setPriority(NEW_PRIORITY);
-        record.setContext(context);
         record.setProcessStatus(ProcessStatus.IDLE);
+        record.setProcessStartAt(null);
+        record.setProcessEndAt(null);
         repository.persist(record);
     }
 
@@ -53,7 +51,7 @@ public class TaskQueue {
         Optional<TaskQueueRecord> mayRecord;
         do {
             mayRecord = repository.peekId(context.getTopic())
-                .map(repository::lock);
+                    .map(repository::lock);
             findCompleted = mayRecord.map(record -> record.getProcessStatus() == ProcessStatus.IDLE).orElse(true);
             LOGGER.info("task queue poll");
         } while (!findCompleted);
@@ -64,8 +62,8 @@ public class TaskQueue {
             repository.persist(record);
         });
         return mayRecord
-            .map(TaskQueueRecord::getId)
-            .orElse(null);
+                .map(TaskQueueRecord::getId)
+                .orElse(null);
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
@@ -79,11 +77,11 @@ public class TaskQueue {
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
     public void onFailed(TaskQueueProcessContext context, String recordId, Exception exception) {
-        var entity = repository.lock(recordId);
-        entity.setFailedMessage(Throwables.getStackTraceAsString(exception));
-        entity.setProcessStatus(ProcessStatus.FAILED);
-        entity.setProcessEndAt(Instant.now());
-        repository.persist(entity);
+        var record = repository.lock(recordId);
+        record.setFailedMessage(Throwables.getStackTraceAsString(exception));
+        record.setProcessStatus(ProcessStatus.FAILED);
+        record.setProcessEndAt(Instant.now());
+        repository.persist(record);
         context.markFailedRecord(recordId);
     }
 }
