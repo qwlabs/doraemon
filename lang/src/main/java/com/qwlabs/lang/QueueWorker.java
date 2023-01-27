@@ -164,21 +164,4 @@ public class QueueWorker<C, E> {
     public interface FailedConsumer<C, E> {
         void accept(C context, E element, Exception e);
     }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    public static class StopRoundContext {
-        private final String topic;
-        private final Duration timeout = Duration.ofHours(1);
-        private final Set<String> failedRecordIds = Sets.newHashSet();
-
-        public void markFailedRecord(String recordId) {
-            this.failedRecordIds.add(recordId);
-        }
-
-        public boolean shouldContinue(String recordId) {
-            return !this.failedRecordIds.contains(recordId);
-        }
-    }
 }
