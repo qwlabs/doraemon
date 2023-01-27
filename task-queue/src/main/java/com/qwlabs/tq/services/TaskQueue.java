@@ -6,31 +6,27 @@ import com.qwlabs.tq.models.TaskQueueRecord;
 import com.qwlabs.tq.repositories.TaskQueueRecordRepository;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.function.Function;
 
 @Slf4j
-@ApplicationScoped
-public class TaskQueue {
+public class TaskQueue<R extends TaskQueueRecord> {
     public static final Integer PROCESSING_TIMEOUT_PRIORITY = 60;
     public static final Integer POSTPONED_TO_IDLE_PRIORITY = 50;
     public static final Integer FAILED_TO_IDLE_PRIORITY = 0;
     public static final Integer MAX_PRIORITY = 100;
     public static final Integer NEW_PRIORITY = 80;
 
-    private final TaskQueueRecordRepository repository;
+    private final TaskQueueRecordRepository<R> repository;
 
-    @Inject
-    public TaskQueue(TaskQueueRecordRepository repository) {
+    public TaskQueue(TaskQueueRecordRepository<R> repository) {
         this.repository = repository;
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
-    public void enqueue(TaskQueueRecord record) {
+    public void enqueue(R record) {
         record.setPriority(NEW_PRIORITY);
         record.setProcessStatus(ProcessStatus.IDLE);
         record.setProcessStartAt(null);
@@ -48,7 +44,7 @@ public class TaskQueue {
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
     public String poll(TaskQueueProcessContext context) {
         boolean findCompleted;
-        Optional<TaskQueueRecord> mayRecord;
+        Optional<R> mayRecord;
         do {
             mayRecord = repository.peekId(context.getTopic())
                     .map(repository::lock);
@@ -67,7 +63,7 @@ public class TaskQueue {
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
-    public <R extends TaskQueueRecord> void onWork(String recordId, Function<R, Boolean> processor) {
+    public void onWork(String recordId, Function<R, Boolean> processor) {
         R record = repository.lock(recordId);
         boolean succeed = processor.apply(record);
         record.setProcessStatus(succeed ? ProcessStatus.SUCCEED : ProcessStatus.POSTPONED);

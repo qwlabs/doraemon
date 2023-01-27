@@ -6,8 +6,8 @@ import com.qwlabs.tq.models.TaskQueueRecord;
 import java.time.Instant;
 import java.util.Optional;
 
-public interface TaskQueueRecordRepository {
-    <R extends TaskQueueRecord> void persist(R record);
+public interface TaskQueueRecordRepository<R extends TaskQueueRecord> {
+    void persist(R record);
 
     int resetByTimeout(String topic, Instant before, Integer priority);
 
@@ -15,5 +15,5 @@ public interface TaskQueueRecordRepository {
 
     Optional<String> peekId(String topic);
 
-    <R extends TaskQueueRecord> R lock(String id);
+    R lock(String id);
 }
