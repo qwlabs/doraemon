@@ -1,6 +1,7 @@
 package com.qwlabs.tq.models;
 
 import java.time.Instant;
+import java.util.Optional;
 
 
 public interface TaskQueueRecord {
@@ -16,7 +17,7 @@ public interface TaskQueueRecord {
 
     void setPriority(Integer topic);
 
-    <C> C getContext(Class<C> clazz);
+    <C> Optional<C> getContext(Class<C> clazz);
 
     void setContext(Object context);
 
