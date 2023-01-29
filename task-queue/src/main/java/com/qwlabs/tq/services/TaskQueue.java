@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 @Slf4j
@@ -73,11 +74,17 @@ public class TaskQueue<R extends TaskQueueRecord> {
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
     public void onFailed(TaskQueueProcessContext context, String recordId, Exception exception) {
+        onFailed(context, recordId, exception, (r)->{});
+    }
+
+    @Transactional(value = Transactional.TxType.REQUIRES_NEW)
+    public void onFailed(TaskQueueProcessContext context, String recordId, Exception exception, Consumer<R> consumer) {
         var record = repository.lock(recordId);
         record.setFailedMessage(Throwables.getStackTraceAsString(exception));
         record.setProcessStatus(ProcessStatus.FAILED);
         record.setProcessEndAt(Instant.now());
         repository.persist(record);
         context.markFailedRecord(recordId);
+        consumer.accept(record);
     }
 }
