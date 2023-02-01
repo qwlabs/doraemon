@@ -1,6 +1,6 @@
 package com.qwlabs.graphql.builder;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.Arrays;
 
 public interface GqlArgumentsAware<SELF> {

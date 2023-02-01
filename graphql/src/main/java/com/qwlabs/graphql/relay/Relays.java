@@ -5,7 +5,7 @@ import com.qwlabs.panache.Ranged;
 import io.quarkus.panache.common.Range;
 import io.smallrye.common.constraint.Nullable;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;

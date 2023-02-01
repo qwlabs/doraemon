@@ -5,9 +5,9 @@ import com.qwlabs.cdi.Primary;
 import com.qwlabs.storage.messages.StorageMessages;
 import com.qwlabs.storage.models.StoragePlan;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
 import java.util.Objects;
 
 @Primary

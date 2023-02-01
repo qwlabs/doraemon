@@ -8,7 +8,7 @@ import com.qwlabs.q.conditions.QCondition;
 import com.qwlabs.q.formatters.QFormatter;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;

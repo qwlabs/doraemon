@@ -2,3 +2,5 @@ dependencies {
     api project(":q-api")
     api "org.antlr:antlr4-runtime:${antlr4Version}"
 }
+
+checkstyleMain.exclude '**/g4/**'

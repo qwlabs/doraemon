@@ -1,10 +1,10 @@
 package com.qwlabs.test.builders;
 
 import io.quarkus.security.identity.SecurityIdentity;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 
-import javax.enterprise.inject.spi.CDI;
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -14,7 +14,7 @@ public abstract class BaseEntityBuilder<T> implements EntityBuilder<T> {
     @Override
     public T persist() {
         T entity = this.build();
-        getEntityManager().ifPresent(em->em.persist(entity));
+        getEntityManager().ifPresent(em -> em.persist(entity));
         return entity;
     }
 

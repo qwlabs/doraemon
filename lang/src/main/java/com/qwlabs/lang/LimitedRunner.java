@@ -2,7 +2,7 @@ package com.qwlabs.lang;
 
 import lombok.extern.slf4j.Slf4j;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Consumer;
 

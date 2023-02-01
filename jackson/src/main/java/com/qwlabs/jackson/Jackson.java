@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.qwlabs.cdi.SafeCDI;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.enterprise.inject.Instance;
+import jakarta.enterprise.inject.Instance;
 import java.util.Optional;
 
 @Slf4j

@@ -4,7 +4,7 @@ import com.qwlabs.cdi.SafeCDI;
 import com.qwlabs.q.QEngine;
 import com.qwlabs.q.QMessages;
 
-import javax.enterprise.inject.Instance;
+import jakarta.enterprise.inject.Instance;
 
 public interface QEngineAware {
     default QEngine engine() {

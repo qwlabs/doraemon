@@ -5,7 +5,7 @@ import io.quarkus.cache.Cache;
 import io.quarkus.cache.CacheManager;
 import io.quarkus.cache.runtime.noop.NoOpCache;
 
-import javax.enterprise.inject.Instance;
+import jakarta.enterprise.inject.Instance;
 
 public interface CacheAware {
     Cache DEFAULT = new NoOpCache();

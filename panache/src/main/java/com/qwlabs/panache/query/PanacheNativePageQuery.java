@@ -3,10 +3,10 @@ package com.qwlabs.panache.query;
 import com.qwlabs.panache.Where;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Parameters;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.Query;
 
-import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
-import javax.persistence.Query;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;

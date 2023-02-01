@@ -2,7 +2,7 @@ package com.qwlabs.graphql.builder;
 
 import com.qwlabs.graphql.builder.formatters.GqlFormatter;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.Optional;
 
 public final class GqlField implements GqlFieldsAware<GqlField>, GqlArgumentsAware<GqlField> {

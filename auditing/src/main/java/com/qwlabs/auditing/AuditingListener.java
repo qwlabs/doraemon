@@ -2,11 +2,11 @@ package com.qwlabs.auditing;
 
 import io.quarkus.security.identity.SecurityIdentity;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Instance;
-import javax.enterprise.inject.spi.CDI;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Instance;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.Optional;

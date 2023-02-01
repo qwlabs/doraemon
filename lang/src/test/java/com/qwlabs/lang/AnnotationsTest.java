@@ -6,7 +6,6 @@ import static com.qwlabs.lang.Annotations.actualTypeArgument;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-
 class AnnotationsTest {
 
     @Test
@@ -19,7 +18,7 @@ class AnnotationsTest {
 
     }
 
-    public static abstract class Base<E> implements I {
+    public abstract static class Base<E> implements I {
 
     }
 

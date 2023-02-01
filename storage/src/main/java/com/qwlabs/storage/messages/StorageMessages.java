@@ -7,7 +7,7 @@ import com.qwlabs.exceptions.NotImplementedException;
 import org.jboss.logging.annotations.Message;
 import org.jboss.logging.annotations.MessageBundle;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import static org.jboss.logging.Messages.getBundle;
 

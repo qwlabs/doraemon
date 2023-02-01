@@ -1,7 +1,7 @@
 package com.qwlabs.ff;
 
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 public abstract class AppFeatureConfigFeatureFlag extends ConfigFeatureFlag {
     private static final String DEFAULT_PREFIX = "app.features";

@@ -6,7 +6,7 @@ import com.qwlabs.tq.models.TaskQueueRecord;
 import com.qwlabs.tq.repositories.TaskQueueRecordRepository;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.function.BiConsumer;

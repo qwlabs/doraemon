@@ -11,8 +11,8 @@ import io.quarkus.arc.Unremovable;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.validation.constraints.NotNull;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.constraints.NotNull;
 
 @Unremovable
 @ApplicationScoped

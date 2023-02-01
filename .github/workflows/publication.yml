@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'master'
+      - 'v0.2'
 
 env:
   COMMIT_OWNER: ${{ github.event.pusher.name }}

@@ -1,18 +1,19 @@
 package com.qwlabs.graphql.builder.formatters;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
+@SuppressWarnings("checkstyle:MethodName")
 public interface GqlFormatter {
 
     default @NotNull String formatType(@NotNull String type) {
         return type;
     }
 
-    default String formatFieldAlias(String alias){
+    default String formatFieldAlias(String alias) {
         return alias;
     }
 
-    default @NotNull String formatFieldName(@NotNull String name){
+    default @NotNull String formatFieldName(@NotNull String name) {
         return name;
     }
 
@@ -28,7 +29,7 @@ public interface GqlFormatter {
         return colon;
     }
 
-    default @NotNull String formatEquals(@NotNull String value){
+    default @NotNull String formatEquals(@NotNull String value) {
         return value;
     }
 
@@ -41,11 +42,11 @@ public interface GqlFormatter {
         return delimiter;
     }
 
-    default String formatFieldDelimiter(String delimiter){
+    default String formatFieldDelimiter(String delimiter) {
         return delimiter;
     }
 
-    default String formatStartVariables(String value){
+    default String formatStartVariables(String value) {
         return value;
     }
 

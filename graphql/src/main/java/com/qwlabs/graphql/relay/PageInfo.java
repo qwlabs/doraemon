@@ -3,7 +3,7 @@ package com.qwlabs.graphql.relay;
 
 import graphql.PublicApi;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 @PublicApi
 public class PageInfo {

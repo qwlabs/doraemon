@@ -4,8 +4,8 @@ import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Page;
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Range;
+import jakarta.persistence.LockModeType;
 
-import javax.persistence.LockModeType;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;

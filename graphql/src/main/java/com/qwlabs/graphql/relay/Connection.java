@@ -3,7 +3,7 @@ package com.qwlabs.graphql.relay;
 import com.google.common.collect.ImmutableList;
 import graphql.PublicApi;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 import static graphql.Assert.assertNotNull;

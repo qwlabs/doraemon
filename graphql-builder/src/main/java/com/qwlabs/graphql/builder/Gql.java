@@ -5,12 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qwlabs.graphql.builder.formatters.GqlCompressedFormatter;
 import com.qwlabs.graphql.builder.formatters.GqlFormatter;
 import com.qwlabs.graphql.builder.formatters.GqlPrettifyFormatter;
+import jakarta.validation.constraints.NotNull;
 
-import javax.validation.constraints.NotNull;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@SuppressWarnings("checkstyle:MethodName")
 public final class Gql implements GqlVariablesAware<Gql>, GqlFieldsAware<Gql> {
     private static final String QUERY = "query";
     private static final String MUTATION = "mutation";
@@ -71,7 +72,7 @@ public final class Gql implements GqlVariablesAware<Gql>, GqlFieldsAware<Gql> {
         Map<String, Object> result = new LinkedHashMap<>();
         result.put("operationName", this.name);
         result.put("query", this.buildQuery(formatter));
-        Optional.ofNullable(variables).ifPresent(vars->result.put("variables", new LinkedHashMap<>(vars)));
+        Optional.ofNullable(variables).ifPresent(vars -> result.put("variables", new LinkedHashMap<>(vars)));
         try {
             return objectMapper.writeValueAsString(result);
         } catch (JsonProcessingException e) {

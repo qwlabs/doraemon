@@ -12,9 +12,9 @@ import com.qwlabs.storage.services.StorageContext;
 import com.qwlabs.storage.services.StorageEngine;
 import com.qwlabs.storage.services.StoragePlanner;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
 import java.io.InputStream;
 
 @ApplicationScoped

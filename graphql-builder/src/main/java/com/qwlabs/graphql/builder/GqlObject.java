@@ -3,7 +3,7 @@ package com.qwlabs.graphql.builder;
 import com.qwlabs.graphql.builder.formatters.GqlFormatter;
 import com.qwlabs.graphql.builder.formatters.GqlValueFormatters;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.StringJoiner;
 
 public class GqlObject {

@@ -3,7 +3,7 @@ package com.qwlabs.security;
 import com.google.common.collect.Maps;
 import com.qwlabs.cdi.DispatchInstance;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.Map;
 
 public class CDICallerAttributes implements CallerAttributes {

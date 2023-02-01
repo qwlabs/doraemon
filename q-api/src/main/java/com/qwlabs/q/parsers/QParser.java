@@ -2,7 +2,7 @@ package com.qwlabs.q.parsers;
 
 import com.qwlabs.q.conditions.QCondition;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 @FunctionalInterface
 public interface QParser {

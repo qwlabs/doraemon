@@ -3,8 +3,8 @@ package com.qwlabs.auditing;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.MappedSuperclass;
 import java.time.Instant;
 
 @Getter

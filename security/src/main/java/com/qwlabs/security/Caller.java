@@ -3,7 +3,7 @@ package com.qwlabs.security;
 import io.quarkus.security.identity.SecurityIdentity;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.Objects;
 
 public interface Caller {

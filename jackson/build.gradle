@@ -1,6 +1,4 @@
 dependencies {
     api project(":cdi")
     api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
-//    api "com.google.guava:guava:${guavaVersion}"
-//    api "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
 }

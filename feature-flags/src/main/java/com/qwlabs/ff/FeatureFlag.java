@@ -3,7 +3,7 @@ package com.qwlabs.ff;
 import com.qwlabs.lang.EmptyConsumer;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.function.Supplier;
 
 public interface FeatureFlag {
