@@ -1,6 +1,7 @@
 package com.qwlabs.validator.constraints;
 
 
+import com.qwlabs.validator.constraintvalidators.oneof.OneOfValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -12,9 +13,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Documented
-@Constraint(
-        validatedBy = {}
-)
+@Constraint(validatedBy = OneOfValidator.class)
 @Target({
         ElementType.METHOD,
         ElementType.FIELD,
