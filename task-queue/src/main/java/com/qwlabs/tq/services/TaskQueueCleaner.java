@@ -4,8 +4,10 @@ import com.qwlabs.tq.models.CleanupTaskQueueCommand;
 import com.qwlabs.tq.repositories.TaskQueueRecordRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 
 
+@Slf4j
 @ApplicationScoped
 public class TaskQueueCleaner {
 
@@ -18,9 +20,10 @@ public class TaskQueueCleaner {
 
     public void cleanup(CleanupTaskQueueCommand command) {
         command.getTopics().forEach(topic ->
-                command.getStatuses().forEach(status ->
-                        repository.cleanup(topic, command.getBucket(), status)
-                )
+                command.getStatuses().forEach(status -> {
+                    var count = repository.cleanup(topic, command.getBucket(), status);
+                    LOGGER.warn("Cleanup task queue count: {}", count);
+                })
         );
     }
 }

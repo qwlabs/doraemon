@@ -21,5 +21,5 @@ public interface TaskQueueRecordRepository {
     <R extends TaskQueueRecord> R lock(@NotNull String id);
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
-    void cleanup(@NotNull String topic, @Nullable String bucket, @NotNull ProcessStatus status);
+    int cleanup(@NotNull String topic, @Nullable String bucket, @NotNull ProcessStatus status);
 }
