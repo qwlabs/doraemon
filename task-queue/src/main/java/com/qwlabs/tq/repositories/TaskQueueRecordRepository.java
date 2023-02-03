@@ -16,7 +16,7 @@ public interface TaskQueueRecordRepository {
 
     int resetByStatus(@NotNull String topic, @Nullable String bucket, @NotNull ProcessStatus processStatus, @NotNull Integer priority);
 
-    Optional<String> peekId(@NotNull String bucket, @NotNull String topic);
+    Optional<String> peekId(@NotNull String topic, @Nullable String bucket);
 
     <R extends TaskQueueRecord> R lock(@NotNull String id);
 

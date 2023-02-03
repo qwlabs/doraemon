@@ -41,9 +41,9 @@ public class TaskQueue {
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
     public void onBefore(TaskQueueProcessContext context) {
-        repository.resetByTimeout(context.getBucket(), context.getTopic(), Instant.now().minus(context.getTimeout()), PROCESSING_TIMEOUT_PRIORITY);
-        repository.resetByStatus(context.getBucket(), context.getTopic(), ProcessStatus.FAILED, POSTPONED_TO_IDLE_PRIORITY);
-        repository.resetByStatus(context.getBucket(), context.getTopic(), ProcessStatus.POSTPONED, FAILED_TO_IDLE_PRIORITY);
+        repository.resetByTimeout(context.getTopic(), context.getBucket(), Instant.now().minus(context.getTimeout()), PROCESSING_TIMEOUT_PRIORITY);
+        repository.resetByStatus(context.getTopic(), context.getBucket(), ProcessStatus.FAILED, POSTPONED_TO_IDLE_PRIORITY);
+        repository.resetByStatus(context.getTopic(), context.getBucket(), ProcessStatus.POSTPONED, FAILED_TO_IDLE_PRIORITY);
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
