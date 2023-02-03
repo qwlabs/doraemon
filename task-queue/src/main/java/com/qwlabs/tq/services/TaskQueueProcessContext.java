@@ -13,6 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class TaskQueueProcessContext {
     private final String topic;
+    private final String bucket;
     private final Duration timeout = Duration.ofHours(1);
     private final Set<String> failedRecordIds = Sets.newHashSet();
 

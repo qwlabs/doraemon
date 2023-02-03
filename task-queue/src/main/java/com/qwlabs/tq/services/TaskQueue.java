@@ -37,9 +37,9 @@ public class TaskQueue<R extends TaskQueueRecord> {
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
     public void onBefore(TaskQueueProcessContext context) {
-        repository.resetByTimeout(context.getTopic(), Instant.now().minus(context.getTimeout()), PROCESSING_TIMEOUT_PRIORITY);
-        repository.resetByStatus(context.getTopic(), ProcessStatus.FAILED, POSTPONED_TO_IDLE_PRIORITY);
-        repository.resetByStatus(context.getTopic(), ProcessStatus.POSTPONED, FAILED_TO_IDLE_PRIORITY);
+        repository.resetByTimeout(context.getBucket(), context.getTopic(), Instant.now().minus(context.getTimeout()), PROCESSING_TIMEOUT_PRIORITY);
+        repository.resetByStatus(context.getBucket(), context.getTopic(), ProcessStatus.FAILED, POSTPONED_TO_IDLE_PRIORITY);
+        repository.resetByStatus(context.getBucket(), context.getTopic(), ProcessStatus.POSTPONED, FAILED_TO_IDLE_PRIORITY);
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
@@ -47,7 +47,7 @@ public class TaskQueue<R extends TaskQueueRecord> {
         boolean findCompleted;
         Optional<R> mayRecord;
         do {
-            mayRecord = repository.peekId(context.getTopic())
+            mayRecord = repository.peekId(context.getTopic(), context.getBucket())
                     .map(repository::lock);
             findCompleted = mayRecord.map(record -> record.getProcessStatus() == ProcessStatus.IDLE).orElse(true);
             LOGGER.info("task queue poll");

@@ -13,6 +13,10 @@ public interface TaskQueueRecord {
 
     void setTopic(String topic);
 
+    String getBucket();
+
+    void setBucket(String bucket);
+
     Integer getPriority();
 
     void setPriority(Integer topic);
