@@ -36,7 +36,7 @@ public final class ConstraintValidatorContexts {
     public static ConstraintValidatorContext addToProperty(ConstraintValidatorContext context,
                                                            String template,
                                                            String propertyNode) {
-        return addToProperty(context, template, propertyNode);
+        return addToProperty(context, template, propertyNode, null);
     }
 
 
