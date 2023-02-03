@@ -1,3 +1,4 @@
 dependencies {
-    api "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
+    api project(":lang")
+    api "org.hibernate.validator:hibernate-validator:${hibernateValidatorVersion}"
 }
