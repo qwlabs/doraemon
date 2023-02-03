@@ -20,14 +20,19 @@ public final class ConstraintValidatorContexts {
 
     public static ConstraintValidatorContext add(ConstraintValidatorContext context,
                                                  Class<?> templateClass, String... suffix) {
-        return add(context, null, templateClass, suffix);
+        return add(context, null, ofTemplate(templateClass, suffix));
     }
 
     public static ConstraintValidatorContext add(ConstraintValidatorContext context,
                                                  Consumer<HibernateConstraintValidatorContext> consumer,
                                                  Class<?> templateClass, String... suffix) {
+        return add(context, consumer, ofTemplate(templateClass, suffix));
+    }
+
+    public static ConstraintValidatorContext add(ConstraintValidatorContext context,
+                                                 Consumer<HibernateConstraintValidatorContext> consumer,
+                                                 String template) {
         acceptContext(context, consumer);
-        String template = ofTemplate(templateClass, suffix);
         context.buildConstraintViolationWithTemplate(template).addConstraintViolation();
         return context;
     }
