@@ -40,14 +40,14 @@ public class TaskQueue {
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
-    public <R extends TaskQueueRecord> void onBefore(TaskQueueProcessContext<R> context) {
+    public void onBefore(TaskQueueProcessContext context) {
         repository.resetByTimeout(context.getBucket(), context.getTopic(), Instant.now().minus(context.getTimeout()), PROCESSING_TIMEOUT_PRIORITY);
         repository.resetByStatus(context.getBucket(), context.getTopic(), ProcessStatus.FAILED, POSTPONED_TO_IDLE_PRIORITY);
         repository.resetByStatus(context.getBucket(), context.getTopic(), ProcessStatus.POSTPONED, FAILED_TO_IDLE_PRIORITY);
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
-    public <R extends TaskQueueRecord> String poll(TaskQueueProcessContext<R> context) {
+    public <R extends TaskQueueRecord> String poll(TaskQueueProcessContext context) {
         boolean findCompleted;
         Optional<R> mayRecord;
         do {
@@ -78,14 +78,14 @@ public class TaskQueue {
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
-    public <R extends TaskQueueRecord> void onFailed(TaskQueueProcessContext<R> context,
+    public <R extends TaskQueueRecord> void onFailed(TaskQueueProcessContext context,
                                                      String recordId,
                                                      Exception exception) {
         this.doOnFailed(context, recordId, exception, (r, e) -> LOGGER.error("Process task error. id={}", r.getId(), e));
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
-    public <R extends TaskQueueRecord> void onFailed(TaskQueueProcessContext<R> context,
+    public <R extends TaskQueueRecord> void onFailed(TaskQueueProcessContext context,
                                                      String recordId,
                                                      Exception exception,
                                                      BiConsumer<R, Exception> consumer) {
@@ -93,7 +93,7 @@ public class TaskQueue {
     }
 
 
-    private <R extends TaskQueueRecord> void doOnFailed(TaskQueueProcessContext<R> context,
+    private <R extends TaskQueueRecord> void doOnFailed(TaskQueueProcessContext context,
                                                         String recordId,
                                                         Exception exception,
                                                         BiConsumer<R, Exception> consumer) {
@@ -102,7 +102,7 @@ public class TaskQueue {
         record.setProcessStatus(ProcessStatus.FAILED);
         record.setProcessEndAt(Instant.now());
         repository.persist(record);
-        context.markFailedRecord(record);
+        context.markFailedRecord(record.getId());
         consumer.accept(record, exception);
     }
 }

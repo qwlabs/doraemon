@@ -12,17 +12,17 @@ import java.util.Set;
 @Getter
 @Builder
 @AllArgsConstructor
-public class TaskQueueProcessContext<R extends TaskQueueRecord> {
+public class TaskQueueProcessContext {
     private final String topic;
     private final String bucket;
     private final Duration timeout = Duration.ofHours(1);
     private final Set<String> failedRecordIds = Sets.newHashSet();
 
-    public void markFailedRecord(R record) {
-        this.failedRecordIds.add(record.getId());
+    public void markFailedRecord(String recordId) {
+        this.failedRecordIds.add(recordId);
     }
 
-    public boolean shouldContinue(R record) {
-        return !this.failedRecordIds.contains(record.getId());
+    public boolean shouldContinue(String recordId) {
+        return !this.failedRecordIds.contains(recordId);
     }
 }
