@@ -4,30 +4,34 @@ import com.google.common.base.Throwables;
 import com.qwlabs.tq.models.ProcessStatus;
 import com.qwlabs.tq.models.TaskQueueRecord;
 import com.qwlabs.tq.repositories.TaskQueueRecordRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
-import jakarta.transaction.Transactional;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 @Slf4j
-public class TaskQueue<R extends TaskQueueRecord> {
+@ApplicationScoped
+public class TaskQueue {
     public static final Integer PROCESSING_TIMEOUT_PRIORITY = 60;
     public static final Integer POSTPONED_TO_IDLE_PRIORITY = 50;
     public static final Integer FAILED_TO_IDLE_PRIORITY = 0;
     public static final Integer MAX_PRIORITY = 100;
     public static final Integer NEW_PRIORITY = 80;
 
-    private final TaskQueueRecordRepository<R> repository;
+    private final TaskQueueRecordRepository repository;
 
-    public TaskQueue(TaskQueueRecordRepository<R> repository) {
+    @Inject
+    public TaskQueue(TaskQueueRecordRepository repository) {
         this.repository = repository;
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
-    public void enqueue(R record) {
+    public <R extends TaskQueueRecord> void enqueue(R record) {
         record.setPriority(NEW_PRIORITY);
         record.setProcessStatus(ProcessStatus.IDLE);
         record.setProcessStartAt(null);
@@ -36,14 +40,14 @@ public class TaskQueue<R extends TaskQueueRecord> {
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
-    public void onBefore(TaskQueueProcessContext context) {
+    public <R extends TaskQueueRecord> void onBefore(TaskQueueProcessContext<R> context) {
         repository.resetByTimeout(context.getBucket(), context.getTopic(), Instant.now().minus(context.getTimeout()), PROCESSING_TIMEOUT_PRIORITY);
         repository.resetByStatus(context.getBucket(), context.getTopic(), ProcessStatus.FAILED, POSTPONED_TO_IDLE_PRIORITY);
         repository.resetByStatus(context.getBucket(), context.getTopic(), ProcessStatus.POSTPONED, FAILED_TO_IDLE_PRIORITY);
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
-    public String poll(TaskQueueProcessContext context) {
+    public <R extends TaskQueueRecord> String poll(TaskQueueProcessContext<R> context) {
         boolean findCompleted;
         Optional<R> mayRecord;
         do {
@@ -64,7 +68,8 @@ public class TaskQueue<R extends TaskQueueRecord> {
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
-    public void onWork(String recordId, Function<R, Boolean> processor) {
+    public <R extends TaskQueueRecord> void onWork(String recordId,
+                                                   Function<R, Boolean> processor) {
         R record = repository.lock(recordId);
         boolean succeed = processor.apply(record);
         record.setProcessStatus(succeed ? ProcessStatus.SUCCEED : ProcessStatus.POSTPONED);
@@ -73,26 +78,31 @@ public class TaskQueue<R extends TaskQueueRecord> {
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
-    public void onFailed(TaskQueueProcessContext context, String recordId, Exception exception) {
+    public <R extends TaskQueueRecord> void onFailed(TaskQueueProcessContext<R> context,
+                                                     String recordId,
+                                                     Exception exception) {
         this.doOnFailed(context, recordId, exception, (r, e) -> LOGGER.error("Process task error. id={}", r.getId(), e));
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
-    public void onFailed(TaskQueueProcessContext context, String recordId, Exception exception, BiConsumer<R, Exception> consumer) {
+    public <R extends TaskQueueRecord> void onFailed(TaskQueueProcessContext<R> context,
+                                                     String recordId,
+                                                     Exception exception,
+                                                     BiConsumer<R, Exception> consumer) {
         this.doOnFailed(context, recordId, exception, consumer);
     }
 
 
-    private void doOnFailed(TaskQueueProcessContext context,
-                           String recordId,
-                           Exception exception,
-                           BiConsumer<R, Exception> consumer) {
-        var record = repository.lock(recordId);
+    private <R extends TaskQueueRecord> void doOnFailed(TaskQueueProcessContext<R> context,
+                                                        String recordId,
+                                                        Exception exception,
+                                                        BiConsumer<R, Exception> consumer) {
+        R record = repository.lock(recordId);
         record.setFailedMessage(Throwables.getStackTraceAsString(exception));
         record.setProcessStatus(ProcessStatus.FAILED);
         record.setProcessEndAt(Instant.now());
         repository.persist(record);
-        context.markFailedRecord(recordId);
+        context.markFailedRecord(record);
         consumer.accept(record, exception);
     }
 }
