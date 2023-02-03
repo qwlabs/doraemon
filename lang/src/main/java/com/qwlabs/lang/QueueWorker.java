@@ -85,7 +85,7 @@ public class QueueWorker<C, E> {
         try {
             onFailed.accept(context, element, e);
         } catch (Exception exception) {
-            LOGGER.warn("on failed handler error.", exception);
+            LOGGER.error("on failed handler error.", exception);
         }
     }
 
@@ -139,7 +139,7 @@ public class QueueWorker<C, E> {
             stopWatch.start("spin");
             Thread.sleep(spinDuration.toMillis());
         } catch (InterruptedException e) {
-            LOGGER.debug("Spin while wait next execute was interrupted", e);
+            LOGGER.error("Spin while wait next execute was interrupted", e);
         } finally {
             stopWatch.stop();
         }

@@ -36,7 +36,7 @@ public class CustomS3Client {
             LOGGER.info("bucket={}, objectName={} not exist.", bucket, objectName);
             return false;
         } catch (Throwable e) {
-            LOGGER.warn("Can not check object exist.", e);
+            LOGGER.error("Can not check object exist.", e);
             throw new StorageException("Can not check object exist.", e);
         }
     }
@@ -50,7 +50,7 @@ public class CustomS3Client {
         try {
             return this.presigner.presignGetObject(request).url().toString();
         } catch (Exception e) {
-            LOGGER.warn("Can not create upload url.", e);
+            LOGGER.error("Can not create upload url.", e);
             throw new StorageException("Can not create upload url.", e);
         }
     }

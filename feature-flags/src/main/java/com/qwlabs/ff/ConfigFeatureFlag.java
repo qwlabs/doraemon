@@ -13,7 +13,7 @@ public abstract class ConfigFeatureFlag extends CachedFeatureFlag {
         try {
             return ConfigProvider.getConfig().getValue(propertyName(), Boolean.class);
         } catch (Exception e) {
-            LOGGER.warn("can not found config feature flag:{}", propertyName());
+            LOGGER.error("Can not found config feature flag:{}", propertyName());
             return false;
         }
     }

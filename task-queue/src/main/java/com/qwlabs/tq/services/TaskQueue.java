@@ -74,11 +74,19 @@ public class TaskQueue<R extends TaskQueueRecord> {
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
     public void onFailed(TaskQueueProcessContext context, String recordId, Exception exception) {
-        onFailed(context, recordId, exception, (r, e) -> LOGGER.warn("Process task error. id={}", r.getId(), e));
+        this.doOnFailed(context, recordId, exception, (r, e) -> LOGGER.error("Process task error. id={}", r.getId(), e));
     }
 
     @Transactional(value = Transactional.TxType.REQUIRES_NEW)
     public void onFailed(TaskQueueProcessContext context, String recordId, Exception exception, BiConsumer<R, Exception> consumer) {
+        this.doOnFailed(context, recordId, exception, consumer);
+    }
+
+
+    private void doOnFailed(TaskQueueProcessContext context,
+                           String recordId,
+                           Exception exception,
+                           BiConsumer<R, Exception> consumer) {
         var record = repository.lock(recordId);
         record.setFailedMessage(Throwables.getStackTraceAsString(exception));
         record.setProcessStatus(ProcessStatus.FAILED);

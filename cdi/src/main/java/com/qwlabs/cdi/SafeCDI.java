@@ -2,8 +2,11 @@ package com.qwlabs.cdi;
 
 import jakarta.enterprise.inject.Instance;
 import jakarta.enterprise.inject.spi.CDI;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Optional;
 
+@Slf4j
 public final class SafeCDI {
     private SafeCDI() {
     }
@@ -12,6 +15,7 @@ public final class SafeCDI {
         try {
             return Optional.of(CDI.current());
         } catch (Exception e) {
+            LOGGER.error("Load current CDI instance error.", e);
             return Optional.empty();
         }
     }

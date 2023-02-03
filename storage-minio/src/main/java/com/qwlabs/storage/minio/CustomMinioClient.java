@@ -55,7 +55,7 @@ public class CustomMinioClient extends MinioAsyncClient {
         } catch (NoSuchAlgorithmException | InsufficientDataException | IOException | InvalidKeyException
             | ServerException | XmlParserException | ErrorResponseException | InternalException
             | InvalidResponseException e) {
-            LOGGER.warn("Can not create upload id.", e);
+            LOGGER.error("Can not create upload id.", e);
             throw new StorageException("Can not create upload id.", e);
         }
     }
@@ -74,7 +74,7 @@ public class CustomMinioClient extends MinioAsyncClient {
         } catch (NoSuchAlgorithmException | InsufficientDataException | IOException | InvalidKeyException
             | ServerException | XmlParserException | ErrorResponseException | InternalException
             | InvalidResponseException e) {
-            LOGGER.warn("Can not create upload url.", e);
+            LOGGER.error("Can not create upload url.", e);
             throw new StorageException("Can not create upload url.", e);
         }
     }
@@ -91,7 +91,7 @@ public class CustomMinioClient extends MinioAsyncClient {
         } catch (ErrorResponseException | InsufficientDataException | InternalException | InvalidKeyException
             | InvalidResponseException | IOException | NoSuchAlgorithmException | XmlParserException
             | ServerException e) {
-            LOGGER.warn("Can not get download url.", e);
+            LOGGER.error("Can not get download url.", e);
             throw new StorageException("Can not create download url.", e);
         }
     }
@@ -103,7 +103,7 @@ public class CustomMinioClient extends MinioAsyncClient {
         } catch (InsufficientDataException | InternalException | InvalidKeyException
             | IOException | NoSuchAlgorithmException
             | XmlParserException | InterruptedException | ExecutionException e) {
-            LOGGER.warn("Can not check bucket exists.", e);
+            LOGGER.error("Can not check bucket exists.", e);
             throw new StorageException(e);
         }
     }
@@ -117,7 +117,7 @@ public class CustomMinioClient extends MinioAsyncClient {
         } catch (InsufficientDataException | InternalException | InvalidKeyException
             | IOException | NoSuchAlgorithmException
             | XmlParserException | InterruptedException | ExecutionException e) {
-            LOGGER.warn("Can not make bucket.", e);
+            LOGGER.error("Can not make bucket.", e);
             throw new StorageException("Can not make bucket.", e);
         }
     }
@@ -131,7 +131,7 @@ public class CustomMinioClient extends MinioAsyncClient {
         } catch (InsufficientDataException | InternalException | InvalidKeyException
             | NoSuchAlgorithmException | XmlParserException | InterruptedException
             | ExecutionException | IOException e) {
-            LOGGER.warn("Can not list multipart uploads.", e);
+            LOGGER.error("Can not list multipart uploads.", e);
             throw new StorageException("Can not list multipart uploads.", e);
         }
     }
@@ -145,7 +145,7 @@ public class CustomMinioClient extends MinioAsyncClient {
         } catch (InsufficientDataException | InternalException | InvalidKeyException
             | IOException | NoSuchAlgorithmException
             | XmlParserException | InterruptedException | ExecutionException e) {
-            LOGGER.warn("Can not complete multipart upload.", e);
+            LOGGER.error("Can not complete multipart upload.", e);
             throw new StorageException("Can not complete multipart upload.", e);
         }
     }
@@ -161,7 +161,7 @@ public class CustomMinioClient extends MinioAsyncClient {
         } catch (InsufficientDataException | InternalException | InvalidKeyException
             | IOException | NoSuchAlgorithmException
             | XmlParserException | InterruptedException | ExecutionException e) {
-            LOGGER.warn("Can not get object", e);
+            LOGGER.error("Can not get object", e);
             throw new StorageException("Can not get object", e);
         }
     }
@@ -179,7 +179,7 @@ public class CustomMinioClient extends MinioAsyncClient {
         } catch (InsufficientDataException | InternalException | InvalidKeyException
             | IOException | NoSuchAlgorithmException
             | XmlParserException | InterruptedException | ExecutionException e) {
-            LOGGER.warn("Can not get object", e);
+            LOGGER.error("Can not get object", e);
             throw new StorageException("Can not get object", e);
         }
     }
