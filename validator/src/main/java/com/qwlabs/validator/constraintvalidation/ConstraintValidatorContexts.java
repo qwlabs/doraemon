@@ -13,8 +13,7 @@ public final class ConstraintValidatorContexts {
 
     public static String ofTemplate(Class<?> templateClass, String... suffix) {
         StringJoiner joiner = new StringJoiner(TEMPLATE_DELIMITER, TEMPLATE_PREFIX, TEMPLATE_SUFFIX);
-        return joiner.add(templateClass.getPackageName())
-                .add(templateClass.getName())
+        return joiner.add(templateClass.getName())
                 .add(String.join(TEMPLATE_DELIMITER, suffix))
                 .toString();
     }
