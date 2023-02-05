@@ -110,8 +110,9 @@ public class QueueWorker<C, E> {
             executeBeforeEach(context, element);
             onWork.accept(context, element);
         } catch (Exception e) {
+            boolean shouldContinue = !isContinue(context, element, e);
             executeOnFailed(context, element, e);
-            if (!isContinue(context, element, e)) {
+            if (!shouldContinue) {
                 LOGGER.info("not need continue.");
                 return false;
             }
