@@ -1,34 +1,25 @@
-
 package com.qwlabs.lang;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 
+import javax.annotation.concurrent.NotThreadSafe;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.HashMap;
+import java.util.Map;
 
 
-@SuppressWarnings("checkstyle:MagicNumber")
+@NotThreadSafe
 public class StopWatch {
 
     private final String id;
 
-    private boolean keepTaskList = true;
+    private final Map<String, Task> tasks = new HashMap<>(1);
 
-    private final List<TaskInfo> taskList = new ArrayList<>(1);
+    private long totalNanos = 0L;
+    private int count = 0;
 
-    private long startTimeNanos;
+    private long startNanos;
 
-    @Nullable
-    private String currentTaskName;
-
-    @Nullable
-    private TaskInfo lastTaskInfo;
-
-    private int taskCount;
-
-    private long totalTimeNanos;
+    private Task lastTask;
 
     public StopWatch() {
         this("");
@@ -42,175 +33,76 @@ public class StopWatch {
         return this.id;
     }
 
-    public void setKeepTaskList(boolean keepTaskList) {
-        this.keepTaskList = keepTaskList;
-    }
-
     public void start() throws IllegalStateException {
         start("");
     }
 
     public void start(String taskName) throws IllegalStateException {
-        if (this.currentTaskName != null) {
+        if (this.lastTask != null) {
             throw new IllegalStateException("Can't start StopWatch: it's already running");
         }
-        this.currentTaskName = taskName;
-        this.startTimeNanos = System.nanoTime();
+        this.lastTask = new Task(taskName);
+        this.startNanos = System.nanoTime();
     }
 
     public void stop() throws IllegalStateException {
-        if (this.currentTaskName == null) {
+        if (this.lastTask == null) {
             throw new IllegalStateException("Can't stop StopWatch: it's not running");
         }
-        long lastTime = System.nanoTime() - this.startTimeNanos;
-        this.totalTimeNanos += lastTime;
-        this.lastTaskInfo = new TaskInfo(this.currentTaskName, lastTime);
-        if (this.keepTaskList) {
-            this.taskList.add(this.lastTaskInfo);
-        }
-        ++this.taskCount;
-        this.currentTaskName = null;
+        long nanos = System.nanoTime() - this.startNanos;
+        tasks.computeIfAbsent(this.lastTask.name, (key) -> this.lastTask).append(nanos);
+        this.totalNanos += nanos;
+        this.count++;
+        this.lastTask = null;
     }
 
     public boolean isRunning() {
-        return (this.currentTaskName != null);
-    }
-
-    @Nullable
-    public String currentTaskName() {
-        return this.currentTaskName;
-    }
-
-    public long getLastTaskTimeNanos() throws IllegalStateException {
-        if (this.lastTaskInfo == null) {
-            throw new IllegalStateException("No tasks run: can't get last task interval");
-        }
-        return this.lastTaskInfo.getTimeNanos();
-    }
-
-    public long getLastTaskTimeMillis() throws IllegalStateException {
-        if (this.lastTaskInfo == null) {
-            throw new IllegalStateException("No tasks run: can't get last task interval");
-        }
-        return this.lastTaskInfo.getTimeMillis();
-    }
-
-    public String getLastTaskName() throws IllegalStateException {
-        if (this.lastTaskInfo == null) {
-            throw new IllegalStateException("No tasks run: can't get last task name");
-        }
-        return this.lastTaskInfo.getTaskName();
-    }
-
-    public TaskInfo getLastTaskInfo() throws IllegalStateException {
-        if (this.lastTaskInfo == null) {
-            throw new IllegalStateException("No tasks run: can't get last task info");
-        }
-        return this.lastTaskInfo;
-    }
-
-    public long getTotalTimeNanos() {
-        return this.totalTimeNanos;
-    }
-
-    public long getTotalTimeMillis() {
-        return nanosToMillis(this.totalTimeNanos);
-    }
-
-    public double getTotalTimeSeconds() {
-        return nanosToSeconds(this.totalTimeNanos);
-    }
-
-    public int getTaskCount() {
-        return this.taskCount;
-    }
-
-    public TaskInfo[] getTaskInfo() {
-        if (!this.keepTaskList) {
-            throw new UnsupportedOperationException("Task info is not being kept!");
-        }
-        return this.taskList.toArray(new TaskInfo[0]);
+        return (this.lastTask != null);
     }
 
     public String shortSummary() {
-        return "StopWatch '" + getId() + "': running time = " + getTotalTimeNanos() + " ns";
+        return "StopWatch '" + getId() + "': running time = " + totalNanos + " ns";
     }
 
     public String prettyPrint() {
         StringBuilder sb = new StringBuilder(shortSummary());
         sb.append('\n');
-        if (!this.keepTaskList) {
-            sb.append("No task info kept");
-        } else {
-            sb.append("---------------------------------------------\n");
-            sb.append("ns         %     Task name\n");
-            sb.append("---------------------------------------------\n");
-            NumberFormat nf = NumberFormat.getNumberInstance();
-            nf.setMinimumIntegerDigits(9);
-            nf.setGroupingUsed(false);
-            NumberFormat pf = NumberFormat.getPercentInstance();
-            pf.setMinimumIntegerDigits(3);
-            pf.setGroupingUsed(false);
-            for (TaskInfo task : getTaskInfo()) {
-                sb.append(nf.format(task.getTimeNanos())).append("  ");
-                sb.append(pf.format((double) task.getTimeNanos() / getTotalTimeNanos())).append("  ");
-                sb.append(task.getTaskName()).append('\n');
-            }
-        }
+        sb.append("---------------------------------------------\n");
+        sb.append("ns         %     Task name\n");
+        sb.append("---------------------------------------------\n");
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMinimumIntegerDigits(9);
+        nf.setGroupingUsed(false);
+        NumberFormat pf = NumberFormat.getPercentInstance();
+        pf.setMinimumIntegerDigits(3);
+        pf.setGroupingUsed(false);
+        this.tasks.values().forEach(task -> {
+            sb.append(nf.format(task.totalNanos)).append("  ");
+            sb.append(pf.format((double) task.totalNanos / totalNanos)).append("  ");
+            sb.append(task.name).append('\n');
+        });
         return sb.toString();
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(shortSummary());
-        if (this.keepTaskList) {
-            for (TaskInfo task : getTaskInfo()) {
-                sb.append("; [").append(task.getTaskName()).append("] took ").append(task.getTimeNanos()).append(" ns");
-                long percent = Math.round(100.0 * task.getTimeNanos() / getTotalTimeNanos());
-                sb.append(" = ").append(percent).append('%');
-            }
-        } else {
-            sb.append("; no task info kept");
-        }
-        return sb.toString();
+        return prettyPrint();
     }
 
+    public static final class Task {
+        private final String name;
+        private int count;
+        private long totalNanos;
 
-    private static long nanosToMillis(long duration) {
-        return TimeUnit.NANOSECONDS.toMillis(duration);
+        Task(String name) {
+            this.name = name;
+            this.count = 0;
+            this.totalNanos = 0L;
+        }
+
+        public void append(long nanos) {
+            this.totalNanos += nanos;
+            this.count++;
+        }
     }
-
-    private static double nanosToSeconds(long duration) {
-        return duration / 1_000_000_000.0;
-    }
-
-    public static final class TaskInfo {
-
-        private final String taskName;
-
-        private final long timeNanos;
-
-        TaskInfo(String taskName, long timeNanos) {
-            this.taskName = taskName;
-            this.timeNanos = timeNanos;
-        }
-
-        public String getTaskName() {
-            return this.taskName;
-        }
-
-        public long getTimeNanos() {
-            return this.timeNanos;
-        }
-
-        public long getTimeMillis() {
-            return nanosToMillis(this.timeNanos);
-        }
-
-        public double getTimeSeconds() {
-            return nanosToSeconds(this.timeNanos);
-        }
-
-    }
-
 }
