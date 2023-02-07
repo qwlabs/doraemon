@@ -34,7 +34,7 @@ public class TaskQueue {
     }
 
     public <R extends TaskQueueRecord> void enqueue(final R record) {
-        QuarkusTransaction.requiringNew().run(() -> {
+        QuarkusTransaction.joiningExisting().run(() -> {
             record.setPriority(NEW);
             record.setProcessStatus(ProcessStatus.IDLE);
             record.setProcessStartAt(null);
