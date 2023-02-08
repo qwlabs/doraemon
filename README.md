@@ -44,6 +44,7 @@ api 'com.qwlabs.doraemon:lang:0.2.*'
 - [storage](storage/README.md) Define storage api
 - [storage-minio](storage-minio/README.md) Storage api implements use minio
 - [storage-s3](storage-s3/README.md) Storage api implements use s3
+- [storage-graphql](storage-graphql/README.md) Storage graphql api
 - [task-queue](task-queue/README.md) Define task queue for loop job
 - [test-builder](test-builder/README.md) Define some builder for testing
 - [validator](validator/README.md) Generic validator

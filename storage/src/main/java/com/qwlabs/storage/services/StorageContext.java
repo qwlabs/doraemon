@@ -3,28 +3,23 @@ package com.qwlabs.storage.services;
 
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
 import com.qwlabs.storage.messages.StorageMessages;
 
 import java.util.Map;
 import java.util.Optional;
 
 public class StorageContext {
-    private static final String ATTRIBUTE_USER_ID = "userId";
     private static final String ATTRIBUTE_FILE_NAME = "fileName";
     private static final String ATTRIBUTE_FILE_HASH = "fileHash";
     private static final String ATTRIBUTE_FILE_PART_COUNT = "filePartCount";
     private static final String ATTRIBUTE_FILE_CONTENT_TYPE = "fileContentType";
     private final String businessType;
-    private final Map attributes;
+    private final Map<String, String> attributes;
 
-    public StorageContext(String businessType, Map attributes) {
+    public StorageContext(String businessType, Map<String, String> attributes) {
         this.businessType = businessType;
         this.attributes = Optional.ofNullable(attributes).orElseGet(Maps::newHashMap);
-    }
-
-    public StorageContext setUserId(String userId) {
-        this.attributes.put(ATTRIBUTE_USER_ID, userId);
-        return this;
     }
 
     public String getBusinessType() {
@@ -32,39 +27,40 @@ public class StorageContext {
     }
 
     public String getFileName() {
-        return getString(ATTRIBUTE_FILE_NAME);
+        return getAttribute(ATTRIBUTE_FILE_NAME)
+                .orElseThrow(() -> StorageMessages.INSTANCE.notFoundContextAttribute(ATTRIBUTE_FILE_NAME));
     }
 
     public String getFileHash() {
-        return getString(ATTRIBUTE_FILE_HASH);
+        return getAttribute(ATTRIBUTE_FILE_HASH)
+                .orElseThrow(() -> StorageMessages.INSTANCE.notFoundContextAttribute(ATTRIBUTE_FILE_HASH));
     }
 
     public String getFileContentType() {
-        return getString(ATTRIBUTE_FILE_CONTENT_TYPE);
+        return getAttribute(ATTRIBUTE_FILE_CONTENT_TYPE)
+                .orElseThrow(() -> StorageMessages.INSTANCE.notFoundContextAttribute(ATTRIBUTE_FILE_CONTENT_TYPE));
     }
 
     public Integer getFilePartCount() {
-        return getInteger(ATTRIBUTE_FILE_PART_COUNT);
+        return getInteger(ATTRIBUTE_FILE_PART_COUNT)
+                .orElseThrow(() -> StorageMessages.INSTANCE.notFoundContextAttribute(ATTRIBUTE_FILE_PART_COUNT));
     }
 
-    public String getUserId() {
-        return getString(ATTRIBUTE_USER_ID);
-    }
-
-    public Map getAttributes() {
+    public Map<String, String> getAttributes() {
         return attributes;
     }
 
-    public String getString(String attributeName) {
-        return Optional.ofNullable(attributes.get(attributeName))
-                .map(Object::toString)
-                .orElseThrow(() -> StorageMessages.INSTANCE.notFoundContextAttribute(attributeName));
+    public Optional<String> getAttribute(String attributeName) {
+        return Optional.ofNullable(attributes.get(attributeName));
     }
 
-    public Integer getInteger(String attributeName) {
-        String value = getString(attributeName);
-        return Optional.ofNullable(Ints.tryParse(value))
-                .orElseThrow(() -> StorageMessages.INSTANCE.invalidContextAttributeType(
-                        attributeName, value, Integer.class.getTypeName()));
+    public Optional<Integer> getInteger(String attributeName) {
+        return getAttribute(attributeName)
+                .map(Ints::tryParse);
+    }
+
+    public Optional<Long> getLong(String attributeName) {
+        return getAttribute(attributeName)
+                .map(Longs::tryParse);
     }
 }

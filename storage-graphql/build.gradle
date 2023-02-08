@@ -1,0 +1,5 @@
+dependencies {
+    api project(":storage")
+    api project(":jackson")
+    api "io.quarkus:quarkus-smallrye-graphql:${quarkusVersion}"
+}

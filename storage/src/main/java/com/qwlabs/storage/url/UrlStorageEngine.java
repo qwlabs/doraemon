@@ -11,15 +11,15 @@ import com.qwlabs.storage.models.PutObjectCommand;
 import com.qwlabs.storage.models.StorageObject;
 import com.qwlabs.storage.models.UploadUrls;
 import com.qwlabs.storage.services.StorageEngine;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import jakarta.enterprise.context.ApplicationScoped;
 import java.io.InputStream;
 import java.util.Objects;
 
 @ApplicationScoped
 public class UrlStorageEngine implements StorageEngine, Dispatchable<String> {
-        private static final String PROVIDER = "url";
+    private static final String PROVIDER = "url";
 
     @Override
     public UploadUrls createUploadUrls(GetUploadUrlsCommand command) {
