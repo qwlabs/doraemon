@@ -43,4 +43,7 @@ public interface StorageMessages {
 
     @Message(value = "未实现", format = Message.Format.MESSAGE_FORMAT)
     NotImplementedException notImplemented();
+
+    @Message(value = "无效的上下文:{0}", format = Message.Format.MESSAGE_FORMAT)
+    BadRequestException invalidContent(String context);
 }
