@@ -27,17 +27,17 @@ public class StorageContext {
     }
 
     public String getFileName() {
-        return getAttribute(ATTRIBUTE_FILE_NAME)
+        return get(ATTRIBUTE_FILE_NAME)
                 .orElseThrow(() -> StorageMessages.INSTANCE.notFoundContextAttribute(ATTRIBUTE_FILE_NAME));
     }
 
     public String getFileHash() {
-        return getAttribute(ATTRIBUTE_FILE_HASH)
+        return get(ATTRIBUTE_FILE_HASH)
                 .orElseThrow(() -> StorageMessages.INSTANCE.notFoundContextAttribute(ATTRIBUTE_FILE_HASH));
     }
 
     public String getFileContentType() {
-        return getAttribute(ATTRIBUTE_FILE_CONTENT_TYPE)
+        return get(ATTRIBUTE_FILE_CONTENT_TYPE)
                 .orElseThrow(() -> StorageMessages.INSTANCE.notFoundContextAttribute(ATTRIBUTE_FILE_CONTENT_TYPE));
     }
 
@@ -46,21 +46,26 @@ public class StorageContext {
                 .orElseThrow(() -> StorageMessages.INSTANCE.notFoundContextAttribute(ATTRIBUTE_FILE_PART_COUNT));
     }
 
-    public Map<String, String> getAttributes() {
+    public StorageContext put(String attributeName, String attributeValue) {
+        this.attributes.put(attributeName, attributeValue);
+        return this;
+    }
+
+    public Map<String, String> get() {
         return attributes;
     }
 
-    public Optional<String> getAttribute(String attributeName) {
+    public Optional<String> get(String attributeName) {
         return Optional.ofNullable(attributes.get(attributeName));
     }
 
     public Optional<Integer> getInteger(String attributeName) {
-        return getAttribute(attributeName)
+        return get(attributeName)
                 .map(Ints::tryParse);
     }
 
     public Optional<Long> getLong(String attributeName) {
-        return getAttribute(attributeName)
+        return get(attributeName)
                 .map(Longs::tryParse);
     }
 }
