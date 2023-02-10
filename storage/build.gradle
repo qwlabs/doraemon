@@ -1,6 +1,7 @@
 dependencies {
     api project(":cdi")
     api project(":exceptions")
-    implementation "com.google.guava:guava:${guavaVersion}"
-    implementation "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
+    api "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+    api "com.google.guava:guava:${guavaVersion}"
+    api "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
 }

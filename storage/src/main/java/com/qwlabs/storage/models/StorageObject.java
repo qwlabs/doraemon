@@ -1,5 +1,6 @@
 package com.qwlabs.storage.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,10 +35,12 @@ public class StorageObject {
         return storageObject;
     }
 
+    @JsonIgnore
     public boolean isValid() {
         return Objects.nonNull(bucket) && Objects.nonNull(objectName);
     }
 
+    @JsonIgnore
     public StorageObject validObject() {
         return isValid() ? this : null;
     }
