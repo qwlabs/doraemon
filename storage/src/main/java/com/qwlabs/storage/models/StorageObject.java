@@ -1,9 +1,10 @@
 package com.qwlabs.storage.models;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import jakarta.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -31,5 +32,13 @@ public class StorageObject {
         storageObject.setProvider(provider);
         storageObject.setName(name);
         return storageObject;
+    }
+
+    public boolean isValid() {
+        return Objects.nonNull(bucket) && Objects.nonNull(objectName);
+    }
+
+    public StorageObject validObject() {
+        return isValid() ? this : null;
     }
 }
