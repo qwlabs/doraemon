@@ -20,32 +20,32 @@ public class DefaultTenant implements Tenant {
 
     private final Supplier<String> idSupplier = Suppliers.memoize(this::resolveId);
 
-    private final DefaultTenantProvider defaultTenantProvider;
+    private final DefaultTenantLoader defaultTenantLoader;
     private final DispatchInstance<String, TenantIdResolver> idResolvers;
     private final DispatchInstance<String, TenantAttributeResolver<?>> attributeResolvers;
 
     @Inject
     public DefaultTenant(RoutingContext routingContext,
                          TenantConfig config,
-                         DefaultTenantProvider defaultTenantProvider,
+                         DefaultTenantLoader defaultTenantLoader,
                          Instance<TenantIdResolver> idResolvers,
                          Instance<TenantAttributeResolver<?>> attributeResolvers) {
         this.routingContext = routingContext;
         this.config = config;
-        this.defaultTenantProvider = defaultTenantProvider;
+        this.defaultTenantLoader = defaultTenantLoader;
         this.idResolvers = DispatchInstance.of(idResolvers, true);
         this.attributeResolvers = DispatchInstance.of(attributeResolvers, true);
     }
 
     private String resolveId() {
         if (isSingle()) {
-            return defaultTenantProvider.get();
+            return defaultTenantLoader.apply(this);
         }
         return C2.stream(config.sources())
                 .map(idResolvers::get)
                 .map(resolver -> resolver.resolve(routingContext, config))
                 .findFirst()
-                .orElseGet(defaultTenantProvider);
+                .orElseGet(() -> defaultTenantLoader.apply(this));
     }
 
     @Override
