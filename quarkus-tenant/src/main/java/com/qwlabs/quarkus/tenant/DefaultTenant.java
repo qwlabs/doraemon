@@ -20,14 +20,14 @@ public class DefaultTenant implements Tenant {
 
     private final Supplier<String> idSupplier = Suppliers.memoize(this::resolveId);
 
-    private final DefaultTenantLoader defaultTenantLoader;
+    private final DefaultTenantResolver defaultTenantLoader;
     private final DispatchInstance<String, TenantIdResolver> idResolvers;
     private final DispatchInstance<String, TenantAttributeResolver<?>> attributeResolvers;
 
     @Inject
     public DefaultTenant(RoutingContext routingContext,
                          TenantConfig config,
-                         DefaultTenantLoader defaultTenantLoader,
+                         DefaultTenantResolver defaultTenantLoader,
                          Instance<TenantIdResolver> idResolvers,
                          Instance<TenantAttributeResolver<?>> attributeResolvers) {
         this.routingContext = routingContext;
@@ -39,13 +39,13 @@ public class DefaultTenant implements Tenant {
 
     private String resolveId() {
         if (isSingle()) {
-            return defaultTenantLoader.apply(this);
+            return defaultTenantLoader.get(this);
         }
         return C2.stream(config.sources())
                 .map(idResolvers::get)
                 .map(resolver -> resolver.resolve(routingContext, config))
                 .findFirst()
-                .orElseGet(() -> defaultTenantLoader.apply(this));
+                .orElseGet(() -> defaultTenantLoader.get(this));
     }
 
     @Override
