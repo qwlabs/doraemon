@@ -40,6 +40,7 @@ api 'com.qwlabs.doraemon:lang:0.2.*'
 - [q-api](q-api/README.md) Query string condition api definition
 - [q-parser-antlr4](q-parser-antlr4/README.md) Query string condition parser with antlr4 
 - [quarkus-cache](quarkus-cache/README.md) Help for quarkus cache
+- [quarkus-tenant](quarkus-tenant/README.md) Quarkus provide tenant from http
 - [security](security/README.md) Define the caller concept in the application and provide the ability to load properties api
 - [storage](storage/README.md) Define storage api
 - [storage-minio](storage-minio/README.md) Storage api implements use minio
