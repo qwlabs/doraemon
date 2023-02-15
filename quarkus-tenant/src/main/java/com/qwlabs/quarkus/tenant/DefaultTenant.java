@@ -57,6 +57,7 @@ public class DefaultTenant implements Tenant {
     }
 
     @Override
+    @ActivateRequestContext
     public <T> T attribute(String name) {
         return attributeResolvers.getOptional(name)
                 .map(attributeResolver -> (T) attributeResolver.resolve(this))
