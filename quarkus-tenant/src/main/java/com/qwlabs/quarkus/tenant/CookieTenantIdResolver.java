@@ -8,6 +8,8 @@ import io.vertx.ext.web.RoutingContext;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.util.Objects;
+
 @ApplicationScoped
 public class CookieTenantIdResolver implements TenantIdResolver, Dispatchable<String> {
 
@@ -15,11 +17,12 @@ public class CookieTenantIdResolver implements TenantIdResolver, Dispatchable<St
     public String resolve(RoutingContext context, TenantConfig config) {
         var request = context.request();
         return C2.stream(config.cookieNames())
-            .map(request::getCookie)
-            .map(Cookie::getValue)
-            .filter(S2::isNotBlank)
-            .findFirst()
-            .orElse(null);
+                .map(request::getCookie)
+                .filter(Objects::nonNull)
+                .map(Cookie::getValue)
+                .filter(S2::isNotBlank)
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
