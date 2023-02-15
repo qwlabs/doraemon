@@ -8,9 +8,11 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.control.ActivateRequestContext;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.function.Supplier;
 
+@Slf4j
 @RequestScoped
 public class DefaultTenant implements Tenant {
     private final RoutingContext routingContext;
@@ -22,27 +24,28 @@ public class DefaultTenant implements Tenant {
     private final DispatchInstance<String, TenantIdResolver> idResolvers;
     private final DispatchInstance<String, TenantAttributeResolver<?>> attributeResolvers;
 
-    @SuppressWarnings("checkstyle:WhitespaceAfter")
     @Inject
-    public DefaultTenant(
-        RoutingContext routingContext,
-        TenantConfig config,
-        DefaultTenantProvider defaultTenantProvider,
-        Instance<TenantIdResolver> resolvers,
-        Instance<TenantAttributeResolver<?>> attributeResolvers) {
+    public DefaultTenant(RoutingContext routingContext,
+                         TenantConfig config,
+                         DefaultTenantProvider defaultTenantProvider,
+                         Instance<TenantIdResolver> idResolvers,
+                         Instance<TenantAttributeResolver<?>> attributeResolvers) {
         this.routingContext = routingContext;
         this.config = config;
         this.defaultTenantProvider = defaultTenantProvider;
-        this.idResolvers = DispatchInstance.of(resolvers, true);
+        this.idResolvers = DispatchInstance.of(idResolvers, true);
         this.attributeResolvers = DispatchInstance.of(attributeResolvers, true);
     }
 
     private String resolveId() {
+        if (isSingle()) {
+            return defaultTenantProvider.get();
+        }
         return C2.stream(config.sources())
-            .map(idResolvers::get)
-            .map(resolver -> resolver.resolve(routingContext, config))
-            .findFirst()
-            .orElseGet(defaultTenantProvider);
+                .map(idResolvers::get)
+                .map(resolver -> resolver.resolve(routingContext, config))
+                .findFirst()
+                .orElseGet(defaultTenantProvider);
     }
 
     @Override
@@ -54,8 +57,8 @@ public class DefaultTenant implements Tenant {
     @Override
     public <T> T attribute(String name) {
         return attributeResolvers.getOptional(name)
-            .map(attributeResolver -> (T) attributeResolver.resolve(this))
-            .orElse(null);
+                .map(attributeResolver -> (T) attributeResolver.resolve(this))
+                .orElse(null);
     }
 
     @Override
