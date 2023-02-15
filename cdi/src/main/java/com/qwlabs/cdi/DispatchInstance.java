@@ -1,15 +1,17 @@
 package com.qwlabs.cdi;
 
 
+import com.qwlabs.lang.C2;
 import com.qwlabs.lang.F2;
+import jakarta.enterprise.inject.Instance;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import jakarta.enterprise.inject.Instance;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j

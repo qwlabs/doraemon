@@ -10,6 +10,7 @@ import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 @Slf4j
@@ -20,32 +21,33 @@ public class DefaultTenant implements Tenant {
 
     private final Supplier<String> idSupplier = Suppliers.memoize(this::resolveId);
 
-    private final DefaultTenantResolver defaultTenantLoader;
+    private final DefaultTenantResolver defaultTenantResolver;
     private final DispatchInstance<String, TenantIdResolver> idResolvers;
     private final DispatchInstance<String, TenantAttributeResolver<?>> attributeResolvers;
 
     @Inject
     public DefaultTenant(RoutingContext routingContext,
                          TenantConfig config,
-                         DefaultTenantResolver defaultTenantLoader,
+                         DefaultTenantResolver defaultTenantResolver,
                          Instance<TenantIdResolver> idResolvers,
                          Instance<TenantAttributeResolver<?>> attributeResolvers) {
         this.routingContext = routingContext;
         this.config = config;
-        this.defaultTenantLoader = defaultTenantLoader;
+        this.defaultTenantResolver = defaultTenantResolver;
         this.idResolvers = DispatchInstance.of(idResolvers, true);
         this.attributeResolvers = DispatchInstance.of(attributeResolvers, true);
     }
 
     private String resolveId() {
         if (isSingle()) {
-            return defaultTenantLoader.get(this);
+            return defaultTenantResolver.get(this);
         }
         return C2.stream(config.sources())
                 .map(idResolvers::get)
                 .map(resolver -> resolver.resolve(routingContext, config))
+                .filter(Objects::nonNull)
                 .findFirst()
-                .orElseGet(() -> defaultTenantLoader.get(this));
+                .orElseGet(() -> defaultTenantResolver.get(this));
     }
 
     @Override
