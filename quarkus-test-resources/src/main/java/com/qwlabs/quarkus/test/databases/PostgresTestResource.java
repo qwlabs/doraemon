@@ -42,18 +42,18 @@ public class PostgresTestResource implements QuarkusTestResourceLifecycleManager
         container.start();
         LOGGER.info("Postgres container started.");
         return Map.of(
-            "quarkus.datasource.jdbc.url", container.getJdbcUrl(),
-            "quarkus.datasource.username", container.getUsername(),
-            "quarkus.datasource.password", container.getPassword()
+                "quarkus.datasource.jdbc.url", container.getJdbcUrl(),
+                "quarkus.datasource.username", container.getUsername(),
+                "quarkus.datasource.password", container.getPassword()
         );
     }
 
     private PostgreSQLContainer<?> create() {
         return new PostgreSQLContainer<>(String.format("%s:%s", image, imageVersion))
-            .withDatabaseName(databaseName)
-            .withUsername(username)
-            .withPassword(password)
-                .withExposedPorts();
+                .withDatabaseName(databaseName)
+                .withUsername(username)
+                .withPassword(password)
+                .withReuse(true);
     }
 
     @Override
