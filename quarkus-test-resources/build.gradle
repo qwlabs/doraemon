@@ -1,8 +1,8 @@
 dependencies {
-    api project(":cdi")
+    api project(":lang")
     api "io.quarkus:quarkus-junit5:${quarkusVersion}"
-    api "org.testcontainers:postgresql:${testcontainersVersion}"
-    api("org.testcontainers:postgresql:${testcontainersVersion}") {
-        exclude group: 'junit', module: 'junit'
-    }
+    api "io.quarkus:quarkus-keycloak-admin-client-reactive:${quarkusVersion}"
+    api "io.rest-assured:rest-assured:${restAssuredVersion}"
+    api "org.jboss.shrinkwrap:shrinkwrap-api:${shrinkwrapVersion}"
+    api("org.testcontainers:postgresql:${testcontainersVersion}")
 }
