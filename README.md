@@ -1,6 +1,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.qwlabs.doraemon/lang.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.qwlabs.doraemon%22)
 [![Commit](https://github.com/qwlabs/doraemon/actions/workflows/publication.yml/badge.svg?branch=master)](https://github.com/qwlabs/doraemon/actions/workflows/publication.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![visitors](https://page-views.glitch.me/badge?page_id=qwlabs.doraemon)](https://page-views.glitch.me/badge?page_id=qwlabs.doraemon)
 
 Useful java tools
 
