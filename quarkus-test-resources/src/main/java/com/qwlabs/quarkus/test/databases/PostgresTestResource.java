@@ -21,6 +21,8 @@ public class PostgresTestResource implements QuarkusTestResourceLifecycleManager
     public static final String DEFAULT_USERNAME = "quarkus";
     public static final String PASSWORD = "password";
     public static final String DEFAULT_PASSWORD = "quarkus";
+    public static final String REUSE = "reuse";
+    public static final String DEFAULT_REUSE = Boolean.FALSE.toString();
     public static final String CLEANUP_SQL_LOCATION = "cleanupSqlLocation";
     public static final String DEFAULT_CLEANUP_SQL_LOCATION = "db/cleanup.sql";
     public static final String CLEANUP_ENABLED = "cleanupEnabled";
@@ -34,6 +36,7 @@ public class PostgresTestResource implements QuarkusTestResourceLifecycleManager
     private String databaseName;
     private String username;
     private String password;
+    private Boolean reuse;
 
     @Override
     public Map<String, String> start() {
@@ -53,7 +56,7 @@ public class PostgresTestResource implements QuarkusTestResourceLifecycleManager
                 .withDatabaseName(databaseName)
                 .withUsername(username)
                 .withPassword(password)
-                .withReuse(true);
+                .withReuse(this.reuse);
     }
 
     @Override
@@ -70,7 +73,8 @@ public class PostgresTestResource implements QuarkusTestResourceLifecycleManager
         this.databaseName = initArgs.getOrDefault(DATABASE_NAME, DEFAULT_DATABASE_NAME);
         this.username = initArgs.getOrDefault(USERNAME, DEFAULT_USERNAME);
         this.password = initArgs.getOrDefault(PASSWORD, DEFAULT_PASSWORD);
-        cleanupEnabled = Boolean.valueOf(initArgs.getOrDefault(CLEANUP_ENABLED, DEFAULT_CLEANUP_ENABLED));
+        this.reuse = Boolean.parseBoolean(initArgs.getOrDefault(REUSE, DEFAULT_REUSE));
+        cleanupEnabled = Boolean.parseBoolean(initArgs.getOrDefault(CLEANUP_ENABLED, DEFAULT_CLEANUP_ENABLED));
         cleanupSqlLocation = initArgs.getOrDefault(CLEANUP_SQL_LOCATION, DEFAULT_CLEANUP_SQL_LOCATION);
     }
 

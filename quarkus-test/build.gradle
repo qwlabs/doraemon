@@ -1,0 +1,3 @@
+dependencies {
+    api "io.quarkus:quarkus-junit5:${quarkusVersion}"
+}
