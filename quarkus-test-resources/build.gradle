@@ -1,0 +1,8 @@
+dependencies {
+    api project(":cdi")
+    api "io.quarkus:quarkus-junit5:${quarkusVersion}"
+    api "org.testcontainers:postgresql:${testcontainersVersion}"
+    api("org.testcontainers:postgresql:${testcontainersVersion}") {
+        exclude group: 'junit', module: 'junit'
+    }
+}
