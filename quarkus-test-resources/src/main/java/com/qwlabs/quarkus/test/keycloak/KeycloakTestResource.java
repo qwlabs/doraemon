@@ -12,6 +12,7 @@ import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RealmRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,11 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
 
     public static final String DEFAULT_CLEANUP_ENABLED = Boolean.TRUE.toString();
 
+    public static final String STARTUP_TIMEOUT = "startupTimeout";
+
+    public static final String DEFAULT_STARTUP_TIMEOUT = Duration.ofMinutes(10).toString();
+
+
     private static KeycloakContainer container;
     private static boolean cleanupEnabled;
     private static String defaultSecret;
@@ -40,6 +46,7 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
 
     private String image;
     private String imageVersion;
+    private Duration startupTimeout;
 
     public static void cleanup() {
         if (!cleanupEnabled) {
@@ -73,6 +80,7 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
     public void init(Map<String, String> initArgs) {
         this.image = initArgs.getOrDefault(IMAGE, DEFAULT_IMAGE);
         this.imageVersion = initArgs.getOrDefault(IMAGE_VERSION, DEFAULT_IMAGE_VERSION);
+        this.startupTimeout = Duration.parse(initArgs.getOrDefault(STARTUP_TIMEOUT, DEFAULT_STARTUP_TIMEOUT));
         defaultSecret = initArgs.getOrDefault(DEFAULT_SECRET, DEFAULT_DEFAULT_SECRET);
         cleanupEnabled = Boolean.parseBoolean(initArgs.getOrDefault(CLEANUP_ENABLED, DEFAULT_CLEANUP_ENABLED));
     }
@@ -84,10 +92,10 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
         }
     }
 
-
     private KeycloakContainer create() {
         return new KeycloakContainer(String.format("%s:%s", image, imageVersion))
-                .withDisabledCaching();
+                .withDisabledCaching()
+                .withStartupTimeout(startupTimeout);
     }
 
     private Map<String, String> genConfig() {
