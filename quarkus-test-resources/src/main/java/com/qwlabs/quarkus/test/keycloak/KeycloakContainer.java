@@ -93,7 +93,7 @@ public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
     @Override
     protected void configure() {
         List<String> commandParts = new ArrayList<>();
-        commandParts.add("start-dev");
+        commandParts.add("start");
 
         if (!contextPath.equals(KEYCLOAK_CONTEXT_PATH)) {
             commandParts.add("--http-relative-path=" + contextPath);

@@ -1,5 +1,6 @@
 package com.qwlabs.quarkus.test.keycloak;
 
+import com.google.common.base.Suppliers;
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -34,7 +36,7 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
     private static KeycloakContainer container;
     private static boolean cleanupEnabled;
     private static String defaultSecret;
-    private static Keycloak adminClient;
+    private static Supplier<Keycloak> adminClient = Suppliers.memoize(KeycloakTestResource::createAdminClient);
 
     private String image;
     private String imageVersion;
@@ -49,8 +51,8 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
             return;
         }
         LOGGER.info("Start clean up keycloak container.");
-        adminClient.realms().findAll()
-            .forEach(realm -> deleteRealms(realm.getRealm()));
+        adminClient.get().realms().findAll()
+                .forEach(realm -> deleteRealms(realm.getRealm()));
         LOGGER.info("Clean up keycloak container completed.");
     }
 
@@ -59,9 +61,12 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
         LOGGER.info("Start bootstrap Keycloak container.");
         container = create();
         container.start();
-        adminClient = container.getKeycloakAdminClient();
         LOGGER.info("Keycloak container started.");
         return genConfig();
+    }
+
+    private static Keycloak createAdminClient() {
+        return container.getKeycloakAdminClient();
     }
 
     @Override
@@ -82,18 +87,18 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
 
     private KeycloakContainer create() {
         return new KeycloakContainer(String.format("%s:%s", image, imageVersion))
-            .withDisabledCaching();
+                .withDisabledCaching();
     }
 
     private Map<String, String> genConfig() {
         return Map.of(
-            "quarkus.oidc.auth-server-url", String.format("%srealms/%s", container.getAuthServerUrl(), KeycloakContainer.MASTER_REALM),
-            "quarkus.tenant.oidc.auth-server-url", container.getAuthServerUrl(),
-            "quarkus.keycloak.admin-client.server-url", container.getAuthServerUrl(),
-            "quarkus.keycloak.admin-client.realm", KeycloakContainer.MASTER_REALM,
-            "quarkus.keycloak.admin-client.username", container.getAdminUsername(),
-            "quarkus.keycloak.admin-client.password", container.getAdminPassword(),
-            "quarkus.keycloak.admin-client.grant-type", CredentialRepresentation.PASSWORD
+                "quarkus.oidc.auth-server-url", String.format("%srealms/%s", container.getAuthServerUrl(), KeycloakContainer.MASTER_REALM),
+                "quarkus.tenant.oidc.auth-server-url", container.getAuthServerUrl(),
+                "quarkus.keycloak.admin-client.server-url", container.getAuthServerUrl(),
+                "quarkus.keycloak.admin-client.realm", KeycloakContainer.MASTER_REALM,
+                "quarkus.keycloak.admin-client.username", container.getAdminUsername(),
+                "quarkus.keycloak.admin-client.password", container.getAdminPassword(),
+                "quarkus.keycloak.admin-client.grant-type", CredentialRepresentation.PASSWORD
         );
     }
 
@@ -147,13 +152,13 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
 
     public static String getAccessToken(String realm, String clientId, String clientSecret, String userName) {
         return createRequestSpec().param("grant_type", "password")
-            .param("username", userName)
-            .param("password", userName)
-            .param("client_id", clientId)
-            .param("client_secret", clientSecret)
-            .when()
-            .post(container.getAuthServerUrl() + "realms/" + realm + "/protocol/openid-connect/token")
-            .as(AccessTokenResponse.class).getToken();
+                .param("username", userName)
+                .param("password", userName)
+                .param("client_id", clientId)
+                .param("client_secret", clientSecret)
+                .when()
+                .post(container.getAuthServerUrl() + "realms/" + realm + "/protocol/openid-connect/token")
+                .as(AccessTokenResponse.class).getToken();
     }
 
     public static RealmRepresentation createRealm(String name) {
@@ -168,30 +173,30 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
     }
 
     public static void createUser(String realm, UserRepresentation user) {
-        adminClient.realm(realm)
-            .users()
-            .create(user);
+        adminClient.get().realm(realm)
+                .users()
+                .create(user);
     }
 
     public static void createClient(String realm, ClientRepresentation client) {
-        adminClient.realm(realm)
-            .clients()
-            .create(client);
+        adminClient.get().realm(realm)
+                .clients()
+                .create(client);
     }
 
     public static void createRealm(RealmRepresentation... realms) {
         Stream.of(realms)
-            .forEach(realm -> adminClient.realms().create(realm));
+                .forEach(realm -> adminClient.get().realms().create(realm));
     }
 
     public static void deleteRealms(String... realms) {
         Stream.of(realms)
-            .filter(realm -> !KeycloakContainer.MASTER_REALM.equalsIgnoreCase(realm))
-            .forEach(realm -> adminClient.realm(realm).remove());
+                .filter(realm -> !KeycloakContainer.MASTER_REALM.equalsIgnoreCase(realm))
+                .forEach(realm -> adminClient.get().realm(realm).remove());
     }
 
     private static String getAdminAccessToken() {
-        return adminClient.tokenManager().getAccessToken().getToken();
+        return adminClient.get().tokenManager().getAccessToken().getToken();
     }
 
     private static RequestSpecification createRequestSpec() {
