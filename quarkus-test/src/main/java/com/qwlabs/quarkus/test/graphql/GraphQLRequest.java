@@ -2,7 +2,7 @@ package com.qwlabs.quarkus.test.graphql;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import org.eclipse.microprofile.config.ConfigProvider;
 
@@ -23,16 +23,20 @@ public class GraphQLRequest {
 
     private void setup() {
         request.port(ConfigProvider.getConfig()
-                .getValue("quarkus.http.test-port", Integer.class))
+                        .getValue("quarkus.http.test-port", Integer.class))
                 .contentType(ContentType.JSON).accept(ContentType.JSON);
     }
 
-    public Response post() {
-        return post(DEFAULT_GRAPHQL_ENDPOINT);
+    public ValidatableResponse then() {
+        return then(DEFAULT_GRAPHQL_ENDPOINT);
     }
 
-    public Response post(String endpoint) {
-        return request.post(endpoint);
+    public ValidatableResponse then(String endpoint) {
+        return request.post()
+                .then()
+                .log()
+                .all()
+                .and();
     }
 
     public GraphQLRequest body(Object body) {
