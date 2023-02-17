@@ -6,26 +6,28 @@ import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.security.identity.SecurityIdentityAugmentor;
 import io.quarkus.security.runtime.QuarkusSecurityIdentity;
 import io.smallrye.mutiny.Uni;
-import lombok.extern.slf4j.Slf4j;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ApplicationScoped
 public class CallerIdentityAugmentor implements SecurityIdentityAugmentor {
     private final CallerPrincipalLoader principalLoader;
+    private final Instance<AnonymousCallerProvider> anonymousCallerProvider;
     private final DispatchInstance<Caller, CallerPermissionsLoader> permissionsLoader;
     private final DispatchInstance<String, CallerAttributeLoader<?, ?>> attributeLoader;
     private final CallerIdentityRolesProvider identityRolesProvider;
 
     @Inject
     public CallerIdentityAugmentor(Instance<CallerPrincipalLoader> principalLoader,
+                                   Instance<AnonymousCallerProvider> anonymousCallerProvider,
                                    Instance<CallerPermissionsLoader> permissionsLoader,
                                    Instance<CallerAttributeLoader<?, ?>> attributeLoader,
                                    CallerIdentityRolesProvider identityRolesProvider) {
         this.principalLoader = principalLoader.get();
+        this.anonymousCallerProvider = anonymousCallerProvider;
         this.permissionsLoader = DispatchInstance.of(permissionsLoader);
         this.attributeLoader = DispatchInstance.of(attributeLoader);
         this.identityRolesProvider = identityRolesProvider;
@@ -37,7 +39,7 @@ public class CallerIdentityAugmentor implements SecurityIdentityAugmentor {
     }
 
     private SecurityIdentity doAugment(SecurityIdentity identity) {
-        Caller caller = identity.isAnonymous() ? AnonymousCaller.INSTANCE : buildCurrentCaller(identity);
+        Caller caller = identity.isAnonymous() ? buildAnonymousCaller(identity) : buildAuthenticatedCaller(identity);
         var newIdentity = buildSecurityIdentity(identity, caller);
         caller.identity(newIdentity);
         return newIdentity;
@@ -51,7 +53,14 @@ public class CallerIdentityAugmentor implements SecurityIdentityAugmentor {
         return builder.build();
     }
 
-    private Caller buildCurrentCaller(SecurityIdentity identity) {
+    private Caller buildAnonymousCaller(SecurityIdentity identity) {
+        if (anonymousCallerProvider.isUnsatisfied()) {
+            return AnonymousCaller.INSTANCE;
+        }
+        return anonymousCallerProvider.get().get(identity);
+    }
+
+    private Caller buildAuthenticatedCaller(SecurityIdentity identity) {
         CallerPrincipal callerPrincipal = principalLoader.load(identity);
         return AuthenticatedCaller.builder()
                 .id(callerPrincipal.id())
