@@ -57,7 +57,8 @@ public class CallerIdentityAugmentor implements SecurityIdentityAugmentor {
         if (anonymousCallerProvider.isUnsatisfied()) {
             return AnonymousCaller.INSTANCE;
         }
-        return anonymousCallerProvider.get().get(identity);
+        return anonymousCallerProvider.get()
+                .get(identity, permissionsLoader, attributeLoader);
     }
 
     private Caller buildAuthenticatedCaller(SecurityIdentity identity) {
