@@ -48,6 +48,7 @@ public class CallerIdentityAugmentor implements SecurityIdentityAugmentor {
     private SecurityIdentity buildSecurityIdentity(SecurityIdentity oldIdentity, Caller caller) {
         QuarkusSecurityIdentity.Builder builder = QuarkusSecurityIdentity.builder(oldIdentity);
         var roles = identityRolesProvider.get(caller);
+        builder.setAnonymous(caller.isAnonymous());
         builder.addRoles(roles);
         builder.addAttribute(Caller.class.getName(), caller);
         return builder.build();
