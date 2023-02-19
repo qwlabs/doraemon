@@ -32,7 +32,7 @@ public class GraphQLRequest {
     }
 
     public ValidatableResponse then(String endpoint) {
-        return request.post()
+        return request.post(endpoint)
                 .then()
                 .log()
                 .all()

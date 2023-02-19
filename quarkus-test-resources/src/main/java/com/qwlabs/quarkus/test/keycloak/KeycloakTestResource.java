@@ -174,13 +174,17 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
     }
 
     public static RealmRepresentation createRealm(String name) {
+        return createRealm(name, 3);
+    }
+
+    public static RealmRepresentation createRealm(String name, Integer lifespan) {
         RealmRepresentation realm = new RealmRepresentation();
         realm.setRealm(name);
         realm.setEnabled(true);
         realm.setUsers(new ArrayList<>());
         realm.setClients(new ArrayList<>());
-        realm.setAccessTokenLifespan(3);
-        realm.setSsoSessionMaxLifespan(3);
+        realm.setAccessTokenLifespan(lifespan);
+        realm.setSsoSessionMaxLifespan(lifespan);
         realm.getClients().add(createServiceClient(TEST_SERVICE_CLIENT));
         return realm;
     }
