@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager {
+    public static final String TEST_SERVICE_CLIENT = "test-service";
     public static final String IMAGE = "imageVersion";
     public static final String DEFAULT_IMAGE = "quay.io/keycloak/keycloak";
     public static final String IMAGE_VERSION = "imageVersion";
@@ -37,7 +38,6 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
     public static final String STARTUP_TIMEOUT = "startupTimeout";
 
     public static final String DEFAULT_STARTUP_TIMEOUT = Duration.ofMinutes(10).toString();
-
 
     private static KeycloakContainer container;
     private static boolean cleanupEnabled;
@@ -154,6 +154,10 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
         return user;
     }
 
+    public static String getAccessToken(String realm, String userName) {
+        return getAccessToken(realm, TEST_SERVICE_CLIENT, userName);
+    }
+
     public static String getAccessToken(String realm, String clientId, String userName) {
         return getAccessToken(realm, clientId, defaultSecret, userName);
     }
@@ -177,6 +181,7 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
         realm.setClients(new ArrayList<>());
         realm.setAccessTokenLifespan(3);
         realm.setSsoSessionMaxLifespan(3);
+        realm.getClients().add(createServiceClient(TEST_SERVICE_CLIENT));
         return realm;
     }
 
