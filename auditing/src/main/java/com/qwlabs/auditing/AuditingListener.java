@@ -36,17 +36,17 @@ public class AuditingListener {
         entity.setCreatedAt(Optional.ofNullable(entity.getCreatedAt())
                 .orElseGet(() -> Instant.now(Clock.systemUTC())));
         entity.setCreatedBy(Optional.ofNullable(entity.getCreatedBy())
-                .orElseGet(() -> getAuditorId().orElse(null)));
+                .orElseGet(() -> getAuditorId(entity, AuditingPhase.PRE_PERSIST).orElse(null)));
     }
 
     private static void touchUpdated(AuditedEntity entity) {
         entity.setUpdatedAt(Instant.now(Clock.systemUTC()));
         entity.setUpdatedBy(Optional.ofNullable(entity.getUpdatedBy())
-                .orElseGet(() -> getAuditorId().orElse(null)));
+                .orElseGet(() -> getAuditorId(entity, AuditingPhase.PRE_UPDATE).orElse(null)));
     }
 
-    private static Optional<String> getAuditorId() {
-        return getAuditorIdProvider().get();
+    private static Optional<String> getAuditorId(Object entity, AuditingPhase phase) {
+        return getAuditorIdProvider().get(entity, phase);
     }
 
     private static AuditorIdProvider getAuditorIdProvider() {
@@ -56,7 +56,7 @@ public class AuditingListener {
 
     private static class DefaultAuditorIdProvider implements AuditorIdProvider {
         @Override
-        public Optional<String> get() {
+        public Optional<String> get(Object entity, AuditingPhase phase) {
             SecurityIdentity identity = CDI.current().select(SecurityIdentity.class).get();
             if (identity.isAnonymous()) {
                 return Optional.empty();
