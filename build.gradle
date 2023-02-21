@@ -8,6 +8,13 @@ buildscript {
 plugins {
     id 'org.kordamp.gradle.jandex' apply false
     id 'org.ajoberstar.grgit' apply false
+    id 'io.codearte.nexus-staging'
+}
+
+nexusStaging {
+    serverUrl = "https://s01.oss.sonatype.org/service/local/"
+    username = System.getenv("OSSRH_TOKEN_USERNAME") ?: ""
+    password = System.getenv("OSSRH_TOKEN_PASSWORD") ?: ""
 }
 
 subprojects {
