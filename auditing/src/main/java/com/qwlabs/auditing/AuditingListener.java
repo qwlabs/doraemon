@@ -17,10 +17,6 @@ public class AuditingListener {
 
     @PrePersist
     public void prePersist(Object entity) {
-        if (entity instanceof IgnoreAuditing
-                && ((IgnoreAuditing) entity).isIgnoreAuditing(PersistPhase.PRE_PERSIST)) {
-            return;
-        }
         if (entity instanceof CreatedAuditedEntity) {
             touchCreated((CreatedAuditedEntity) entity);
         }
@@ -31,10 +27,6 @@ public class AuditingListener {
 
     @PreUpdate
     public void preUpdate(Object entity) {
-        if (entity instanceof IgnoreAuditing
-                && ((IgnoreAuditing) entity).isIgnoreAuditing(PersistPhase.POST_UPDATE)) {
-            return;
-        }
         if (entity instanceof AuditedEntity) {
             touchUpdated((AuditedEntity) entity);
         }
