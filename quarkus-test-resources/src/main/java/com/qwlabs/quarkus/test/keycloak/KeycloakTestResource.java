@@ -30,7 +30,8 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
 
     public static final String DEFAULT_SECRET = "defaultSecret";
     public static final String DEFAULT_DEFAULT_SECRET = "secret";
-
+    public static final String PRIMARY_OIDC_REALM = "primaryOidcRealm";
+    public static final String DEFAULT_PRIMARY_OIDC_REALM = "master";
     public static final String CLEANUP_ENABLED = "cleanupEnabled";
 
     public static final String DEFAULT_CLEANUP_ENABLED = Boolean.TRUE.toString();
@@ -42,6 +43,7 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
     private static KeycloakContainer container;
     private static boolean cleanupEnabled;
     private static String defaultSecret;
+    private static String primaryOidcRealm;
     private static Supplier<Keycloak> adminClient = Suppliers.memoize(KeycloakTestResource::createAdminClient);
 
     private String image;
@@ -82,6 +84,7 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
         this.imageVersion = initArgs.getOrDefault(IMAGE_VERSION, DEFAULT_IMAGE_VERSION);
         this.startupTimeout = Duration.parse(initArgs.getOrDefault(STARTUP_TIMEOUT, DEFAULT_STARTUP_TIMEOUT));
         defaultSecret = initArgs.getOrDefault(DEFAULT_SECRET, DEFAULT_DEFAULT_SECRET);
+        primaryOidcRealm = initArgs.getOrDefault(PRIMARY_OIDC_REALM, DEFAULT_PRIMARY_OIDC_REALM);
         cleanupEnabled = Boolean.parseBoolean(initArgs.getOrDefault(CLEANUP_ENABLED, DEFAULT_CLEANUP_ENABLED));
     }
 
@@ -100,12 +103,13 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
 
     private Map<String, String> genConfig() {
         return Map.of(
-                "quarkus.oidc.auth-server-url", String.format("%srealms/%s", container.getAuthServerUrl(), KeycloakContainer.MASTER_REALM),
+                "quarkus.oidc.auth-server-url", String.format("%srealms/%s", container.getAuthServerUrl(), primaryOidcRealm),
                 "quarkus.tenant.oidc.auth-server-url", container.getAuthServerUrl(),
                 "quarkus.keycloak.admin-client.server-url", container.getAuthServerUrl(),
                 "quarkus.keycloak.admin-client.realm", KeycloakContainer.MASTER_REALM,
                 "quarkus.keycloak.admin-client.username", container.getAdminUsername(),
                 "quarkus.keycloak.admin-client.password", container.getAdminPassword(),
+                "quarkus.keycloak.admin-client.client-id", KeycloakContainer.ADMIN_CLI_CLIENT,
                 "quarkus.keycloak.admin-client.grant-type", CredentialRepresentation.PASSWORD
         );
     }
