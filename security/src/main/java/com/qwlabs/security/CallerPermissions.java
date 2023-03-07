@@ -13,5 +13,5 @@ public interface CallerPermissions {
 
     @NotNull boolean has(@NotNull String scope, @NotNull String permission);
 
-    @NotNull Set<@NotNull String> scopes(@NotNull String permission, @NotNull String targetType);
+    @NotNull GrantTargets targets(@NotNull String permission, @NotNull String targetType);
 }
