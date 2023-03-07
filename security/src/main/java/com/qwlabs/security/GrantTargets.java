@@ -33,6 +33,6 @@ public class GrantTargets {
     }
 
     public static GrantTargets of(Set<String> targets) {
-        return new GrantTargets(true, targets);
+        return new GrantTargets(false, targets);
     }
 }
