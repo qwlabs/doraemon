@@ -38,7 +38,7 @@ public class AnonymousCaller implements Caller {
 
         @Override
         public GrantTargets targets(String permission, String targetType) {
-            return GrantTargets.of();
+            return GrantTargets.none();
         }
     };
 
