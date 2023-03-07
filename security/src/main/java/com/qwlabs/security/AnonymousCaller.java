@@ -35,6 +35,11 @@ public class AnonymousCaller implements Caller {
         public boolean has(String scope, String permission) {
             return false;
         }
+
+        @Override
+        public Set<@NotNull String> scopes(String permission, String targetType) {
+            return Set.of();
+        }
     };
 
     @Override
