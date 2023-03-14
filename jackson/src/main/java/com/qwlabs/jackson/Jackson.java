@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.qwlabs.cdi.SafeCDI;
-import jakarta.annotation.Nullable;
 import jakarta.enterprise.inject.Instance;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
@@ -91,10 +91,7 @@ public final class Jackson {
         }
     }
 
-    public static String asText(@Nullable ObjectNode node, @Nullable String propertyName) {
-        if (node == null || propertyName == null) {
-            return null;
-        }
+    public static String asText(@NotNull ObjectNode node, @NotNull String propertyName) {
         return Optional.ofNullable(node.get(propertyName))
                 .map(JsonNode::asText)
                 .orElse(null);
