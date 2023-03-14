@@ -91,6 +91,10 @@ public final class Jackson {
         }
     }
 
+    public static String asText(@Nullable ObjectNode node) {
+        return asText(node, null);
+    }
+
     public static String asText(@Nullable ObjectNode node, @Nullable String propertyName) {
         if (node == null) {
             return null;
