@@ -99,7 +99,7 @@ public final class Jackson {
         if (node == null) {
             return null;
         }
-        if (propertyName != null) {
+        if (propertyName == null) {
             return node.asText();
         }
         return Optional.ofNullable(node.get(propertyName))
