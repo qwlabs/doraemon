@@ -3,7 +3,13 @@ package com.qwlabs.jackson;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.BooleanNode;
+import com.fasterxml.jackson.databind.node.DecimalNode;
+import com.fasterxml.jackson.databind.node.MissingNode;
+import com.fasterxml.jackson.databind.node.NullNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,10 +20,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
+import static com.qwlabs.jackson.Jackson.asText;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -113,6 +122,21 @@ public class JacksonTest {
     void should_return_empty_when_unmarshal_fail(@Mock JsonProcessingException exception) throws JsonProcessingException {
         var mayResult = Jackson.read("{\"value\": v1}");
         Assertions.assertTrue(mayResult.isEmpty());
+    }
+
+    @Test
+    void should_asText() {
+        assertNull(asText(null));
+        assertNull(asText(null, null));
+        assertNull(asText(NullNode.getInstance()));
+        assertNull(asText(NullNode.getInstance(), null));
+        assertNull(asText(MissingNode.getInstance()));
+        assertNull(asText(MissingNode.getInstance(), null));
+        assertThat(asText(BooleanNode.FALSE), is("false"));
+        assertThat(asText(BooleanNode.TRUE, null), is("true"));
+        assertThat(asText(DecimalNode.valueOf(new BigDecimal("1.2222222222222222222222222222222222"))), is("1.2222222222222222222222222222222222"));
+        assertThat(asText(DecimalNode.valueOf(new BigDecimal("1.2222222222222222222222222222222222")), null), is("1.2222222222222222222222222222222222"));
+        assertThat(asText(Jackson.createObjectNode().put("a", "1.2222222222222222222222222222222222"), "a"), is("1.2222222222222222222222222222222222"));
     }
 
     @Getter

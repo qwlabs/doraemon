@@ -91,19 +91,24 @@ public final class Jackson {
         }
     }
 
-    public static String asText(@Nullable ObjectNode node) {
-        return asText(node, null);
-    }
-
-    public static String asText(@Nullable ObjectNode node, @Nullable String propertyName) {
-        if (node == null) {
-            return null;
-        }
+    public static String asText(@Nullable JsonNode node, @Nullable String propertyName) {
         if (propertyName == null) {
-            return node.asText();
+            return asText(node);
         }
         return Optional.ofNullable(node.get(propertyName))
-                .map(JsonNode::asText)
+                .map(Jackson::asText)
                 .orElse(null);
+    }
+
+    public static String asText(@Nullable JsonNode node) {
+        if (node == null || node.isNull() || node.isMissingNode()) {
+            return null;
+        }
+        try {
+            return node.asText();
+        } catch (Exception e) {
+            LOGGER.error("JsonNode asText() error.", e);
+            return null;
+        }
     }
 }
