@@ -7,7 +7,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.Query;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -73,8 +72,7 @@ public class PanacheNativePageQuery<Entity> extends AbstractPanacheNativeQuery<E
 
     @Override
     public long count() {
-        BigInteger count = (BigInteger) buildCountQuery().getSingleResult();
-        return count.longValue();
+        return (Long) buildCountQuery().getSingleResult();
     }
 
     private Query buildDataQuery() {
