@@ -1,3 +1,4 @@
 dependencies {
+    api project(":jackson")
     api "org.hibernate:hibernate-core:${hibernateVersion}"
 }

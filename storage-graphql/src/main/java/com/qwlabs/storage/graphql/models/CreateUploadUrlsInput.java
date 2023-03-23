@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.qwlabs.jackson.Jackson;
 import com.qwlabs.storage.messages.StorageMessages;
 import com.qwlabs.storage.services.StorageContext;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +13,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.eclipse.microprofile.graphql.Input;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Objects;
 

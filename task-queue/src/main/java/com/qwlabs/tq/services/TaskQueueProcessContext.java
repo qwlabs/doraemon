@@ -1,13 +1,12 @@
 package com.qwlabs.tq.services;
 
 import com.google.common.collect.Sets;
-import com.qwlabs.tq.models.TaskQueueRecord;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.annotation.Nullable;
 import java.time.Duration;
 import java.util.Set;
 

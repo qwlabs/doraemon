@@ -1,7 +1,8 @@
 package com.qwlabs.security;
 
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
+
 import java.util.Objects;
 
 public interface GrantTargetAble {

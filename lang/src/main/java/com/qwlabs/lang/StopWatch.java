@@ -1,13 +1,12 @@
 package com.qwlabs.lang;
 
 
-import javax.annotation.concurrent.NotThreadSafe;
+
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 
-@NotThreadSafe
 public class StopWatch {
 
     private final String id;
