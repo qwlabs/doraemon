@@ -26,7 +26,7 @@ public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager
     public static final String IMAGE = "imageVersion";
     public static final String DEFAULT_IMAGE = "quay.io/keycloak/keycloak";
     public static final String IMAGE_VERSION = "imageVersion";
-    public static final String DEFAULT_IMAGE_VERSION = "20.0.3-0";
+    public static final String DEFAULT_IMAGE_VERSION = "21.0.1";
 
     public static final String DEFAULT_SECRET = "defaultSecret";
     public static final String DEFAULT_DEFAULT_SECRET = "secret";

@@ -3,5 +3,7 @@ dependencies {
     api project(":cdi")
     api project(":storage")
     api project(":exceptions")
-    api "software.amazon.awssdk:s3:${s3Version}"
+    api("software.amazon.awssdk:s3:${s3Version}"){
+        exclude group: 'io.netty'
+    }
 }
