@@ -28,16 +28,24 @@ public class TreeNode<S> implements Iterable<TreeNode<S>> {
 
     @JsonCreator
     public TreeNode() {
-        this(null);
+        this(null, new ArrayList<>(0));
     }
 
-    public TreeNode(S source) {
+    public TreeNode(S source, List<TreeNode<S>> children) {
         this.source = source;
-        this.children = new ArrayList<>(0);
+        this.children = children;
     }
 
     public static <S> TreeNode<S> of(S source) {
-        return new TreeNode<>(source);
+        return of(source, new ArrayList<>(0));
+    }
+
+    public static <S> TreeNode<S> of(S source, TreeNode<S>... children) {
+        return of(source, Lists.newArrayList(children));
+    }
+
+    public static <S> TreeNode<S> of(S source, List<TreeNode<S>> children) {
+        return new TreeNode<>(source, children);
     }
 
     public int size() {
@@ -77,10 +85,10 @@ public class TreeNode<S> implements Iterable<TreeNode<S>> {
         return this;
     }
 
-    public void acceptDeep(BiConsumer<S, S> consumer) {
+    public void accept(BiConsumer<S, S> consumer) {
         children.forEach(child -> {
             consumer.accept(source, child.getSource());
-            child.acceptDeep(consumer);
+            child.accept(consumer);
         });
     }
 
@@ -97,17 +105,23 @@ public class TreeNode<S> implements Iterable<TreeNode<S>> {
         return Optional.empty();
     }
 
-    public <R> List<R> mapDeep(Function<S, R> mapper) {
-        return mapDeep(mapper, false);
+    public <R> TreeNode<R> map(Function<S, R> mapper) {
+        var newNode = TreeNode.of(mapper.apply(source));
+        children.forEach(child -> newNode.add(child.map(mapper)));
+        return newNode;
     }
 
-    public <R> List<R> mapDeep(Function<S, R> mapper, boolean withSelf) {
+    public <R> List<R> mapSource(Function<S, R> mapper) {
+        return mapSource(mapper, false);
+    }
+
+    public <R> List<R> mapSource(Function<S, R> mapper, boolean withSelf) {
         List<R> result = Lists.newArrayList();
         if (withSelf) {
             result.add(mapper.apply(source));
         }
         children.forEach(child -> {
-            result.addAll(child.mapDeep(mapper, true));
+            result.addAll(child.mapSource(mapper, true));
         });
         return result;
     }

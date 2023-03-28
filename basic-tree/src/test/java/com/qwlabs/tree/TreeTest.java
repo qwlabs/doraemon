@@ -33,15 +33,15 @@ public class TreeTest {
         TreeSource treeSource = tree.findNode(s -> s.id.equals("6")).get().getSource();
         assertThat(treeSource.toString(), is("6"));
 
-        List<String> ids = tree.mapDeep(TreeSource::getId);
+        List<String> ids = tree.mapSource(TreeSource::getId);
         assertThat(ids.toString(), is("[1, 4, 5, 7, 10, 6, 2, 3, 8, 9, 11, 12, 13]"));
 
         TreeNode<TreeSource> foundNode = tree.findNode(s -> s.id.equals("4")).get();
-        ids = foundNode.mapDeep(TreeSource::getId, true);
+        ids = foundNode.mapSource(TreeSource::getId, true);
         assertThat(ids.toString(), is("[4, 5, 7, 10]"));
-        ids = foundNode.mapDeep(TreeSource::getId, false);
+        ids = foundNode.mapSource(TreeSource::getId, false);
         assertThat(ids.toString(), is("[5, 7, 10]"));
-        ids = foundNode.mapDeep(TreeSource::getId);
+        ids = foundNode.mapSource(TreeSource::getId);
         assertThat(ids.toString(), is("[5, 7, 10]"));
     }
 

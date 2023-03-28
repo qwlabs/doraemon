@@ -50,20 +50,15 @@ public final class Tree<S> extends TreeNode<S> {
     }
 
     @Override
-    public <R> List<R> mapDeep(Function<S, R> mapper) {
-        return super.mapDeep(mapper, false);
-    }
-
-    @Override
-    public <R> List<R> mapDeep(Function<S, R> mapper, boolean withSelf) {
-        return super.mapDeep(mapper, false);
+    public <R> List<R> mapSource(Function<S, R> mapper, boolean withSelf) {
+        return super.mapSource(mapper, false);
     }
 
     private Map<Object, S> loadParentMapping() {
         Map<Object, S> parentMapping = Maps.newHashMap();
         getChildren().forEach(child -> {
             parentMapping.put(identityFunction.apply(child.getSource()), null);
-            child.acceptDeep((parent, c) -> {
+            child.accept((parent, c) -> {
                 parentMapping.put(identityFunction.apply(c), parent);
             });
         });
