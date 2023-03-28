@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import jakarta.validation.constraints.NotNull;
+
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -37,7 +37,7 @@ public final class Tree<S> extends TreeNode<S> {
         return super.getChildren();
     }
 
-    public <I> List<S> path(@NotNull S source) {
+    public List<S> path(@NotNull S source) {
         List<S> parents = Lists.newArrayList();
         S maxParent = source;
         do {
@@ -58,8 +58,8 @@ public final class Tree<S> extends TreeNode<S> {
         Map<Object, S> parentMapping = Maps.newHashMap();
         getChildren().forEach(child -> {
             parentMapping.put(identityFunction.apply(child.getSource()), null);
-            child.accept((parent, c) -> {
-                parentMapping.put(identityFunction.apply(c), parent);
+            child.acceptSource((location, c) -> {
+                parentMapping.put(identityFunction.apply(c), location.parent());
             });
         });
         return parentMapping;

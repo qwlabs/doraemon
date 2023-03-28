@@ -36,18 +36,6 @@ public class TreeNode<S> implements Iterable<TreeNode<S>> {
         this.children = children;
     }
 
-    public static <S> TreeNode<S> of(S source) {
-        return of(source, new ArrayList<>(0));
-    }
-
-    public static <S> TreeNode<S> of(S source, TreeNode<S>... children) {
-        return of(source, Lists.newArrayList(children));
-    }
-
-    public static <S> TreeNode<S> of(S source, List<TreeNode<S>> children) {
-        return new TreeNode<>(source, children);
-    }
-
     public int size() {
         return children.size();
     }
@@ -85,24 +73,47 @@ public class TreeNode<S> implements Iterable<TreeNode<S>> {
         return this;
     }
 
-    public void accept(BiConsumer<S, S> consumer) {
-        children.forEach(child -> {
-            consumer.accept(source, child.getSource());
-            child.accept(consumer);
-        });
+    public void accept(BiConsumer<Location<S>, TreeNode<S>> consumer) {
+        accept(consumer, Location.root());
     }
 
-    public Optional<TreeNode<S>> findNode(Predicate<S> filter) {
+    private void accept(BiConsumer<Location<S>, TreeNode<S>> consumer,
+                        Location<S> parentLocation) {
+        consumer.accept(parentLocation, this);
+        var location = parentLocation.child(source);
+        children.forEach(child -> child.accept(consumer, location));
+    }
+
+    public void acceptSource(BiConsumer<Location<S>, S> consumer) {
+        acceptSource(consumer, Location.root());
+    }
+
+    private void acceptSource(BiConsumer<Location<S>, S> consumer,
+                              Location<S> parentLocation) {
+        consumer.accept(parentLocation, source);
+        var location = parentLocation.child(source);
+        children.forEach(child -> child.acceptSource(consumer, location));
+    }
+
+    @NotNull
+    public LocationWithNode<S> find(Predicate<S> filter) {
+        return find(filter, Location.root());
+    }
+
+    @NotNull
+    private LocationWithNode<S> find(Predicate<S> filter,
+                                     Location<S> parentLocation) {
         if (source != null && filter.test(source)) {
-            return Optional.of(this);
+            return LocationWithNode.of(parentLocation, this);
         }
+        var location = parentLocation.child(source);
         for (TreeNode<S> child : children) {
-            Optional<TreeNode<S>> mayNode = child.findNode(filter);
-            if (mayNode.isPresent()) {
-                return mayNode;
+            LocationWithNode<S> node = child.find(filter, location);
+            if (node.isFound()) {
+                return node;
             }
         }
-        return Optional.empty();
+        return LocationWithNode.notFound();
     }
 
     public <R> TreeNode<R> map(Function<S, R> mapper) {
@@ -112,7 +123,7 @@ public class TreeNode<S> implements Iterable<TreeNode<S>> {
     }
 
     public <R> List<R> mapSource(Function<S, R> mapper) {
-        return mapSource(mapper, false);
+        return mapSource(mapper, true);
     }
 
     public <R> List<R> mapSource(Function<S, R> mapper, boolean withSelf) {
@@ -120,10 +131,21 @@ public class TreeNode<S> implements Iterable<TreeNode<S>> {
         if (withSelf) {
             result.add(mapper.apply(source));
         }
-        children.forEach(child -> {
-            result.addAll(child.mapSource(mapper, true));
-        });
+        children.forEach(child -> result.addAll(child.mapSource(mapper, true)));
         return result;
     }
+
+    public static <S> TreeNode<S> of(S source) {
+        return of(source, new ArrayList<>(0));
+    }
+
+    public static <S> TreeNode<S> of(S source, TreeNode<S>... children) {
+        return of(source, Lists.newArrayList(children));
+    }
+
+    public static <S> TreeNode<S> of(S source, List<TreeNode<S>> children) {
+        return new TreeNode<>(source, children);
+    }
+
 }
 
