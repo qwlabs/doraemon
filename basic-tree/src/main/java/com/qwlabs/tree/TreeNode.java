@@ -1,9 +1,11 @@
 package com.qwlabs.tree;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.google.common.collect.Lists;
-
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.ArrayList;
@@ -11,18 +13,23 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Spliterator;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+@Getter
+@Setter
 public class TreeNode<S> implements Iterable<TreeNode<S>> {
     @JsonUnwrapped
-    private final S source;
-    private final List<TreeNode<S>> children;
+    private S source;
+    private List<TreeNode<S>> children;
+
+    @JsonCreator
+    public TreeNode() {
+        this(null);
+    }
 
     public TreeNode(S source) {
         this.source = source;
@@ -33,30 +40,12 @@ public class TreeNode<S> implements Iterable<TreeNode<S>> {
         return new TreeNode<>(source);
     }
 
-    public S getSource() {
-        return source;
-    }
-
-    public List<TreeNode<S>> getChildren() {
-        return children;
-    }
-
     public int size() {
         return children.size();
     }
 
     public TreeNode<S> get(int index) {
         return children.get(index);
-    }
-
-    @Override
-    public void forEach(Consumer<? super TreeNode<S>> action) {
-        children.forEach(action);
-    }
-
-    @Override
-    public Spliterator<TreeNode<S>> spliterator() {
-        return children.spliterator();
     }
 
     @NotNull

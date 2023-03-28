@@ -22,7 +22,6 @@ public final class Tree<S> extends TreeNode<S> {
     private final Supplier<Map<Object, S>> parentMapping = Suppliers.memoize(this::loadParentMapping);
 
     public Tree(Function<S, Object> identityFunction) {
-        super(null);
         this.identityFunction = identityFunction;
     }
 
