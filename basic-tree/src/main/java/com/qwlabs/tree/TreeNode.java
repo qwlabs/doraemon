@@ -36,8 +36,7 @@ public class TreeNode<S> implements ITreeNode<S> {
         accept(consumer, Location.root());
     }
 
-    protected void accept(BiConsumer<Location<S>, TreeNode<S>> consumer,
-                          Location<S> parentLocation) {
+    protected void accept(BiConsumer<Location<S>, TreeNode<S>> consumer, Location<S> parentLocation) {
         consumer.accept(parentLocation, this);
         var location = parentLocation.child(source);
         children.forEach(child -> child.accept(consumer, location));
@@ -48,8 +47,7 @@ public class TreeNode<S> implements ITreeNode<S> {
         acceptSource(consumer, Location.root());
     }
 
-    protected void acceptSource(BiConsumer<Location<S>, S> consumer,
-                                Location<S> parentLocation) {
+    protected void acceptSource(BiConsumer<Location<S>, S> consumer, Location<S> parentLocation) {
         consumer.accept(parentLocation, source);
         var location = parentLocation.child(source);
         children.forEach(child -> child.acceptSource(consumer, location));
@@ -62,8 +60,7 @@ public class TreeNode<S> implements ITreeNode<S> {
     }
 
     @NotNull
-    protected LocationWithNode<S> find(Predicate<S> filter,
-                                       Location<S> parentLocation) {
+    protected LocationWithNode<S> find(Predicate<S> filter, Location<S> parentLocation) {
         if (source != null && filter.test(source)) {
             return LocationWithNode.of(parentLocation, this);
         }
@@ -81,8 +78,7 @@ public class TreeNode<S> implements ITreeNode<S> {
         return map(mapper, Location.root());
     }
 
-    protected <R> TreeNode<R> map(BiFunction<Location<S>, S, R> mapper,
-                                  Location<S> parentLocation) {
+    protected <R> TreeNode<R> map(BiFunction<Location<S>, S, R> mapper, Location<S> parentLocation) {
         var location = parentLocation.child(source);
         var newSource = mapper.apply(parentLocation, source);
         return TreeNode.of(newSource, children.map(mapper, location));
@@ -96,14 +92,11 @@ public class TreeNode<S> implements ITreeNode<S> {
 
     @NotNull
     @Override
-    public <R> List<@NotNull R> mapSource(BiFunction<Location<S>, S, R> mapper,
-                                          Predicate<R> filter) {
+    public <R> List<@NotNull R> mapSource(BiFunction<Location<S>, S, R> mapper, Predicate<R> filter) {
         return mapSource(mapper, Location.root(), filter);
     }
 
-    protected <R> List<R> mapSource(BiFunction<Location<S>, S, R> mapper,
-                                    Location<S> parentLocation,
-                                    Predicate<R> filter) {
+    protected <R> List<R> mapSource(BiFunction<Location<S>, S, R> mapper, Location<S> parentLocation, Predicate<R> filter) {
         List<R> result = Lists.newArrayList();
         var r = mapper.apply(parentLocation, source);
         if (filter.test(r)) {
@@ -114,6 +107,22 @@ public class TreeNode<S> implements ITreeNode<S> {
         return result;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        TreeNode<?> treeNode = (TreeNode<?>) o;
+        return Objects.equals(source, treeNode.source) && Objects.equals(children, treeNode.children);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(source, children);
+    }
 
     public static <S> TreeNode<S> of(S source) {
         return of(source, TreeNodes.empty());

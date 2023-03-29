@@ -1,13 +1,17 @@
 package com.qwlabs.tree;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.qwlabs.jackson.Jackson;
 import lombok.Getter;
 import lombok.Setter;
 import org.junit.jupiter.api.Test;
 
+import java.util.Objects;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class TreeNodeTest {
@@ -66,12 +70,61 @@ class TreeNodeTest {
         assertThat(toJson, is("{\"name\":\"p1-v1-1\",\"children\":[{\"name\":\"p2-v1-3\",\"children\":[]},{\"name\":\"p3-v1-2\",\"children\":[]}]}"));
     }
 
+
+    @Test
+    void should_eq() throws JsonProcessingException {
+        var json = """ 
+                {
+                    "partCode": "p1",
+                    "partVersion": "v1",
+                    "numberOfUnit": 1,
+                    "children": [
+                        {
+                            "partCode": "p2",
+                            "partVersion": "v1",
+                            "numberOfUnit": 3
+                        },
+                        {
+                            "partCode": "p3",
+                            "partVersion": "v1",
+                            "numberOfUnit": 2,
+                            "children": []
+                        }
+                    ]
+                }
+                """;
+        var node1 = Jackson.read(json, TYPE).get();
+        var node2 = Jackson.read(json, TYPE).get();
+
+        assertEquals(node1, node2);
+
+    }
+
     @Getter
     @Setter
     private static class FromNode {
         private String partCode;
         private String partVersion;
         private Integer numberOfUnit;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            FromNode fromNode = (FromNode) o;
+            return Objects.equals(partCode, fromNode.partCode)
+                    && Objects.equals(partVersion, fromNode.partVersion)
+                    && Objects.equals(numberOfUnit, fromNode.numberOfUnit);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(partCode, partVersion, numberOfUnit);
+        }
     }
 
     @Getter
