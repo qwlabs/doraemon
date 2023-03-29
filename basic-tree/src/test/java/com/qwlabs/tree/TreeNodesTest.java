@@ -3,16 +3,17 @@ package com.qwlabs.tree;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Objects;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TreeNodesTest {
     static final TypeReference<TreeNodes<Node>> TYPE = new TypeReference<>() {
@@ -62,7 +63,28 @@ class TreeNodesTest {
         var nodes2 = objectMapper.readValue(json, TYPE);
 
         assertEquals(nodes1, nodes2);
+    }
 
+    @Test
+    void should_foreach() throws JsonProcessingException {
+        String json = """
+                [
+                    {
+                        "id": "1"
+                    },
+                    {
+                        "id": "2"
+                    },
+                    {
+                        "id": "3"
+                    }
+                ]
+                """;
+        var nodes = objectMapper.readValue(json, TYPE);
+        List<String> ids = Lists.newArrayList();
+        nodes.forEach((location, node) -> ids.add(node.getSource().getId()));
+
+        assertThat(ids.toString(), is("[1, 2, 3]"));
     }
 
     @Getter

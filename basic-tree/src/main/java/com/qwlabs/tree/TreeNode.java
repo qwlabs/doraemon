@@ -108,6 +108,17 @@ public class TreeNode<S> implements ITreeNode<S> {
     }
 
     @Override
+    public void forEach(BiConsumer<Location<S>, TreeNode<S>> consumer) {
+        forEach(consumer, Location.root());
+    }
+
+    protected void forEach(BiConsumer<Location<S>, TreeNode<S>> consumer, Location<S> parentLocation) {
+        consumer.accept(Location.root(), this);
+        var location = parentLocation.child(source);
+        children.forEach(consumer, location);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

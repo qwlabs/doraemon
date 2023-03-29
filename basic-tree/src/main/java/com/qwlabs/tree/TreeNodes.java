@@ -86,6 +86,15 @@ public class TreeNodes<S> extends ArrayList<TreeNode<S>> implements ITreeNode<S>
         return mapSource(mapper, Location.root(), filter);
     }
 
+    @Override
+    public void forEach(BiConsumer<Location<S>, TreeNode<S>> consumer) {
+        forEach(consumer, Location.root());
+    }
+
+    protected void forEach(BiConsumer<Location<S>, TreeNode<S>> consumer, Location<S> parentLocation) {
+        forEach(node -> node.forEach(consumer, parentLocation));
+    }
+
     protected <R> List<R> mapSource(BiFunction<Location<S>, S, R> mapper,
                                     Location<S> parentLocation,
                                     Predicate<R> filter) {

@@ -15,4 +15,6 @@ public interface ITreeNode<S> {
     <R> List<R> mapSource(BiFunction<Location<S>, S, R> mapper);
 
     <R> List<R> mapSource(BiFunction<Location<S>, S, R> mapper, Predicate<R> filter);
+
+    void forEach(BiConsumer<Location<S>, TreeNode<S>> consumer);
 }

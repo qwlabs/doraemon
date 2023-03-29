@@ -2,11 +2,13 @@ package com.qwlabs.tree;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.common.collect.Lists;
 import com.qwlabs.jackson.Jackson;
 import lombok.Getter;
 import lombok.Setter;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Objects;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -98,6 +100,35 @@ class TreeNodeTest {
 
         assertEquals(node1, node2);
 
+    }
+
+    @Test
+    void should_foreach() throws JsonProcessingException {
+        var json = """ 
+                {
+                    "partCode": "p1",
+                    "partVersion": "v1",
+                    "numberOfUnit": 1,
+                    "children": [
+                        {
+                            "partCode": "p2",
+                            "partVersion": "v1",
+                            "numberOfUnit": 3
+                        },
+                        {
+                            "partCode": "p3",
+                            "partVersion": "v1",
+                            "numberOfUnit": 2,
+                            "children": []
+                        }
+                    ]
+                }
+                """;
+        var node = Jackson.read(json, TYPE).get();
+        List<String> partCodes = Lists.newArrayList();
+        node.forEach((location, n) -> partCodes.add(n.getSource().getPartCode()));
+
+        assertThat(partCodes.toString(), is("[p1, p2, p3]"));
     }
 
     @Getter
