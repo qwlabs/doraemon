@@ -55,7 +55,7 @@ class TreeNodeTest {
         assertThat(fromNode.getChildren().get(0).getChildren().size(), is(0));
 
 
-        var toNode = fromNode.map(node -> {
+        var toNode = fromNode.map((location, node) -> {
             ToNode t = new ToNode();
             t.setName("%s-%s-%d".formatted(node.partCode, node.partVersion, node.numberOfUnit));
             return t;

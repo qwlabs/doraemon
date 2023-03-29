@@ -49,11 +49,6 @@ public final class Tree<S> extends TreeNode<S> {
         return parents;
     }
 
-    @Override
-    public <R> List<R> mapSource(Function<S, R> mapper, boolean withSelf) {
-        return super.mapSource(mapper, false);
-    }
-
     private Map<Object, S> loadParentMapping() {
         Map<Object, S> parentMapping = Maps.newHashMap();
         getChildren().forEach(child -> {

@@ -3,6 +3,7 @@ package com.qwlabs.tree;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -33,15 +34,11 @@ public class TreeTest {
         TreeSource treeSource = tree.find(s -> s.id.equals("6")).getNode().getSource();
         assertThat(treeSource.toString(), is("6"));
 
-        List<String> ids = tree.mapSource(TreeSource::getId);
+        List<String> ids = tree.mapSource((location, node) -> Optional.ofNullable(node).map(TreeSource::getId).orElse(null));
         assertThat(ids.toString(), is("[1, 4, 5, 7, 10, 6, 2, 3, 8, 9, 11, 12, 13]"));
 
         TreeNode<TreeSource> foundNode = tree.find(s -> s.id.equals("4")).getNode();
-        ids = foundNode.mapSource(TreeSource::getId, true);
-        assertThat(ids.toString(), is("[4, 5, 7, 10]"));
-        ids = foundNode.mapSource(TreeSource::getId, false);
-        assertThat(ids.toString(), is("[5, 7, 10]"));
-        ids = foundNode.mapSource(TreeSource::getId);
+        ids = foundNode.mapSource((location, node) -> node.id);
         assertThat(ids.toString(), is("[4, 5, 7, 10]"));
     }
 

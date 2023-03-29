@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -23,6 +23,7 @@ import java.util.stream.StreamSupport;
 @Setter
 public class TreeNode<S> implements Iterable<TreeNode<S>> {
     @JsonUnwrapped
+    @NotNull
     private S source;
     private List<TreeNode<S>> children;
 
@@ -116,22 +117,38 @@ public class TreeNode<S> implements Iterable<TreeNode<S>> {
         return LocationWithNode.notFound();
     }
 
-    public <R> TreeNode<R> map(Function<S, R> mapper) {
-        var newNode = TreeNode.of(mapper.apply(source));
-        children.forEach(child -> newNode.add(child.map(mapper)));
+    public <R> TreeNode<R> map(BiFunction<Location<S>, S, R> mapper) {
+        return map(mapper, Location.root());
+    }
+
+    private <R> TreeNode<R> map(BiFunction<Location<S>, S, R> mapper,
+                                Location<S> parentLocation) {
+        var newNode = TreeNode.of(mapper.apply(parentLocation, source));
+        var location = parentLocation.child(source);
+        children.forEach(child -> newNode.add(child.map(mapper, location)));
         return newNode;
     }
 
-    public <R> List<R> mapSource(Function<S, R> mapper) {
-        return mapSource(mapper, true);
+    public <R> List<R> mapSource(BiFunction<Location<S>, S, R> mapper) {
+        return mapSource(mapper, Location.root(), Objects::nonNull);
     }
 
-    public <R> List<R> mapSource(Function<S, R> mapper, boolean withSelf) {
+
+    public <R> List<R> mapSource(BiFunction<Location<S>, S, R> mapper,
+                                 Predicate<R> filter) {
+        return mapSource(mapper, Location.root(), filter);
+    }
+
+    private <R> List<R> mapSource(BiFunction<Location<S>, S, R> mapper,
+                                  Location<S> parentLocation,
+                                  Predicate<R> filter) {
         List<R> result = Lists.newArrayList();
-        if (withSelf) {
-            result.add(mapper.apply(source));
+        var r = mapper.apply(parentLocation, source);
+        if (filter.test(r)) {
+            result.add(r);
         }
-        children.forEach(child -> result.addAll(child.mapSource(mapper, true)));
+        var location = parentLocation.child(source);
+        children.forEach(child -> result.addAll(child.mapSource(mapper, location, filter)));
         return result;
     }
 
