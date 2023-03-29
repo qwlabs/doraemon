@@ -1,14 +1,15 @@
 package com.qwlabs.tree;
 
+import com.qwlabs.jackson.Jackson;
+import lombok.Getter;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.Matchers.is;
 
-public class TreeTest {
+class TreeTest {
     TreeSource source1 = new TreeSource("1", null);
     TreeSource source2 = new TreeSource("2", null);
     TreeSource source3 = new TreeSource("3", null);
@@ -24,42 +25,21 @@ public class TreeTest {
     TreeSource source13 = new TreeSource("13", "12");
 
     @Test
-    void should_tree() {
-        Tree<TreeSource> tree = Tree.toTree(List.of(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, source11, source12, source13),
+    void should_of() {
+        TreeNodes<TreeSource> nodes = Tree.of(List.of(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, source11, source12, source13),
                 TreeSource::getId, TreeSource::getParentId);
-
-        List<TreeSource> path = tree.path(new TreeSource("13", "12"));
-        assertThat(path.toString(), is("[3, 8, 9, 11, 12, 13]"));
-
-        TreeSource treeSource = tree.find(s -> s.id.equals("6")).getNode().getSource();
-        assertThat(treeSource.toString(), is("6"));
-
-        List<String> ids = tree.mapSource((location, node) -> Optional.ofNullable(node).map(TreeSource::getId).orElse(null));
-        assertThat(ids.toString(), is("[1, 4, 5, 7, 10, 6, 2, 3, 8, 9, 11, 12, 13]"));
-
-        TreeNode<TreeSource> foundNode = tree.find(s -> s.id.equals("4")).getNode();
-        ids = foundNode.mapSource((location, node) -> node.id);
-        assertThat(ids.toString(), is("[4, 5, 7, 10]"));
+        assertThat(Jackson.write(nodes).get(), is("[{\"id\":\"1\",\"parentId\":null,\"children\":[{\"id\":\"4\",\"parentId\":\"1\",\"children\":[{\"id\":\"5\",\"parentId\":\"4\",\"children\":[{\"id\":\"7\",\"parentId\":\"5\",\"children\":[]}]},{\"id\":\"10\",\"parentId\":\"4\",\"children\":[]}]},{\"id\":\"6\",\"parentId\":\"1\",\"children\":[]}]},{\"id\":\"2\",\"parentId\":null,\"children\":[]},{\"id\":\"3\",\"parentId\":null,\"children\":[{\"id\":\"8\",\"parentId\":\"3\",\"children\":[{\"id\":\"9\",\"parentId\":\"8\",\"children\":[{\"id\":\"11\",\"parentId\":\"9\",\"children\":[{\"id\":\"12\",\"parentId\":\"11\",\"children\":[{\"id\":\"13\",\"parentId\":\"12\",\"children\":[]}]}]}]}]}]}]"));
     }
 
+    @Getter
     static class TreeSource {
         private final String id;
         private final String parentId;
-
 
         TreeSource(String id, String parentId) {
             this.id = id;
             this.parentId = parentId;
         }
-
-        String getId() {
-            return id;
-        }
-
-        String getParentId() {
-            return parentId;
-        }
-
 
         @Override
         public String toString() {
