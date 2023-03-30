@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
@@ -15,7 +16,7 @@ import java.util.function.Predicate;
 
 @Getter
 @Setter
-public class TreeNode<S> implements ITreeNode<S> {
+public class TreeNode<S> implements ITreeNode<S>, Serializable {
     @JsonUnwrapped
     @NotNull
     private S source;

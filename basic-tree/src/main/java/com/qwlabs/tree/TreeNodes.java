@@ -10,12 +10,14 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 public class TreeNodes<S> extends ArrayList<TreeNode<S>> implements ITreeNode<S> {
     public TreeNodes(int initialCapacity) {
         super(initialCapacity);
     }
 
+    @JsonCreator
     public TreeNodes() {
     }
 
