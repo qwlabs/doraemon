@@ -25,12 +25,12 @@ public class CallerIdentityAugmentor implements SecurityIdentityAugmentor {
                                    Instance<AnonymousCallerProvider> anonymousCallerProvider,
                                    Instance<CallerPermissionsLoader> permissionsLoader,
                                    Instance<CallerAttributeLoader<?, ?>> attributeLoader,
-                                   CallerIdentityRolesProvider identityRolesProvider) {
+                                   Instance<CallerIdentityRolesProvider> identityRolesProvider) {
         this.principalLoader = principalLoader.get();
         this.anonymousCallerProvider = anonymousCallerProvider;
         this.permissionsLoader = DispatchInstance.of(permissionsLoader);
         this.attributeLoader = DispatchInstance.of(attributeLoader);
-        this.identityRolesProvider = identityRolesProvider;
+        this.identityRolesProvider = identityRolesProvider.get();
     }
 
     @Override
