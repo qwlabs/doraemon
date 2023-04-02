@@ -23,21 +23,28 @@ class TreeNodeTest {
 
     @Test
     void should_read_json() {
-        var fromJson = """ 
+        var fromJson = """
                 {
-                    "partCode": "p1",
-                    "partVersion": "v1",
-                    "numberOfUnit": 1,
+                    "source": {
+                        "partCode": "p1",
+                        "partVersion": "v1",
+                        "numberOfUnit": 1
+                    },
                     "children": [
                         {
-                            "partCode": "p2",
-                            "partVersion": "v1",
-                            "numberOfUnit": 3
+                            "source": {
+                                "partCode": "p2",
+                                "partVersion": "v1",
+                                "numberOfUnit": 3
+                            },
+                            "children": []
                         },
                         {
-                            "partCode": "p3",
-                            "partVersion": "v1",
-                            "numberOfUnit": 2,
+                            "source": {
+                                "partCode": "p3",
+                                "partVersion": "v1",
+                                "numberOfUnit": 2
+                            },
                             "children": []
                         }
                     ]
@@ -69,7 +76,7 @@ class TreeNodeTest {
 
         var toJson = Jackson.write(toNode).get();
 
-        assertThat(toJson, is("{\"name\":\"p1-v1-1\",\"children\":[{\"name\":\"p2-v1-3\",\"children\":[]},{\"name\":\"p3-v1-2\",\"children\":[]}]}"));
+        assertThat(toJson, is("{\"source\":{\"name\":\"p1-v1-1\"},\"children\":[{\"source\":{\"name\":\"p2-v1-3\"},\"children\":[]},{\"source\":{\"name\":\"p3-v1-2\"},\"children\":[]}]}"));
     }
 
 
@@ -77,24 +84,31 @@ class TreeNodeTest {
     void should_eq() throws JsonProcessingException {
         var json = """ 
                 {
-                    "partCode": "p1",
-                    "partVersion": "v1",
-                    "numberOfUnit": 1,
+                    "source": {
+                        "partCode": "p1",
+                        "partVersion": "v1",
+                        "numberOfUnit": 1
+                    },
                     "children": [
                         {
-                            "partCode": "p2",
-                            "partVersion": "v1",
-                            "numberOfUnit": 3
+                            "source": {
+                                "partCode": "p2",
+                                "partVersion": "v1",
+                                "numberOfUnit": 3
+                            },
+                            "children": []
                         },
                         {
-                            "partCode": "p3",
-                            "partVersion": "v1",
-                            "numberOfUnit": 2,
+                            "source": {
+                                "partCode": "p3",
+                                "partVersion": "v1",
+                                "numberOfUnit": 2
+                            },
                             "children": []
                         }
                     ]
-                }
-                """;
+                }              
+                 """;
         var node1 = Jackson.read(json, TYPE).get();
         var node2 = Jackson.read(json, TYPE).get();
 
@@ -105,20 +119,27 @@ class TreeNodeTest {
     @Test
     void should_foreach() throws JsonProcessingException {
         var json = """ 
-                {
-                    "partCode": "p1",
-                    "partVersion": "v1",
-                    "numberOfUnit": 1,
+               {
+                    "source": {
+                        "partCode": "p1",
+                        "partVersion": "v1",
+                        "numberOfUnit": 1
+                    },
                     "children": [
                         {
-                            "partCode": "p2",
-                            "partVersion": "v1",
-                            "numberOfUnit": 3
+                            "source": {
+                                "partCode": "p2",
+                                "partVersion": "v1",
+                                "numberOfUnit": 3
+                            },
+                            "children": []
                         },
                         {
-                            "partCode": "p3",
-                            "partVersion": "v1",
-                            "numberOfUnit": 2,
+                            "source": {
+                                "partCode": "p3",
+                                "partVersion": "v1",
+                                "numberOfUnit": 2
+                            },
                             "children": []
                         }
                     ]

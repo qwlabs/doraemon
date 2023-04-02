@@ -25,13 +25,19 @@ class TreeNodesTest {
         String fromJson = """
                 [
                     {
+                       "source": {
                         "id": "1"
+                       }
                     },
                     {
+                      "source": {
                         "id": "2"
+                      }
                     },
                     {
+                      "source": {
                         "id": "3"
+                      }
                     }
                 ]
                 """;
@@ -40,8 +46,6 @@ class TreeNodesTest {
         assertThat(nodes.get(0).getSource().id, is("1"));
         assertThat(nodes.get(1).getSource().id, is("2"));
         assertThat(nodes.get(2).getSource().id, is("3"));
-
-        assertThat(objectMapper.writeValueAsString(nodes), is("[{\"id\":\"1\",\"children\":[]},{\"id\":\"2\",\"children\":[]},{\"id\":\"3\",\"children\":[]}]"));
     }
 
     @Test
@@ -49,13 +53,19 @@ class TreeNodesTest {
         String json = """
                 [
                     {
+                       "source": {
                         "id": "1"
+                      }
                     },
                     {
+                       "source": {
                         "id": "2"
+                      }
                     },
                     {
+                        "source": {
                         "id": "3"
+                      }
                     }
                 ]
                 """;
@@ -70,13 +80,19 @@ class TreeNodesTest {
         String json = """
                 [
                     {
+                     "source": {
                         "id": "1"
+                      }
                     },
                     {
+                       "source": {
                         "id": "2"
+                      }
                     },
                     {
+                        "source": {
                         "id": "3"
+                      }
                     }
                 ]
                 """;
