@@ -17,7 +17,7 @@ import java.util.function.Predicate;
 @Getter
 @Setter
 public class TreeNode<S> implements ITreeNode<S>, Serializable {
-    @JsonUnwrapped
+    
     @NotNull
     private S source;
     private TreeNodes<S> children;
