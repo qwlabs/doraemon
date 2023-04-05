@@ -1,49 +1,77 @@
 package com.qwlabs.tree;
 
-import com.qwlabs.jackson.Jackson;
-import lombok.Getter;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class TreeTest {
-    TreeSource source1 = new TreeSource("1", null);
-    TreeSource source2 = new TreeSource("2", null);
-    TreeSource source3 = new TreeSource("3", null);
-    TreeSource source4 = new TreeSource("4", "1");
-    TreeSource source5 = new TreeSource("5", "4");
-    TreeSource source6 = new TreeSource("6", "1");
-    TreeSource source7 = new TreeSource("7", "5");
-    TreeSource source8 = new TreeSource("8", "3");
-    TreeSource source9 = new TreeSource("9", "8");
-    TreeSource source10 = new TreeSource("10", "4");
-    TreeSource source11 = new TreeSource("11", "9");
-    TreeSource source12 = new TreeSource("12", "11");
-    TreeSource source13 = new TreeSource("13", "12");
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    private final Stream<TestTreeNode> treeNodes = Stream.of(TestTreeNode.of("a"), TestTreeNode.of("ab"), TestTreeNode.of("c"));
+    private final String rawNodes = "[{\"children\":[{\"children\":null,\"value\":\"ab\"}],\"value\":\"a\"},{\"children\":null,\"value\":\"c\"}]";
+    private final TypeReference<TreeNodes<TestTreeNode>> type = new TypeReference<>() {
+    };
+
+    private final JavaType javaType = objectMapper.constructType(type);
 
     @Test
-    void should_of() {
-        TreeNodes<TreeSource> nodes = Tree.of(List.of(source1, source2, source3, source4, source5, source6, source7, source8, source9, source10, source11, source12, source13),
-                TreeSource::getId, TreeSource::getParentId);
-        assertThat(Jackson.write(nodes).get(), is("[{\"source\":{\"id\":\"1\",\"parentId\":null},\"children\":[{\"source\":{\"id\":\"4\",\"parentId\":\"1\"},\"children\":[{\"source\":{\"id\":\"5\",\"parentId\":\"4\"},\"children\":[{\"source\":{\"id\":\"7\",\"parentId\":\"5\"},\"children\":[]}]},{\"source\":{\"id\":\"10\",\"parentId\":\"4\"},\"children\":[]}]},{\"source\":{\"id\":\"6\",\"parentId\":\"1\"},\"children\":[]}]},{\"source\":{\"id\":\"2\",\"parentId\":null},\"children\":[]},{\"source\":{\"id\":\"3\",\"parentId\":null},\"children\":[{\"source\":{\"id\":\"8\",\"parentId\":\"3\"},\"children\":[{\"source\":{\"id\":\"9\",\"parentId\":\"8\"},\"children\":[{\"source\":{\"id\":\"11\",\"parentId\":\"9\"},\"children\":[{\"source\":{\"id\":\"12\",\"parentId\":\"11\"},\"children\":[{\"source\":{\"id\":\"13\",\"parentId\":\"12\"},\"children\":[]}]}]}]}]}]}]"));
+    void should_of_stream() throws JsonProcessingException {
+        var nodes = Tree.of(treeNodes,
+                TestTreeNode::getValue,
+                TestTreeNode::getParent);
+        assertThat(objectMapper.writeValueAsString(nodes), is(rawNodes));
+        TreeNodes<TestTreeNode> decodeNodes = objectMapper.readValue(rawNodes, javaType);
+        assertThat(decodeNodes.size(), is(2));
+        assertThat(decodeNodes.get(0).getValue(), is("a"));
+        assertThat(decodeNodes.get(0).getChildren().size(), is(1));
+        assertThat(decodeNodes.get(0).getChildren().get(0).getValue(), is("ab"));
+
+        assertThat(decodeNodes.get(1).getValue(), is("c"));
+        assertNull(decodeNodes.get(1).getChildren());
+
     }
 
-    @Getter
-    static class TreeSource {
-        private final String id;
-        private final String parentId;
+    @Test
+    void should_of_iterable() throws JsonProcessingException {
+        var nodes = Tree.of(treeNodes.collect(Collectors.toList()),
+                TestTreeNode::getValue,
+                TestTreeNode::getParent);
+        assertThat(objectMapper.writeValueAsString(nodes), is(rawNodes));
 
-        TreeSource(String id, String parentId) {
-            this.id = id;
-            this.parentId = parentId;
-        }
+        TreeNodes<TestTreeNode> decodeNodes = objectMapper.readValue(rawNodes, type);
+        assertThat(decodeNodes.size(), is(2));
+        assertThat(decodeNodes.get(0).getValue(), is("a"));
+        assertThat(decodeNodes.get(0).getChildren().size(), is(1));
+        assertThat(decodeNodes.get(0).getChildren().get(0).getValue(), is("ab"));
 
-        @Override
-        public String toString() {
-            return this.id;
-        }
+        assertThat(decodeNodes.get(1).getValue(), is("c"));
+        assertNull(decodeNodes.get(1).getChildren());
+    }
+
+    @Test
+    void should_of_iterator() throws JsonProcessingException {
+        var nodes = Tree.of(treeNodes.iterator(),
+                TestTreeNode::getValue,
+                TestTreeNode::getParent);
+        assertThat(objectMapper.writeValueAsString(nodes), is(rawNodes));
+
+        TreeNodes<TestTreeNode> decodeNodes = objectMapper.readValue(rawNodes, javaType);
+        assertThat(decodeNodes.size(), is(2));
+        assertThat(decodeNodes.get(0).getValue(), is("a"));
+        assertThat(decodeNodes.get(0).getChildren().size(), is(1));
+        assertThat(decodeNodes.get(0).getChildren().get(0).getValue(), is("ab"));
+
+        assertThat(decodeNodes.get(1).getValue(), is("c"));
+        assertNull(decodeNodes.get(1).getChildren());
     }
 }

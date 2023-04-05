@@ -1,108 +1,67 @@
 package com.qwlabs.tree;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Predicate;
+import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
-import com.fasterxml.jackson.annotation.JsonCreator;
 
-public class TreeNodes<S> extends ArrayList<TreeNode<S>> implements ITreeNode<S> {
-    public TreeNodes(int initialCapacity) {
-        super(initialCapacity);
-    }
+public class TreeNodes<N extends TreeNode<N>> extends ArrayList<N> implements TreeNodeAble<N> {
 
     @JsonCreator
     public TreeNodes() {
     }
 
-    public TreeNodes(Collection<? extends TreeNode<S>> c) {
+    public TreeNodes(Collection<? extends N> c) {
         super(c);
     }
 
-    public Optional<TreeNode<S>> toNode() {
-        if (isEmpty()) {
-            return Optional.empty();
+    public static <N extends TreeNode<N>> TreeNodes<N> of(N... nodes) {
+        if (nodes == null || nodes.length == 0) {
+            return new TreeNodes<>();
         }
-        return Optional.of(get(0));
-    }
-
-
-    public static <S> TreeNodes<S> empty() {
-        return new TreeNodes<>(0);
-    }
-
-    public static <S> TreeNodes<S> of(TreeNode<S>... nodes) {
-        return of(Arrays.asList(nodes));
-    }
-
-    public static <S> TreeNodes<S> of(Collection<? extends TreeNode<S>> c) {
-        return new TreeNodes<>(c);
+        return new TreeNodes<>(Arrays.asList(nodes));
     }
 
     @Override
-    public void accept(BiConsumer<Location<S>, TreeNode<S>> consumer) {
-        Location<S> location = Location.root();
-        forEach(node -> node.accept(consumer, location));
+    public void forEach(BiConsumer<Location<N>, N> consumer, Location<N> parentLocation) {
+        forEach(node -> consumer.accept(parentLocation, node));
     }
 
     @Override
-    public void acceptSource(BiConsumer<Location<S>, S> consumer) {
-        Location<S> location = Location.root();
-        forEach(node -> node.acceptSource(consumer, location));
+    public Optional<Location<N>> find(BiPredicate<Location<N>, N> filter, Location<N> parentLocation) {
+        return this.stream()
+                .map(node -> node.find(filter, parentLocation))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .findFirst();
     }
 
     @Override
-    public LocationWithNode<S> find(Predicate<S> filter) {
-        Location<S> location = Location.root();
+    public <R> List<R> all(BiFunction<Location<N>, N, R> mapper, Location<N> parentLocation) {
         return stream()
-                .map(node -> node.find(filter, location))
-                .filter(LocationWithNode::isFound)
-                .findAny()
-                .orElseGet(LocationWithNode::notFound);
+                .map(node -> node.all(mapper, parentLocation))
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
     }
 
-    public <R> TreeNodes<R> map(BiFunction<Location<S>, S, R> mapper) {
+    public <R extends TreeNode<R>> TreeNodes<R> map(BiFunction<Location<N>, N, R> mapper) {
         return map(mapper, Location.root());
     }
 
-    protected <R> TreeNodes<R> map(BiFunction<Location<S>, S, R> mapper,
-                                   Location<S> parentLocation) {
-        return TreeNodes.of(stream()
+    public <R extends TreeNode<R>> TreeNodes<R> map(BiFunction<Location<N>, N, R> mapper, Location<N> parentLocation) {
+        return new TreeNodes<>(stream()
                 .map(node -> node.map(mapper, parentLocation))
                 .collect(Collectors.toList()));
     }
 
-    @Override
-    public <R> List<R> mapSource(BiFunction<Location<S>, S, R> mapper) {
-        return mapSource(mapper, Location.root(), Objects::nonNull);
-    }
-
-    @Override
-    public <R> List<R> mapSource(BiFunction<Location<S>, S, R> mapper, Predicate<R> filter) {
-        return mapSource(mapper, Location.root(), filter);
-    }
-
-    @Override
-    public void forEach(BiConsumer<Location<S>, TreeNode<S>> consumer) {
-        forEach(consumer, Location.root());
-    }
-
-    protected void forEach(BiConsumer<Location<S>, TreeNode<S>> consumer, Location<S> parentLocation) {
-        forEach(node -> node.forEach(consumer, parentLocation));
-    }
-
-    protected <R> List<R> mapSource(BiFunction<Location<S>, S, R> mapper,
-                                    Location<S> parentLocation,
-                                    Predicate<R> filter) {
-        return stream()
-                .map(node -> node.mapSource(mapper, parentLocation, filter))
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
+    public Optional<N> first() {
+        return stream().findFirst();
     }
 }

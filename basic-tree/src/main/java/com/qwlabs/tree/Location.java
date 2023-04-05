@@ -2,46 +2,83 @@ package com.qwlabs.tree;
 
 import com.google.common.collect.Lists;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Getter
-@Builder
-@AllArgsConstructor
-public class Location<S> {
+public class Location<N> {
     private static final RootLocation ROOT = new RootLocation<>();
     @NotNull
-    private final List<S> path;
+    private final List<N> path;
 
-    @Nullable
-    public S parent() {
-        return path.isEmpty() ? null : path.get(path.size() - 1);
+    public Location(List<N> path) {
+        this.path = path;
     }
 
-    public static <S> Location<S> root() {
-        return (Location<S>) ROOT;
+    @NotNull
+    public Optional<Location<N>> parent() {
+        return isRoot() ? Optional.empty() :
+                Optional.of(Location.of(path.subList(0, path.size() - 1)));
     }
 
-    public <R> List<R> mapPath(Function<S, R> mapper) {
+    public boolean isRoot() {
+        return path.isEmpty();
+    }
+
+    public <RN> Location<RN> map(Function<N, RN> mapper) {
+        return Location.of(mapPath(mapper));
+    }
+
+    public <RN> List<RN> mapPath(Function<N, RN> mapper) {
         return path.stream().map(mapper)
                 .collect(Collectors.toList());
     }
 
-    public Location<S> child(S source) {
-        List<S> childPath = Lists.newArrayList(path);
-        childPath.add(source);
-        return Location.<S>builder()
-                .path(childPath)
-                .build();
+    public Location<N> child(N node) {
+        List<N> childPath = Lists.newArrayList(path);
+        childPath.add(node);
+        return Location.of(childPath);
     }
 
-    public static class RootLocation<S> extends Location<S> {
+    public Optional<N> tail() {
+        return isRoot() ? Optional.empty() : Optional.of(path.get(path.size() - 1));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Location<?> location = (Location<?>) o;
+        return Objects.equals(path, location.path);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(path);
+    }
+
+    public static <N> Location<N> root() {
+        return (Location<N>) ROOT;
+    }
+
+    public static <N> Location<N> of(List<N> path) {
+        return new Location<>(path);
+    }
+
+    public static <N> Location<N> of(N... path) {
+        return of(List.of(path));
+    }
+
+    public static class RootLocation<N extends TreeNode<N>> extends Location<N> {
         public RootLocation() {
             super(List.of());
         }

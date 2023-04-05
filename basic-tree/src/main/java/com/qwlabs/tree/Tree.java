@@ -10,31 +10,34 @@ import java.util.stream.Stream;
 
 public class Tree {
 
-    public static <S, I extends Comparable<I>> TreeNodes<S> of(@NotNull Stream<S> sortedSources,
-                                                               @NotNull Function<S, I> identityFunction,
-                                                               @NotNull Function<S, I> parentFunction) {
+    public static <N extends TreeNode<N>, I extends Comparable<I>> TreeNodes<N>
+    of(@NotNull Stream<N> sortedSources,
+       @NotNull Function<N, I> identityFunction,
+       @NotNull Function<N, I> parentFunction) {
         return of(sortedSources.iterator(), identityFunction, parentFunction);
     }
 
-    public static <S, I extends Comparable<I>> TreeNodes<S> of(@NotNull Iterable<S> sortedSources,
-                                                               @NotNull Function<S, I> identityFunction,
-                                                               @NotNull Function<S, I> parentFunction) {
+    public static <N extends TreeNode<N>, I extends Comparable<I>> TreeNodes<N>
+    of(@NotNull Iterable<N> sortedSources,
+       @NotNull Function<N, I> identityFunction,
+       @NotNull Function<N, I> parentFunction) {
         return of(sortedSources.iterator(), identityFunction, parentFunction);
     }
 
-    public static <S, I extends Comparable<I>> TreeNodes<S> of(@NotNull Iterator<S> sortedSources,
-                                                               @NotNull Function<S, I> identityFunction,
-                                                               @NotNull Function<S, I> parentFunction) {
-        TreeNodes<S> tree = new TreeNodes<>();
-        Map<I, TreeNode<S>> nodeMapping = Maps.newHashMap();
-        sortedSources.forEachRemaining(source -> nodeMapping.put(identityFunction.apply(source), TreeNode.of(source)));
+    public static <N extends TreeNode<N>, I extends Comparable<I>> TreeNodes<N>
+    of(@NotNull Iterator<N> sortedSources,
+       @NotNull Function<N, I> identityFunction,
+       @NotNull Function<N, I> parentFunction) {
+        TreeNodes<N> tree = new TreeNodes<>();
+        Map<I, N> nodeMapping = Maps.newHashMap();
+        sortedSources.forEachRemaining(node -> nodeMapping.put(identityFunction.apply(node), node));
         nodeMapping.forEach((sourceIdentity, node) -> {
-            I parentIdentity = parentFunction.apply(node.getSource());
+            I parentIdentity = parentFunction.apply(node);
             if (parentIdentity == null) {
                 tree.add(node);
             } else {
-                TreeNode<S> parentNode = nodeMapping.get(parentIdentity);
-                parentNode.getChildren().add(node);
+                N parentNode = nodeMapping.get(parentIdentity);
+                parentNode.addChildren(node);
             }
         });
         return tree;

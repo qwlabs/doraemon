@@ -3,5 +3,5 @@ dependencies {
     api "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
     api("com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}")
 
-    testImplementation project(":jackson")
+    testImplementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 }
