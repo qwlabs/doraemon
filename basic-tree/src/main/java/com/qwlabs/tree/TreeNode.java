@@ -10,7 +10,7 @@ import java.util.function.BiPredicate;
 
 public interface TreeNode<N extends TreeNode<N>> extends TreeNodeAble<N> {
 
-    default N unwarp() {
+    default N unwrap() {
         return (N) this;
     }
 
@@ -22,7 +22,7 @@ public interface TreeNode<N extends TreeNode<N>> extends TreeNodeAble<N> {
 
     @Override
     default void forEach(BiConsumer<Location<N>, N> consumer, Location<N> parentLocation) {
-        var self = unwarp();
+        var self = unwrap();
         consumer.accept(parentLocation, self);
         var location = parentLocation.child(self);
         getChildren().forEach(consumer, location);
@@ -30,7 +30,7 @@ public interface TreeNode<N extends TreeNode<N>> extends TreeNodeAble<N> {
 
     @Override
     default Optional<Location<N>> find(BiPredicate<Location<N>, N> filter, Location<N> parentLocation) {
-        var self = unwarp();
+        var self = unwrap();
         var location = parentLocation.child(self);
         if (filter.test(parentLocation, self)) {
             return Optional.of(location);
@@ -40,7 +40,7 @@ public interface TreeNode<N extends TreeNode<N>> extends TreeNodeAble<N> {
 
     @Override
     default <R> List<R> all(BiFunction<Location<N>, N, R> mapper, Location<N> parentLocation) {
-        var self = unwarp();
+        var self = unwrap();
         var location = parentLocation.child(self);
         List<R> results = Lists.newArrayList(getChildren().all(mapper, location));
         results.add(0, mapper.apply(parentLocation, self));
@@ -52,7 +52,7 @@ public interface TreeNode<N extends TreeNode<N>> extends TreeNodeAble<N> {
     }
 
     default <R extends TreeNode<R>> R map(BiFunction<Location<N>, N, R> mapper, Location<N> parentLocation) {
-        var self = unwarp();
+        var self = unwrap();
         var newNode = mapper.apply(parentLocation, self);
         var r = newNode.newInstance();
         r.setChildren(getChildren().map(mapper, parentLocation));
@@ -64,6 +64,6 @@ public interface TreeNode<N extends TreeNode<N>> extends TreeNodeAble<N> {
                 .orElseGet(TreeNodes::of);
         children.addAll(List.of(addChildren));
         setChildren(children);
-        return unwarp();
+        return unwrap();
     }
 }
