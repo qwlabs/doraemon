@@ -11,6 +11,7 @@ import java.util.Objects;
 @Setter
 public class TestTreeNode extends BaseTreeNode<TestTreeNode> {
     private String value;
+
     @Override
     public TestTreeNode newInstance() {
         return new TestTreeNode();

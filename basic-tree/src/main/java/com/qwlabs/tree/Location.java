@@ -30,11 +30,11 @@ public class Location<N> {
         return path.isEmpty();
     }
 
-    public <RN> Location<RN> map(Function<N, RN> mapper) {
+    public <R> Location<R> map(Function<N, R> mapper) {
         return Location.of(mapPath(mapper));
     }
 
-    public <RN> List<RN> mapPath(Function<N, RN> mapper) {
+    public <R> List<R> mapPath(Function<N, R> mapper) {
         return path.stream().map(mapper)
                 .collect(Collectors.toList());
     }
