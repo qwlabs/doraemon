@@ -17,9 +17,9 @@ class TreeTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private final Stream<TestTreeNode> treeNodes = Stream.of(TestTreeNode.of("a"), TestTreeNode.of("ab"), TestTreeNode.of("c"));
-    private final String rawNodes = "[{\"children\":[{\"children\":null,\"value\":\"ab\"}],\"value\":\"a\"},{\"children\":null,\"value\":\"c\"}]";
-    private final TypeReference<TreeNodes<TestTreeNode>> type = new TypeReference<>() {
+    private final Stream<BomNode> treeNodes = Stream.of(BomNode.of("a"), BomNode.of("ab"), BomNode.of("c"));
+    private final String rawNodes = "[{\"children\":[{\"children\":null,\"value\":\"ab\",\"value1\":\"ab\",\"value\":\"ab\"}],\"value\":\"a\",\"value1\":\"a\",\"value\":\"a\"},{\"children\":null,\"value\":\"c\",\"value1\":\"c\",\"value\":\"c\"}]";
+    private final TypeReference<TreeNodes<BomNode>> type = new TypeReference<>() {
     };
 
     private final JavaType javaType = objectMapper.constructType(type);
@@ -27,10 +27,10 @@ class TreeTest {
     @Test
     void should_of_stream() throws JsonProcessingException {
         var nodes = Tree.of(treeNodes,
-                TestTreeNode::getValue,
-                TestTreeNode::getParent);
+                BomNode::getValue,
+                BomNode::getParent);
         assertThat(objectMapper.writeValueAsString(nodes), is(rawNodes));
-        TreeNodes<TestTreeNode> decodeNodes = objectMapper.readValue(rawNodes, javaType);
+        TreeNodes<BomNode> decodeNodes = objectMapper.readValue(rawNodes, javaType);
         assertThat(decodeNodes.size(), is(2));
         assertThat(decodeNodes.get(0).getValue(), is("a"));
         assertThat(decodeNodes.get(0).getChildren().size(), is(1));
@@ -44,11 +44,11 @@ class TreeTest {
     @Test
     void should_of_iterable() throws JsonProcessingException {
         var nodes = Tree.of(treeNodes.collect(Collectors.toList()),
-                TestTreeNode::getValue,
-                TestTreeNode::getParent);
+                BomNode::getValue,
+                BomNode::getParent);
         assertThat(objectMapper.writeValueAsString(nodes), is(rawNodes));
 
-        TreeNodes<TestTreeNode> decodeNodes = objectMapper.readValue(rawNodes, type);
+        TreeNodes<BomNode> decodeNodes = objectMapper.readValue(rawNodes, type);
         assertThat(decodeNodes.size(), is(2));
         assertThat(decodeNodes.get(0).getValue(), is("a"));
         assertThat(decodeNodes.get(0).getChildren().size(), is(1));
@@ -61,11 +61,11 @@ class TreeTest {
     @Test
     void should_of_iterator() throws JsonProcessingException {
         var nodes = Tree.of(treeNodes.iterator(),
-                TestTreeNode::getValue,
-                TestTreeNode::getParent);
+                BomNode::getValue,
+                BomNode::getParent);
         assertThat(objectMapper.writeValueAsString(nodes), is(rawNodes));
 
-        TreeNodes<TestTreeNode> decodeNodes = objectMapper.readValue(rawNodes, javaType);
+        TreeNodes<BomNode> decodeNodes = objectMapper.readValue(rawNodes, javaType);
         assertThat(decodeNodes.size(), is(2));
         assertThat(decodeNodes.get(0).getValue(), is("a"));
         assertThat(decodeNodes.get(0).getChildren().size(), is(1));

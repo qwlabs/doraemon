@@ -10,11 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class LocationTest {
     @Test
     void should_root() {
-        var root = Location.<TestTreeNode>root();
+        var root = Location.<BomNode>root();
         assertTrue(root.tail().isEmpty());
         assertTrue(root.parent().isEmpty());
         assertTrue(root.isRoot());
-        assertTrue(root.map(TestTreeNode::getValue).isRoot());
+        assertTrue(root.map(BomNode::getValue).isRoot());
     }
 
     @Test
