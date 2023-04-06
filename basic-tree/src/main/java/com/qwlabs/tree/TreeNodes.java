@@ -12,17 +12,17 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
-public class TreeNodes<N extends TreeNode<N>> extends ArrayList<N> implements TreeNodeAble<N> {
+public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble<N> {
 
     @JsonCreator
     public TreeNodes() {
     }
 
-    public TreeNodes(Collection<? extends N> c) {
+    public TreeNodes(Collection<? extends TreeNode<N>> c) {
         super(c);
     }
 
-    public static <N extends TreeNode<N>> TreeNodes<N> of(N... nodes) {
+    public static <N> TreeNodes<N> of(TreeNode<N>... nodes) {
         if (nodes == null || nodes.length == 0) {
             return new TreeNodes<>();
         }
@@ -30,12 +30,12 @@ public class TreeNodes<N extends TreeNode<N>> extends ArrayList<N> implements Tr
     }
 
     @Override
-    public void forEach(BiConsumer<Location<N>, N> consumer, Location<N> parentLocation) {
+    public void forEach(BiConsumer<Location<TreeNode<N>>, TreeNode<N>> consumer, Location<TreeNode<N>> parentLocation) {
         forEach(node -> consumer.accept(parentLocation, node));
     }
 
     @Override
-    public Optional<Location<N>> find(BiPredicate<Location<N>, N> filter, Location<N> parentLocation) {
+    public Optional<Location<TreeNode<N>>> find(BiPredicate<Location<TreeNode<N>>, TreeNode<N>> filter, Location<TreeNode<N>> parentLocation) {
         return this.stream()
                 .map(node -> node.find(filter, parentLocation))
                 .filter(Optional::isPresent)
@@ -44,24 +44,24 @@ public class TreeNodes<N extends TreeNode<N>> extends ArrayList<N> implements Tr
     }
 
     @Override
-    public <R> List<R> all(BiFunction<Location<N>, N, R> mapper, Location<N> parentLocation) {
+    public <R> List<R> all(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper, Location<TreeNode<N>> parentLocation) {
         return stream()
                 .map(node -> node.all(mapper, parentLocation))
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
     }
 
-    public <R extends TreeNode<R>> TreeNodes<R> map(BiFunction<Location<N>, N, R> mapper) {
+    public <R> TreeNodes<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper) {
         return map(mapper, Location.root());
     }
 
-    public <R extends TreeNode<R>> TreeNodes<R> map(BiFunction<Location<N>, N, R> mapper, Location<N> parentLocation) {
+    public <R> TreeNodes<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper, Location<TreeNode<N>> parentLocation) {
         return new TreeNodes<>(stream()
                 .map(node -> node.map(mapper, parentLocation))
                 .collect(Collectors.toList()));
     }
 
-    public Optional<N> first() {
+    public Optional<TreeNode<N>> first() {
         return stream().findFirst();
     }
 }

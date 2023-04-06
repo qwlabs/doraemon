@@ -1,6 +1,9 @@
 package com.qwlabs.tree;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.google.common.collect.Lists;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,62 +11,63 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 
-public interface TreeNode<N extends TreeNode<N>> extends TreeNodeAble<N> {
+@Getter
+@Setter
+public class TreeNode<N> implements TreeNodeAble<N> {
 
-    default N unwrap() {
-        return (N) this;
-    }
+    @JsonUnwrapped
+    private N node;
 
-    N newInstance();
+    private TreeNodes<N> children;
 
-    TreeNodes<N> getChildren();
-
-    void setChildren(TreeNodes<N> children);
 
     @Override
-    default void forEach(BiConsumer<Location<N>, N> consumer, Location<N> parentLocation) {
-        var self = unwrap();
-        consumer.accept(parentLocation, self);
-        var location = parentLocation.child(self);
+    public void forEach(BiConsumer<Location<TreeNode<N>>, TreeNode<N>> consumer, Location<TreeNode<N>> parentLocation) {
+        consumer.accept(parentLocation, this);
+        var location = parentLocation.child(this);
         getChildren().forEach(consumer, location);
     }
 
     @Override
-    default Optional<Location<N>> find(BiPredicate<Location<N>, N> filter, Location<N> parentLocation) {
-        var self = unwrap();
-        var location = parentLocation.child(self);
-        if (filter.test(parentLocation, self)) {
+    public Optional<Location<TreeNode<N>>> find(BiPredicate<Location<TreeNode<N>>, TreeNode<N>> filter, Location<TreeNode<N>> parentLocation) {
+        var location = parentLocation.child(this);
+        if (filter.test(parentLocation, this)) {
             return Optional.of(location);
         }
         return getChildren().find(filter, location);
     }
 
     @Override
-    default <R> List<R> all(BiFunction<Location<N>, N, R> mapper, Location<N> parentLocation) {
-        var self = unwrap();
-        var location = parentLocation.child(self);
+    public <R> List<R> all(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper, Location<TreeNode<N>> parentLocation) {
+        var location = parentLocation.child(this);
         List<R> results = Lists.newArrayList(getChildren().all(mapper, location));
-        results.add(0, mapper.apply(parentLocation, self));
+        results.add(0, mapper.apply(parentLocation, this));
         return results;
     }
 
-    default <R extends TreeNode<R>> R map(BiFunction<Location<N>, N, R> mapper) {
+    public <R> TreeNode<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper) {
         return map(mapper, Location.root());
     }
 
-    default <R extends TreeNode<R>> R map(BiFunction<Location<N>, N, R> mapper, Location<N> parentLocation) {
-        var self = unwrap();
-        var newNode = mapper.apply(parentLocation, self);
-        var r = newNode.newInstance();
-        r.setChildren(getChildren().map(mapper, parentLocation));
-        return r;
+    public <R> TreeNode<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper, Location<TreeNode<N>> parentLocation) {
+        R newNode = mapper.apply(parentLocation, this);
+        var newTreeNode = new TreeNode<R>();
+        newTreeNode.setNode(newNode);
+        newTreeNode.setChildren(getChildren().map(mapper, parentLocation));
+        return newTreeNode;
     }
 
-    default N addChildren(N... addChildren) {
+    public TreeNode<N> addChildren(TreeNode<N>... addChildren) {
         TreeNodes<N> children = Optional.ofNullable(getChildren())
-                .orElseGet(TreeNodes::of);
+            .orElseGet(TreeNodes::of);
         children.addAll(List.of(addChildren));
         setChildren(children);
-        return unwrap();
+        return this;
+    }
+
+    public static <N> TreeNode<N> of(N node) {
+        var treeNode = new TreeNode<N>();
+        treeNode.setNode(node);
+        return treeNode;
     }
 }

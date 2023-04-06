@@ -3,9 +3,6 @@ package com.qwlabs.tree;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonRawValue;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import lombok.Getter;
@@ -16,20 +13,13 @@ import java.util.Objects;
 
 @Getter
 @Setter
-public class BomNode extends BaseTreeNode<BomNode> {
-
+public class BomNode {
     @JsonAnyGetter
     @JsonAnySetter
     @JsonIgnore
     private Map<String, String> attributes;
 
-    @Override
-    public BomNode newInstance() {
-        var node = new BomNode();
-        node.setAttributes(attributes);
-        return node;
-    }
-
+    @JsonIgnore
     public String getValue() {
         return attributes.get("value");
     }
