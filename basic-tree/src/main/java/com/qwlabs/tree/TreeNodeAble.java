@@ -1,12 +1,13 @@
 package com.qwlabs.tree;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 
-public interface TreeNodeAble<N extends TreeNode<N>> {
+public interface TreeNodeAble<N extends TreeNode<N>> extends Serializable {
     default void forEach(BiConsumer<Location<N>, N> consumer) {
         forEach(consumer, Location.root());
     }
