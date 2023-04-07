@@ -20,12 +20,15 @@ public class TreeNode<N> implements TreeNodeAble<N> {
 
     private TreeNodes<N> children;
 
+    private TreeNodes<N> safeChildren() {
+        return Optional.ofNullable(children).orElseGet(TreeNodes::empty);
+    }
 
     @Override
     public void forEach(BiConsumer<Location<TreeNode<N>>, TreeNode<N>> consumer, Location<TreeNode<N>> parentLocation) {
         consumer.accept(parentLocation, this);
         var location = parentLocation.child(this);
-        getChildren().forEach(consumer, location);
+        safeChildren().forEach(consumer, location);
     }
 
     @Override
@@ -34,13 +37,13 @@ public class TreeNode<N> implements TreeNodeAble<N> {
         if (filter.test(parentLocation, this)) {
             return Optional.of(location);
         }
-        return getChildren().find(filter, location);
+        return safeChildren().find(filter, location);
     }
 
     @Override
     public <R> List<R> all(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper, Location<TreeNode<N>> parentLocation) {
         var location = parentLocation.child(this);
-        List<R> results = Lists.newArrayList(getChildren().all(mapper, location));
+        List<R> results = Lists.newArrayList(safeChildren().all(mapper, location));
         results.add(0, mapper.apply(parentLocation, this));
         return results;
     }
@@ -53,7 +56,7 @@ public class TreeNode<N> implements TreeNodeAble<N> {
         R newNode = mapper.apply(parentLocation, this);
         var newTreeNode = new TreeNode<R>();
         newTreeNode.setNode(newNode);
-        newTreeNode.setChildren(getChildren().map(mapper, parentLocation));
+        newTreeNode.setChildren(safeChildren().map(mapper, parentLocation));
         return newTreeNode;
     }
 
