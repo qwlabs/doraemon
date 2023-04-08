@@ -55,22 +55,39 @@ public class TreeNode<N> implements TreeNodeAble<N> {
     public <R> TreeNode<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper, Location<TreeNode<N>> parentLocation) {
         R newNode = mapper.apply(parentLocation, this);
         var newTreeNode = new TreeNode<R>();
+        var location = parentLocation.child(this);
         newTreeNode.setNode(newNode);
-        newTreeNode.setChildren(safeChildren().map(mapper, parentLocation));
+        newTreeNode.setChildren(safeChildren().map(mapper, location));
         return newTreeNode;
     }
 
     public TreeNode<N> addChildren(TreeNode<N>... addChildren) {
-        TreeNodes<N> children = Optional.ofNullable(getChildren())
-            .orElseGet(TreeNodes::of);
-        children.addAll(List.of(addChildren));
-        setChildren(children);
+        if (addChildren != null && addChildren.length > 0) {
+            TreeNodes<N> children = Optional.ofNullable(getChildren())
+                .orElseGet(TreeNodes::of);
+            children.addAll(List.of(addChildren));
+            setChildren(children);
+        }
         return this;
     }
 
     public static <N> TreeNode<N> of(N node) {
         var treeNode = new TreeNode<N>();
         treeNode.setNode(node);
+        return treeNode;
+    }
+
+    public static <N> TreeNode<N> of(N node, TreeNode<N>... children) {
+        var treeNode = new TreeNode<N>();
+        treeNode.setNode(node);
+        treeNode.addChildren(children);
+        return treeNode;
+    }
+
+    public static <N> TreeNode<N> of(N node, TreeNodes<N> children) {
+        var treeNode = new TreeNode<N>();
+        treeNode.setNode(node);
+        treeNode.setChildren(children);
         return treeNode;
     }
 }

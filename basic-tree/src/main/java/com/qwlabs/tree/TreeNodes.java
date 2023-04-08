@@ -30,7 +30,7 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
 
     @Override
     public void forEach(BiConsumer<Location<TreeNode<N>>, TreeNode<N>> consumer, Location<TreeNode<N>> parentLocation) {
-        forEach(node -> consumer.accept(parentLocation, node));
+        forEach(node -> node.forEach(consumer, parentLocation));
     }
 
     @Override
@@ -69,7 +69,7 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
     }
 
     public boolean isMultiple() {
-        return size() >= 1;
+        return size() > 1;
     }
 
     public static <N> TreeNodes<N> of(TreeNode<N>... nodes) {
