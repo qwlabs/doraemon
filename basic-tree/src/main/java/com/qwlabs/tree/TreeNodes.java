@@ -64,6 +64,14 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
         return stream().findFirst();
     }
 
+    public boolean isSingle() {
+        return size() == 1;
+    }
+
+    public boolean isMultiple() {
+        return size() >= 1;
+    }
+
     public static <N> TreeNodes<N> of(TreeNode<N>... nodes) {
         if (nodes == null || nodes.length == 0) {
             return new TreeNodes<>();

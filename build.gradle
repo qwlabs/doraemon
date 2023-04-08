@@ -28,8 +28,8 @@ subprojects {
     apply from: "${rootProject.rootDir}/gradle/publication.gradle"
 
     repositories {
-        mavenCentral()
         mavenLocal()
+        mavenCentral()
     }
 
 
