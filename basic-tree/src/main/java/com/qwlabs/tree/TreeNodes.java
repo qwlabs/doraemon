@@ -65,6 +65,15 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
         return stream().map(node -> node.map(mapper)).collect(Collectors.toList());
     }
 
+    public <R> List<R> map(TreeNodeFunction<N, R> mapper) {
+        return map(mapper, Location.root());
+    }
+
+    public <R> List<R> map(TreeNodeFunction<N, R> mapper,
+                           Location<TreeNode<N>> parentLocation) {
+        return stream().map(node -> node.map(mapper, parentLocation)).collect(Collectors.toList());
+    }
+
     public Optional<TreeNode<N>> first() {
         return stream().findFirst();
     }

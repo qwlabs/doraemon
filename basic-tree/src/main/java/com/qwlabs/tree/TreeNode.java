@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -62,6 +63,17 @@ public class TreeNode<N> implements TreeNodeAble<N> {
         return newTreeNode;
     }
 
+    public <R> R map(TreeNodeFunction<N, R> mapper) {
+        return map(mapper, Location.root());
+    }
+
+    public <R> R map(TreeNodeFunction<N, R> mapper,
+                     Location<TreeNode<N>> parentLocation) {
+        var location = parentLocation.child(this);
+        var children = safeChildren().map(mapper, location);
+        return mapper.apply(parentLocation, this, children);
+    }
+
     public <R> R map(Function<N, R> mapper) {
         return mapper.apply(node);
     }
@@ -74,6 +86,23 @@ public class TreeNode<N> implements TreeNodeAble<N> {
             setChildren(children);
         }
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        TreeNode<?> treeNode = (TreeNode<?>) o;
+        return Objects.equals(node, treeNode.node) && Objects.equals(children, treeNode.children);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(node, children);
     }
 
     public static <N> TreeNode<N> of(N node) {
