@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble<N> {
@@ -58,6 +59,10 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
         return new TreeNodes<>(stream()
             .map(node -> node.map(mapper, parentLocation))
             .collect(Collectors.toList()));
+    }
+
+    public <R> List<R> map(Function<N, R> mapper) {
+        return stream().map(node -> node.map(mapper)).collect(Collectors.toList());
     }
 
     public Optional<TreeNode<N>> first() {

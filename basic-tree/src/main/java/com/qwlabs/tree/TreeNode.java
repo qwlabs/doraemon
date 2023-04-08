@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Function;
 
 @Getter
 @Setter
@@ -59,6 +60,10 @@ public class TreeNode<N> implements TreeNodeAble<N> {
         newTreeNode.setNode(newNode);
         newTreeNode.setChildren(safeChildren().map(mapper, location));
         return newTreeNode;
+    }
+
+    public <R> R map(Function<N, R> mapper) {
+        return mapper.apply(node);
     }
 
     public TreeNode<N> addChildren(TreeNode<N>... addChildren) {
