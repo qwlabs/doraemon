@@ -63,7 +63,6 @@ class TreeNodeTest {
 
         assertThat(objectMapper.writeValueAsString(rootNode), is(rawNode));
 
-
         TreeNode<BomNode> decodeNode = objectMapper.readValue(rawNode, javaType);
 
         assertThat(decodeNode.getNode().getValue(), is("a"));

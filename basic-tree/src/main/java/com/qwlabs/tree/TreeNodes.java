@@ -35,6 +35,15 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
     }
 
     @Override
+    public <E> Optional<TreeNode<N>> find(List<E> path, BiPredicate<TreeNode<N>, E> filter) {
+        return this.stream()
+            .map(node -> node.find(path, filter))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .findFirst();
+    }
+
+    @Override
     public Optional<Location<TreeNode<N>>> find(BiPredicate<Location<TreeNode<N>>, TreeNode<N>> filter, Location<TreeNode<N>> parentLocation) {
         return this.stream()
             .map(node -> node.find(filter, parentLocation))

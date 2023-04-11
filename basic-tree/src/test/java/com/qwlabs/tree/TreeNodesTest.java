@@ -5,10 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -75,5 +77,27 @@ class TreeNodesTest {
         List<String> values = nodes.all((location, node) -> "%s-%s".formatted(location.mapPath(TreeNode::getNode), node.getNode()));
 
         assertThat(values, is(List.of("[]-1", "[1]-3", "[1]-4", "[]-2", "[2]-5")));
+    }
+
+    @Test
+    void should_find_by_path() {
+        TreeNodes<String> nodes = TreeNodes.of(
+            TreeNode.of("1",
+                TreeNodes.of(TreeNode.of("3",
+                    TreeNodes.of(TreeNode.of("6",
+                        TreeNodes.of(TreeNode.of("7"), TreeNode.of("8"))))),
+                        TreeNode.of("9"))),
+            TreeNode.of("2", TreeNodes.of(TreeNode.of("5")))
+        );
+        var mayNode = nodes.find(List.of("1", "3", "6"), (node, findFor) -> Objects.equals(node.getNode(), findFor));
+
+        assertTrue(mayNode.isPresent());
+        var node = mayNode.get();
+        assertThat(node.getNode(), is("6"));
+        assertThat(node.getChildren().size(), is(2));
+        assertThat(node.getChildren().get(0).getNode(), is("7"));
+        assertNull(node.getChildren().get(0).getChildren());
+        assertThat(node.getChildren().get(1).getNode(), is("8"));
+        assertNull(node.getChildren().get(1).getChildren());
     }
 }

@@ -34,6 +34,23 @@ public class TreeNode<N> implements TreeNodeAble<N> {
     }
 
     @Override
+    public <E> Optional<TreeNode<N>> find(List<E> path, BiPredicate<TreeNode<N>, E> filter) {
+        if (path.isEmpty()) {
+            return Optional.empty();
+        }
+        var findFor = path.get(0);
+        var found = filter.test(this, findFor);
+        if (!found) {
+            return Optional.empty();
+        }
+        if (path.size() == 1) {
+            return Optional.of(this);
+        }
+        var childPath = path.subList(1, path.size());
+        return children.find(childPath, filter);
+    }
+
+    @Override
     public Optional<Location<TreeNode<N>>> find(BiPredicate<Location<TreeNode<N>>, TreeNode<N>> filter, Location<TreeNode<N>> parentLocation) {
         var location = parentLocation.child(this);
         if (filter.test(parentLocation, this)) {
