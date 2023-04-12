@@ -1,11 +1,16 @@
 package com.qwlabs.quarkus.tenant;
 
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotNull;
+
 public interface Tenant {
+    @Nullable
     String tenantId();
 
-    <T> T attribute(String name);
+    @Nullable
+    <T> T attribute(@NotNull String name);
 
-    TenantConfig config();
+    @NotNull  TenantConfig config();
 
     default boolean enabled() {
         return config().enabled();
