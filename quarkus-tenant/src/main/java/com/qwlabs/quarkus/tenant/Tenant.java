@@ -10,7 +10,7 @@ public interface Tenant {
     default boolean isEmpty() {
         return Strings.isNullOrEmpty(tenantId());
     }
-    
+
     @Nullable
     default boolean isPresent() {
         return !isEmpty();

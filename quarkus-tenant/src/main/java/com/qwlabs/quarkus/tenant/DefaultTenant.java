@@ -21,33 +21,33 @@ public class DefaultTenant implements Tenant {
 
     private final Supplier<String> idSupplier = Suppliers.memoize(this::resolveId);
 
-    private final DefaultTenantResolver defaultTenantResolver;
+    private final DefaultTenantResolver defaultResolver;
     private final DispatchInstance<String, TenantIdResolver> idResolvers;
     private final DispatchInstance<String, TenantAttributeResolver<?>> attributeResolvers;
 
     @Inject
     public DefaultTenant(RoutingContext routingContext,
                          TenantConfig config,
-                         DefaultTenantResolver defaultTenantResolver,
+                         DefaultTenantResolver defaultResolver,
                          Instance<TenantIdResolver> idResolvers,
                          Instance<TenantAttributeResolver<?>> attributeResolvers) {
         this.routingContext = routingContext;
         this.config = config;
-        this.defaultTenantResolver = defaultTenantResolver;
+        this.defaultResolver = defaultResolver;
         this.idResolvers = DispatchInstance.of(idResolvers, true);
         this.attributeResolvers = DispatchInstance.of(attributeResolvers, true);
     }
 
     private String resolveId() {
         if (isSingle()) {
-            return defaultTenantResolver.get(this);
+            return defaultResolver.get(this);
         }
         return C2.stream(config.sources())
-                .map(idResolvers::get)
-                .map(resolver -> resolver.resolve(routingContext, config))
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElseGet(() -> defaultTenantResolver.get(this));
+            .map(idResolvers::get)
+            .map(resolver -> resolver.resolve(routingContext, config))
+            .filter(Objects::nonNull)
+            .findFirst()
+            .orElseGet(() -> defaultResolver.get(this));
     }
 
     @Override
@@ -60,8 +60,9 @@ public class DefaultTenant implements Tenant {
     @ActivateRequestContext
     public <T> T attribute(String name) {
         return attributeResolvers.getOptional(name)
-                .map(attributeResolver -> (T) attributeResolver.resolve(this))
-                .orElse(null);
+            .filter(resolver -> resolver.resolvable(this, name))
+            .map(resolver -> (T) resolver.resolve(this))
+            .orElse(null);
     }
 
     @Override
