@@ -20,7 +20,7 @@ class DefaultTenantTest {
     @Mock
     TenantConfig config;
     @Mock
-    DefaultTenantResolver defaultTenantResolver;
+    Instance<DefaultTenantResolver> defaultTenantResolver;
     @Mock
     Instance<TenantIdResolver> idResolvers;
     @Mock
@@ -31,20 +31,22 @@ class DefaultTenantTest {
     @BeforeEach
     void setUp() {
         tenant = new DefaultTenant(routingContext, config,
-                defaultTenantResolver,
-                idResolvers,
-                attributeResolvers);
+            defaultTenantResolver,
+            idResolvers,
+            attributeResolvers);
     }
 
     @Test
-    void should_default_when_single_and_called_once() {
+    void should_default_when_single_and_called_once(@Mock DefaultTenantResolver defaultResolver) {
         when(config.enabled()).thenReturn(false);
-        when(defaultTenantResolver.get(tenant)).thenReturn("mock");
+        when(defaultTenantResolver.isResolvable()).thenReturn(true);
+        when(defaultTenantResolver.get()).thenReturn(defaultResolver);
+        when(defaultResolver.get(tenant)).thenReturn("mock");
 
         assertThat(tenant.tenantId(), is("mock"));
         assertThat(tenant.tenantId(), is("mock"));
 
         verify(config).enabled();
-        verify(defaultTenantResolver).get(tenant);
+        verify(defaultResolver).get(tenant);
     }
 }

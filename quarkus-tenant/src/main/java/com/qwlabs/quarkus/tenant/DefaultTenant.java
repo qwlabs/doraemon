@@ -16,19 +16,20 @@ import java.util.function.Supplier;
 @Slf4j
 @RequestScoped
 public class DefaultTenant implements Tenant {
+    private static final DefaultTenantResolver DEFAULT_TENANT_RESOLVER = (tenant) -> null;
     private final RoutingContext routingContext;
     private final TenantConfig config;
 
     private final Supplier<String> idSupplier = Suppliers.memoize(this::resolveId);
 
-    private final DefaultTenantResolver defaultResolver;
+    private final Instance<DefaultTenantResolver> defaultResolver;
     private final DispatchInstance<String, TenantIdResolver> idResolvers;
     private final DispatchInstance<String, TenantAttributeResolver<?>> attributeResolvers;
 
     @Inject
     public DefaultTenant(RoutingContext routingContext,
                          TenantConfig config,
-                         DefaultTenantResolver defaultResolver,
+                         Instance<DefaultTenantResolver> defaultResolver,
                          Instance<TenantIdResolver> idResolvers,
                          Instance<TenantAttributeResolver<?>> attributeResolvers) {
         this.routingContext = routingContext;
@@ -38,16 +39,23 @@ public class DefaultTenant implements Tenant {
         this.attributeResolvers = DispatchInstance.of(attributeResolvers, true);
     }
 
+    private String defaultTenantId() {
+        if (defaultResolver.isResolvable()) {
+            return defaultResolver.get().get(this);
+        }
+        return DEFAULT_TENANT_RESOLVER.get(this);
+    }
+
     private String resolveId() {
         if (isSingle()) {
-            return defaultResolver.get(this);
+            return defaultTenantId();
         }
         return C2.stream(config.sources())
             .map(idResolvers::get)
             .map(resolver -> resolver.resolve(routingContext, config))
             .filter(Objects::nonNull)
             .findFirst()
-            .orElseGet(() -> defaultResolver.get(this));
+            .orElseGet(this::defaultTenantId);
     }
 
     @Override
