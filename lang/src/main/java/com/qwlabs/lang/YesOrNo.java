@@ -1,5 +1,7 @@
 package com.qwlabs.lang;
 
+import java.util.function.Supplier;
+
 public enum YesOrNo {
     YES {
         @Override
@@ -42,6 +44,10 @@ public enum YesOrNo {
 
     public YesOrNo or(YesOrNo that) {
         return of(this.booleanValue() || that.booleanValue());
+    }
+
+    public <R> R map(Supplier<R> yesSupplier, Supplier<R> noSupplier) {
+        return isYes() ? yesSupplier.get() : noSupplier.get();
     }
 
     public static YesOrNo of(boolean yesOrNo) {

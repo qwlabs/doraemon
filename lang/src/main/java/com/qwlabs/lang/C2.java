@@ -2,6 +2,8 @@ package com.qwlabs.lang;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Streams;
+import jakarta.validation.constraints.NotNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,6 +22,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 public final class C2 {
@@ -142,6 +145,13 @@ public final class C2 {
         return Streams.stream(input);
     }
 
+    public static <E> void forEachWithIndex(@Nullable Stream<E> stream, @NotNull BiConsumer<E, Long> consumer) {
+        if (stream == null) {
+            return;
+        }
+        Streams.forEachPair(stream, LongStream.rangeClosed(0, Long.MAX_VALUE).boxed(), consumer);
+    }
+
     public static <E> Set<E> set(E[] input) {
         return set(input, Function.identity());
     }
@@ -203,8 +213,8 @@ public final class C2 {
                                        Function<E, R> mapper,
                                        Predicate<R> predicate) {
         return input.map(mapper)
-                .filter(predicate)
-                .collect(Collectors.toSet());
+            .filter(predicate)
+            .collect(Collectors.toSet());
     }
 
     public static <E> List<E> list(Stream<E> input) {
@@ -268,8 +278,8 @@ public final class C2 {
                                          Function<E, R> mapper,
                                          Predicate<R> predicate) {
         return input.map(mapper)
-                .filter(predicate)
-                .collect(Collectors.toList());
+            .filter(predicate)
+            .collect(Collectors.toList());
     }
 
     public static <E, K, V> Map<K, V> map(Iterable<E> input,
@@ -341,8 +351,8 @@ public final class C2 {
                                                     Function<? super E, ? extends K> keyMapper,
                                                     Function<? super E, ? extends V> valueMapper) {
         return F2.ifPresent(input,
-                () -> listMap(Streams.stream(input), keyMapper, valueMapper),
-                Collections.emptyMap());
+            () -> listMap(Streams.stream(input), keyMapper, valueMapper),
+            Collections.emptyMap());
     }
 
     public static <E, K, V> Map<K, List<V>> listMap(Stream<E> input,
@@ -351,17 +361,17 @@ public final class C2 {
         Objects.requireNonNull(keyMapper, "key mapper can not be null.");
         Objects.requireNonNull(valueMapper, "value mapper can not be null.");
         return F2.ifPresent(input,
-                () -> input.collect(Collectors.groupingBy(keyMapper,
-                        Collectors.mapping(valueMapper, Collectors.toList()))),
-                Collections.emptyMap());
+            () -> input.collect(Collectors.groupingBy(keyMapper,
+                Collectors.mapping(valueMapper, Collectors.toList()))),
+            Collections.emptyMap());
     }
 
     public static <E, K, V> Map<K, Set<V>> setMap(Iterable<E> input,
                                                   Function<? super E, ? extends K> keyMapper,
                                                   Function<? super E, ? extends V> valueMapper) {
         return F2.ifPresent(input,
-                () -> setMap(Streams.stream(input), keyMapper, valueMapper),
-                Collections.emptyMap());
+            () -> setMap(Streams.stream(input), keyMapper, valueMapper),
+            Collections.emptyMap());
     }
 
     public static <E, K, V> Map<K, Set<V>> setMap(Stream<E> input,
@@ -370,9 +380,9 @@ public final class C2 {
         Objects.requireNonNull(keyMapper, "key mapper can not be null.");
         Objects.requireNonNull(valueMapper, "value mapper can not be null.");
         return F2.ifPresent(input,
-                () -> input.collect(Collectors.groupingBy(keyMapper,
-                        Collectors.mapping(valueMapper, Collectors.toSet()))),
-                Collections.emptyMap());
+            () -> input.collect(Collectors.groupingBy(keyMapper,
+                Collectors.mapping(valueMapper, Collectors.toSet()))),
+            Collections.emptyMap());
     }
 
 }
