@@ -89,15 +89,27 @@ class TreeNodesTest {
                         TreeNode.of("9"))),
             TreeNode.of("2", TreeNodes.of(TreeNode.of("5")))
         );
-        var mayNode = nodes.find(List.of("1", "3", "6"), (node, findFor) -> Objects.equals(node.getNode(), findFor));
 
-        assertTrue(mayNode.isPresent());
-        var node = mayNode.get();
+        var mayNode1 = nodes.find(List.of(), (n, findFor) -> Objects.equals(n.getNode(), findFor));
+        assertTrue(mayNode1.isEmpty());
+
+        var mayNode2 = nodes.find(List.of("1", "3", "6"), (n, findFor) -> Objects.equals(n.getNode(), findFor));
+        assertTrue(mayNode2.isPresent());
+        var node = mayNode2.get();
         assertThat(node.getNode(), is("6"));
         assertThat(node.getChildren().size(), is(2));
         assertThat(node.getChildren().get(0).getNode(), is("7"));
         assertNull(node.getChildren().get(0).getChildren());
         assertThat(node.getChildren().get(1).getNode(), is("8"));
         assertNull(node.getChildren().get(1).getChildren());
+
+        var mayNode3 = mayNode2.get().find(List.of(), (n, findFor) -> Objects.equals(n.getNode(), findFor));
+        assertTrue(mayNode3.isPresent());
+        assertThat(mayNode3.get(), is(mayNode2.get()));
+
+
+        var mayNode4 = mayNode2.get().find(List.of("6"), (n, findFor) -> Objects.equals(n.getNode(), findFor));
+        assertTrue(mayNode4.isPresent());
+        assertThat(mayNode4.get(), is(mayNode2.get()));
     }
 }
