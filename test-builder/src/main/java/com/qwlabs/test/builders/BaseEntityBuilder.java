@@ -1,10 +1,12 @@
 package com.qwlabs.test.builders;
 
+import com.qwlabs.cdi.SafeCDI;
 import io.quarkus.security.identity.SecurityIdentity;
-import jakarta.enterprise.inject.spi.CDI;
+import jakarta.enterprise.inject.Instance;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
+import java.security.Principal;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -18,23 +20,21 @@ public abstract class BaseEntityBuilder<T> implements EntityBuilder<T> {
         return entity;
     }
 
-
     protected Instant now() {
         return Instant.now();
     }
 
     protected Optional<EntityManager> getEntityManager() {
-        return CDI.current().select(EntityManager.class)
-                .stream().findAny();
+        return SafeCDI.select(EntityManager.class)
+            .map(Instance::get);
     }
 
     protected Optional<String> getAuditorId() {
-//        TODO use caller
-        SecurityIdentity identity = CDI.current().select(SecurityIdentity.class).get();
-        if (identity.isAnonymous()) {
-            return Optional.empty();
-        }
-        return Optional.ofNullable(identity.getPrincipal().getName());
+        return SafeCDI.select(SecurityIdentity.class)
+            .map(Instance::get)
+            .filter(identity -> !identity.isAnonymous())
+            .map(SecurityIdentity::getPrincipal)
+            .map(Principal::getName);
     }
 
 }

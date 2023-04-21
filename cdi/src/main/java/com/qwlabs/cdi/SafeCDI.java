@@ -15,7 +15,6 @@ public final class SafeCDI {
         try {
             return Optional.of(CDI.current());
         } catch (Exception e) {
-            LOGGER.error("Load current CDI instance error.", e);
             return Optional.empty();
         }
     }
@@ -26,6 +25,6 @@ public final class SafeCDI {
 
     public static <T> Optional<T> selectPrimary(Class<T> clzzz) {
         return current()
-                .flatMap(cdi -> cdi.select(clzzz, PrimaryLiteral.INSTANCE).stream().findFirst());
+            .flatMap(cdi -> cdi.select(clzzz, PrimaryLiteral.INSTANCE).stream().findFirst());
     }
 }
