@@ -17,49 +17,61 @@ class TreeGeneratorTest {
     }
 
     @Test
-    void should_gen() throws JsonProcessingException {
-        var node = TreeGenerator.node("""
-            # A
-            """);
-        assertThat(objectMapper.writeValueAsString(node), is("{\"node\":\"A\",\"children\":[]}"));
+    void should_gen1() throws JsonProcessingException {
+        genAndCheck("""
+                # A
+                """,
+            "{\"node\":\"A\",\"children\":[]}");
+    }
 
-        node = TreeGenerator.node("""
-            # A
-            ## B
-            ## C
-            """);
-        assertThat(objectMapper.writeValueAsString(node), is("{\"node\":\"A\",\"children\":[{\"node\":\"B\",\"children\":[]},{\"node\":\"C\",\"children\":[]}]}"));
+    @Test
+    void should_gen2() throws JsonProcessingException {
+        genAndCheck("""
+                # A
+                ## B
+                ## C
+                """,
+            "{\"node\":\"A\",\"children\":[{\"node\":\"B\",\"children\":[]},{\"node\":\"C\",\"children\":[]}]}");
+    }
 
+    @Test
+    void should_gen3() throws JsonProcessingException {
+        genAndCheck("""
+                # A
+                ## B
+                ### C
+                ### D
+                ## E
+                ### F
+                ### G
+                ### C
+                """,
+            "{\"node\":\"A\",\"children\":[{\"node\":\"B\",\"children\":[{\"node\":\"C\",\"children\":[]},{\"node\":\"D\",\"children\":[]}]},{\"node\":\"E\",\"children\":[{\"node\":\"F\",\"children\":[]},{\"node\":\"G\",\"children\":[]},{\"node\":\"C\",\"children\":[]}]}]}");
+    }
 
-        node = TreeGenerator.node("""
-            # A
-            ## B
-            ### C
-            ### D
-            ## E
-            ### F
-            ### G
-            ### C
-            """);
-        assertThat(objectMapper.writeValueAsString(node), is("{\"node\":\"A\",\"children\":[{\"node\":\"B\",\"children\":[{\"node\":\"C\",\"children\":[]},{\"node\":\"D\",\"children\":[]}]},{\"node\":\"E\",\"children\":[{\"node\":\"G\",\"children\":[]},{\"node\":\"F\",\"children\":[]},{\"node\":\"C\",\"children\":[]}]}]}"));
+    @Test
+    void should_gen4() throws JsonProcessingException {
+        genAndCheck("""
+                # A
+                ## B
+                ### C
+                #### D
+                #### E
+                #### H
+                ### D
+                ## C
+                ### D
+                ### E
+                ### H
+                ### I
+                #### G
+                #### K
+                """,
+            "{\"node\":\"A\",\"children\":[{\"node\":\"C\",\"children\":[{\"node\":\"D\",\"children\":[]},{\"node\":\"E\",\"children\":[]},{\"node\":\"H\",\"children\":[]},{\"node\":\"I\",\"children\":[{\"node\":\"K\",\"children\":[]},{\"node\":\"G\",\"children\":[]}]}]},{\"node\":\"B\",\"children\":[{\"node\":\"C\",\"children\":[{\"node\":\"H\",\"children\":[]},{\"node\":\"D\",\"children\":[]},{\"node\":\"E\",\"children\":[]}]},{\"node\":\"D\",\"children\":[]}]}]}");
+    }
 
-
-        node = TreeGenerator.node("""
-            # A
-            ## B
-            ### C
-            #### D
-            #### E
-            #### H
-            ### D
-            ## C
-            ### D
-            ### E
-            ### H
-            ### I
-            #### G
-            #### K
-            """);
-        assertThat(objectMapper.writeValueAsString(node), is("{\"node\":\"A\",\"children\":[{\"node\":\"C\",\"children\":[{\"node\":\"E\",\"children\":[{\"node\":\"I\",\"children\":[{\"node\":\"K\",\"children\":[]},{\"node\":\"G\",\"children\":[]}]},{\"node\":\"H\",\"children\":[]}]},{\"node\":\"D\",\"children\":[]}]},{\"node\":\"B\",\"children\":[{\"node\":\"D\",\"children\":[]},{\"node\":\"C\",\"children\":[{\"node\":\"D\",\"children\":[]},{\"node\":\"E\",\"children\":[]},{\"node\":\"H\",\"children\":[]}]}]}]}"));
+    void genAndCheck(String graph, String expected) throws JsonProcessingException {
+        var node = TreeGenerator.node(graph);
+        assertThat(objectMapper.writeValueAsString(node), is(expected));
     }
 }
