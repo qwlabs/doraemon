@@ -12,7 +12,7 @@ import com.qwlabs.storage.models.StorageObject;
 import com.qwlabs.storage.models.UploadUrls;
 import com.qwlabs.storage.services.StorageEngine;
 import jakarta.enterprise.context.ApplicationScoped;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import jakarta.annotation.Nullable;
 
 import java.io.InputStream;
 import java.util.Objects;

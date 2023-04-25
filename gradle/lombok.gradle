@@ -4,5 +4,5 @@ dependencies {
     api "org.slf4j:slf4j-api:${slf4jVersion}"
 
     testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
-    testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.26")
 }

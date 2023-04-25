@@ -1,7 +1,7 @@
 package com.qwlabs.q;
 
 import com.qwlabs.q.conditions.QCondition;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import jakarta.annotation.Nullable;
 
 import jakarta.validation.constraints.NotNull;
 

@@ -1,7 +1,7 @@
 package com.qwlabs.ff;
 
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import jakarta.annotation.Nullable;
 import org.eclipse.microprofile.config.ConfigProvider;
 
 @Slf4j

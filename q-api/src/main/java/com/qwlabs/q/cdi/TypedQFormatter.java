@@ -6,7 +6,7 @@ import com.qwlabs.lang.Annotations;
 import com.qwlabs.q.QEngine;
 import com.qwlabs.q.conditions.QCondition;
 import com.qwlabs.q.formatters.QFormatter;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import jakarta.annotation.Nullable;
 
 import jakarta.validation.constraints.NotNull;
 import java.util.Objects;

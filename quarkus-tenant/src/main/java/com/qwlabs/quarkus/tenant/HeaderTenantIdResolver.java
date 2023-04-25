@@ -5,7 +5,7 @@ import com.qwlabs.lang.C2;
 import com.qwlabs.lang.S2;
 import io.vertx.ext.web.RoutingContext;
 import jakarta.enterprise.context.ApplicationScoped;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import jakarta.annotation.Nullable;
 
 @ApplicationScoped
 public class HeaderTenantIdResolver implements TenantIdResolver, Dispatchable<String> {

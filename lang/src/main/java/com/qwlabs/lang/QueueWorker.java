@@ -3,7 +3,7 @@ package com.qwlabs.lang;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import jakarta.annotation.Nullable;
 
 import java.time.Duration;
 import java.util.Objects;

@@ -1,7 +1,7 @@
 package com.qwlabs.security;
 
 import io.quarkus.security.identity.SecurityIdentity;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import jakarta.annotation.Nullable;
 
 import jakarta.validation.constraints.NotNull;
 import java.util.Set;

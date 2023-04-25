@@ -1,4 +1,5 @@
 dependencies {
     api "com.google.guava:guava:${guavaVersion}"
     api "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
+    api "jakarta.annotation:jakarta.annotation-api:${jakartaAnnotationApiVersion}"
 }

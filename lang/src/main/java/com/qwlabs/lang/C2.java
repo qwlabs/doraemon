@@ -3,7 +3,7 @@ package com.qwlabs.lang;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Streams;
 import jakarta.validation.constraints.NotNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import jakarta.annotation.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;

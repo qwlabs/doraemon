@@ -1,7 +1,7 @@
 package com.qwlabs.ff;
 
 import com.qwlabs.lang.EmptyConsumer;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import jakarta.annotation.Nullable;
 
 import jakarta.validation.constraints.NotNull;
 import java.util.function.Supplier;

@@ -9,7 +9,7 @@ import com.qwlabs.q.conditions.QCondition;
 import com.qwlabs.q.formatters.QFormatter;
 import com.qwlabs.q.parsers.QParser;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import jakarta.annotation.Nullable;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
