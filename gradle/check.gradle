@@ -38,3 +38,7 @@ tasks.named('checkstyleTest') {
 tasks.named('compileTestJava') {
     dependsOn('jandex')
 }
+
+tasks.named('javadoc') {
+    dependsOn('jandex')
+}
