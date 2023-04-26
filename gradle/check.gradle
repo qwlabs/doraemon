@@ -26,3 +26,15 @@ test {
 task prepush(dependsOn: ["checkstyle", test, check]) {
 }
 prepush.mustRunAfter clean
+
+tasks.named('checkstyleMain') {
+    dependsOn('jandex')
+}
+
+tasks.named('checkstyleTest') {
+    dependsOn('jandex')
+}
+
+tasks.named('compileTestJava') {
+    dependsOn('jandex')
+}
