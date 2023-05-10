@@ -1,4 +1,4 @@
-package com.qwlabs.graphql.relay;
+package com.qwlabs.graphql;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,8 +6,10 @@ import com.google.common.base.Throwables;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 public class Gql {
@@ -37,24 +39,14 @@ public class Gql {
     }
 
     public String build() {
-        return """
-            {
-                "operationName": "%s",
-                "query": "%s",
-                "variables": %s
-            }
-            """.formatted(operationName, query, buildVariables());
-    }
-
-    private String buildVariables() {
-        if (Objects.isNull(variables)) {
-            return DEFAULT_VARIABLES;
-        }
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("operationName", operationName);
+        result.put("query", query);
+        Optional.ofNullable(variables).ifPresent(vars -> result.put("variables", variables));
         try {
-            return initObjectMapper().writeValueAsString(variables);
+            return initObjectMapper().writeValueAsString(result);
         } catch (JsonProcessingException e) {
-            Throwables.throwIfUnchecked(e);
-            return null;
+            throw new IllegalArgumentException(e);
         }
     }
 
