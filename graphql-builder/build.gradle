@@ -1,4 +1,0 @@
-dependencies {
-    api project(":lang")
-    api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
-}

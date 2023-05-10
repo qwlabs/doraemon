@@ -3,4 +3,5 @@ dependencies {
     api "com.google.guava:guava:${guavaVersion}"
     api "com.graphql-java:graphql-java:${graphqlJavaVersion}"
     api "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
+    api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 }
