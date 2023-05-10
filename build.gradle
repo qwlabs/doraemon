@@ -20,6 +20,7 @@ nexusStaging {
 subprojects {
     apply plugin: 'java-library'
     apply plugin: 'org.kordamp.gradle.jandex'
+    apply from: "${rootProject.rootDir}/gradle/bom.gradle"
     apply from: "${rootProject.rootDir}/gradle/version.gradle"
     apply from: "${rootProject.rootDir}/gradle/reversion.gradle"
     apply from: "${rootProject.rootDir}/gradle/lombok.gradle"

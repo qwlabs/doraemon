@@ -5,7 +5,4 @@ dependencies {
     api "io.rest-assured:rest-assured:${restAssuredVersion}"
     api "org.jboss.shrinkwrap:shrinkwrap-api:${shrinkwrapVersion}"
     api "org.testcontainers:postgresql:${testcontainersVersion}"
-//    api("org.testcontainers:postgresql:${testcontainersVersion}"){
-//        exclude group: 'junit'
-//    }
 }

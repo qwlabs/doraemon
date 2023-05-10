@@ -1,0 +1,14 @@
+configurations.all {
+    resolutionStrategy {
+        force "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+        force "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+        force "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+        force "com.google.errorprone:error_prone_annotations:${errorProneAannotationsVersion}"
+        force "com.google.guava:guava:${guavaVersion}"
+        force "com.graphql-java:graphql-java:${graphqlJavaVersion}"
+        force "io.smallrye.reactive:mutiny:${mutinyVersion}"
+        force "net.bytebuddy:byte-buddy:${bytebuddyVersion}"
+        force "net.bytebuddy:byte-buddy-agent:${bytebuddyVersion}"
+        force "org.apache.httpcomponents:httpclient:${httpclientVersion}"
+    }
+}

@@ -88,7 +88,7 @@ public class AverageDistributor {
                 leftRequired -= distribution;
                 var key = Distribution.of(totalEntry.getKey(), entry.getKey());
                 distributed.put(entry.getKey(), distributed.getOrDefault(entry.getKey(), 0) + distribution);
-                distributions.computeIfAbsent(key, (k)->k).append(distribution);
+                distributions.computeIfAbsent(key, (k) -> k).append(distribution);
             }
             put(nextLeftRequires, entry.getKey(), leftRequired);
         }
@@ -96,7 +96,7 @@ public class AverageDistributor {
         doDistribute(nextLeftRequires);
     }
 
-    public Set<Distribution> getDistributions(){
+    public Set<Distribution> getDistributions() {
         return distributions.keySet();
     }
 
