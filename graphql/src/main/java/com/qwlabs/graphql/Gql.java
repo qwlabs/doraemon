@@ -74,7 +74,15 @@ public class Gql {
         return new Gql(operationName);
     }
 
-    public static String relyNode(String raw){
+    public static String rely(String raw) {
         return "edges{node{ %s }}".formatted(raw);
+    }
+
+    public static String relyWithPage(String raw) {
+        return "%s %s".formatted(rely(raw), page());
+    }
+    
+    public static String page() {
+        return "pageInfo {startCursor endCursor hasNextPage hasPreviousPage } totalCount";
     }
 }
