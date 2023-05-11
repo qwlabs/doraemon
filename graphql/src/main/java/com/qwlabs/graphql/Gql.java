@@ -70,23 +70,8 @@ public class Gql {
         return new Gql(null, query);
     }
 
-    public static Gql ofRely(String query, String node) {
-        return of(query.formatted(rely(node)));
-    }
-
-    public static Gql ofRelyPage(String query, String node) {
-        return of(query.formatted(relyPage(node)));
-    }
-
     public static Gql ofName(@NotNull String operationName) {
         return new Gql(operationName);
     }
 
-    private static String rely(String raw) {
-        return "edges{node{ %s }}".formatted(raw);
-    }
-
-    private static String relyPage(String raw) {
-        return "%s pageInfo {startCursor endCursor hasNextPage hasPreviousPage } totalCount".formatted(rely(raw));
-    }
 }
