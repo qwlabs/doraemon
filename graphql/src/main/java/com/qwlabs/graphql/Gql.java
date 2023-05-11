@@ -2,26 +2,29 @@ package com.qwlabs.graphql;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Throwables;
+import com.qwlabs.lang.F2;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
 public class Gql {
     private static final String INPUT = "input";
-    private static final String DEFAULT_VARIABLES = "{}";
     private static ObjectMapper objectMapper;
     private final String operationName;
     private String query;
     private Object variables;
 
-    public Gql(String operationName) {
+    private Gql(String operationName) {
+        this(operationName, null);
+    }
+
+    private Gql(String operationName, String query) {
         this.operationName = operationName;
+        this.query = query;
     }
 
     public Gql query(String query) {
@@ -40,7 +43,9 @@ public class Gql {
 
     public String build() {
         Map<String, Object> result = new LinkedHashMap<>();
-        result.put("operationName", operationName);
+        F2.ifPresent(operationName, name -> {
+            result.put("operationName", name);
+        });
         result.put("query", query);
         Optional.ofNullable(variables).ifPresent(vars -> result.put("variables", variables));
         try {
@@ -61,7 +66,11 @@ public class Gql {
         return Gql.objectMapper;
     }
 
-    public static Gql of(@NotNull String operationName) {
+    public static Gql of(String query) {
+        return new Gql(null, query);
+    }
+
+    public static Gql ofName(@NotNull String operationName) {
         return new Gql(operationName);
     }
 }

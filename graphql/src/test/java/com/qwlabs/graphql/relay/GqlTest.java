@@ -5,8 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.junit.jupiter.api.Test;
 
+import static com.qwlabs.lang.Annotations.actualTypeArgument;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 
 class GqlTest {
@@ -15,8 +16,7 @@ class GqlTest {
         var input = new CreateAsnInput();
         input.setName("2");
 
-        var payload = Gql.of("createAsn")
-            .query("""
+        var payload = Gql.of("""
                 mutation createAsn($input:CreateAsnInput!){
                     createAsn(input:$input){
                         id
@@ -26,8 +26,7 @@ class GqlTest {
                 """)
             .input(input)
             .build();
-//        payload = payload.replaceAll("\n", "");
-//        assertThat(payload, is("{\"operationName\":\"createAsn\",\"query\":\"mutation createAsn($input:CreateAsnInput!){\n    createAsn(input:$input){\n        id\n        quantity\n    }\n}\n\",\"variables\":{\"input\":{\"name\":\"2\"}}}"));
+//        assertThat(payload, is("{\"query\":\"mutation createAsn($input:CreateAsnInput!){\n    createAsn(input:$input){\n        id\n        quantity\n    }\n}\n\",\"variables\":{\"input\":{\"name\":\"2\"}}}"));
     }
 
     @Getter
