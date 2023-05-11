@@ -73,4 +73,8 @@ public class Gql {
     public static Gql ofName(@NotNull String operationName) {
         return new Gql(operationName);
     }
+
+    public static String relyNode(String raw){
+        return "edges{node{ %s }}".formatted(raw);
+    }
 }

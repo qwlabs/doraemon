@@ -26,6 +26,7 @@ class GqlTest {
                 """)
             .input(input)
             .build();
+//        edges{node{id readFlag status updatedAt announcement{title content org{id name code}}}}}}
 //        assertThat(payload, is("{\"query\":\"mutation createAsn($input:CreateAsnInput!){\n    createAsn(input:$input){\n        id\n        quantity\n    }\n}\n\",\"variables\":{\"input\":{\"name\":\"2\"}}}"));
     }
 
