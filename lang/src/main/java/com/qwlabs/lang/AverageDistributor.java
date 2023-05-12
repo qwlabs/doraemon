@@ -37,12 +37,13 @@ public class AverageDistributor {
         this.leftTotals = buildLeftTotals();
     }
 
-    public void distribute() {
+    public AverageDistributor distribute() {
         if (this.distributedFlag) {
-            return;
+            return this;
         }
         this.distributedFlag = true;
         doDistribute(buildLeftRequires());
+        return this;
     }
 
     private TreeMap<Integer, Integer> buildLeftTotals() {
