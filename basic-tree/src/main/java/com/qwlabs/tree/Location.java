@@ -22,8 +22,7 @@ public class Location<N> {
 
     @NotNull
     public Optional<Location<N>> parent() {
-        return isRoot() ? Optional.empty() :
-                Optional.of(Location.of(path.subList(0, path.size() - 1)));
+        return parent(path).map(Location::of);
     }
 
     public boolean isRoot() {
@@ -36,7 +35,7 @@ public class Location<N> {
 
     public <R> List<R> mapPath(Function<N, R> mapper) {
         return path.stream().map(mapper)
-                .collect(Collectors.toList());
+            .collect(Collectors.toList());
     }
 
     public Location<N> child(N node) {
@@ -76,6 +75,12 @@ public class Location<N> {
 
     public static <N> Location<N> of(N... path) {
         return of(List.of(path));
+    }
+
+    public static <N> Optional<List<N>> parent(List<N> path) {
+        return Optional.ofNullable(path)
+            .filter(p -> !p.isEmpty())
+            .map(p -> p.subList(0, p.size() - 1));
     }
 
     public static class RootLocation<N extends TreeNode<N>> extends Location<N> {
