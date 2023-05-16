@@ -29,6 +29,14 @@ public class Location<N> {
         return path.isEmpty();
     }
 
+    public N get(int index) {
+        return path.get(index);
+    }
+
+    public int size() {
+        return path.size();
+    }
+
     public <R> Location<R> map(Function<N, R> mapper) {
         return Location.of(mapPath(mapper));
     }
