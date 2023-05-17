@@ -2,8 +2,8 @@ package com.qwlabs.lang;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Streams;
-import jakarta.validation.constraints.NotNull;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -385,4 +385,11 @@ public final class C2 {
             Collections.emptyMap());
     }
 
+    public static <E> Stream<E> merge(Collection<E>... collections) {
+        return C2.stream(collections).flatMap(Collection::stream);
+    }
+
+    public static <E> Stream<E> merge(Collection<E> collection, E... elements) {
+        return Streams.concat(C2.stream(collection), C2.stream(elements));
+    }
 }
