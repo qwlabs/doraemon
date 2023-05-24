@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Getter
 public class Location<N> {
-    private static final RootLocation ROOT = new RootLocation<>();
+    private static final Location ROOT = new Location<>(List.of());
     @NotNull
     private final List<N> path;
 
@@ -61,10 +61,13 @@ public class Location<N> {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (o == null || !o.getClass().isAssignableFrom(Location.class)) {
             return false;
         }
         Location<?> location = (Location<?>) o;
+        if (location.isRoot() && isRoot()) {
+            return true;
+        }
         return Objects.equals(path, location.path);
     }
 
@@ -78,6 +81,9 @@ public class Location<N> {
     }
 
     public static <N> Location<N> of(List<N> path) {
+        if (path == null || path.isEmpty()) {
+            return root();
+        }
         return new Location<>(path);
     }
 
@@ -89,11 +95,5 @@ public class Location<N> {
         return Optional.ofNullable(path)
             .filter(p -> !p.isEmpty())
             .map(p -> p.subList(0, p.size() - 1));
-    }
-
-    public static class RootLocation<N extends TreeNode<N>> extends Location<N> {
-        public RootLocation() {
-            super(List.of());
-        }
     }
 }

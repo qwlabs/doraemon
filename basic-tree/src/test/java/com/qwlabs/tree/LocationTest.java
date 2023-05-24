@@ -15,6 +15,9 @@ class LocationTest {
         assertTrue(root.parent().isEmpty());
         assertTrue(root.isRoot());
         assertTrue(root.map(BomNode::getValue).isRoot());
+        assertTrue(root.equals(Location.of()));
+        assertTrue(Location.of().equals(root));
+        assertTrue(root.hashCode() == Location.of().hashCode());
     }
 
     @Test
