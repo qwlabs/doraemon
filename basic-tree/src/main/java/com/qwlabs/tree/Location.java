@@ -52,6 +52,15 @@ public class Location<N> {
         return Location.of(childPath);
     }
 
+    public Location<N> child(Location<N> location) {
+        if(location.isRoot()){
+            return this;
+        }
+        List<N> childPath = Lists.newArrayList(path);
+        childPath.addAll(location.path);
+        return Location.of(childPath);
+    }
+
     public Optional<N> tail() {
         return isRoot() ? Optional.empty() : Optional.of(path.get(path.size() - 1));
     }
