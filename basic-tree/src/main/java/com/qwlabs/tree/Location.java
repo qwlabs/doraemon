@@ -53,7 +53,7 @@ public class Location<N> {
     }
 
     public Location<N> child(Location<N> location) {
-        if(location.isRoot()){
+        if (location.isRoot()) {
             return this;
         }
         List<N> childPath = Lists.newArrayList(path);
