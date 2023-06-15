@@ -5,9 +5,10 @@ import com.qwlabs.quarkus.cache.CacheAware;
 import io.quarkus.cache.Cache;
 import io.quarkus.cache.CacheKey;
 import io.quarkus.cache.CacheResult;
-import lombok.extern.slf4j.Slf4j;
 import jakarta.annotation.Nullable;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -30,17 +31,15 @@ public abstract class CachedFeatureFlag implements FeatureFlag, CacheAware {
 
     public void invalidateAll() {
         Cache cache = getCache(CACHE_NAME);
-        cache.invalidate(getCacheKey(null)).await().indefinitely();
+        cache.invalidateAll().await().indefinitely();
     }
 
     public void invalidateBy(String... topics) {
-        var cacheKeys = C2.stream(topics).map(this::getCacheKey).collect(Collectors.toSet());
+        var cacheKeys = C2.stream(topics)
+            .map(this::getCacheKey)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toSet());
         if (cacheKeys.isEmpty()) {
-            invalidateAll();
-            return;
-        }
-        if (cacheKeys.contains(null)) {
-            invalidateAll();
             return;
         }
         Cache cache = getCache(CACHE_NAME);
