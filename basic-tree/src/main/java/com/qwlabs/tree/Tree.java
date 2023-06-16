@@ -29,7 +29,7 @@ public class Tree {
        @NotNull Function<N, I> identityFunction,
        @NotNull Function<N, I> parentFunction) {
         TreeNodes<N> tree = new TreeNodes<>();
-        Map<I, TreeNode<N>> nodeMapping = Maps.newHashMap();
+        Map<I, TreeNode<N>> nodeMapping = Maps.newLinkedHashMap();
         sortedSources.forEachRemaining(node -> nodeMapping.put(identityFunction.apply(node), TreeNode.of(node)));
         nodeMapping.forEach((sourceIdentity, node) -> {
             I parentIdentity = parentFunction.apply(node.getNode());

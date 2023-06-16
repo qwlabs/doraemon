@@ -67,7 +67,7 @@ class TreeGeneratorTest {
                 #### G
                 #### K
                 """,
-            "{\"node\":\"A\",\"children\":[{\"node\":\"C\",\"children\":[{\"node\":\"D\",\"children\":[]},{\"node\":\"E\",\"children\":[]},{\"node\":\"H\",\"children\":[]},{\"node\":\"I\",\"children\":[{\"node\":\"K\",\"children\":[]},{\"node\":\"G\",\"children\":[]}]}]},{\"node\":\"B\",\"children\":[{\"node\":\"C\",\"children\":[{\"node\":\"H\",\"children\":[]},{\"node\":\"D\",\"children\":[]},{\"node\":\"E\",\"children\":[]}]},{\"node\":\"D\",\"children\":[]}]}]}");
+            "{\"node\":\"A\",\"children\":[{\"node\":\"B\",\"children\":[{\"node\":\"C\",\"children\":[{\"node\":\"D\",\"children\":[]},{\"node\":\"E\",\"children\":[]},{\"node\":\"H\",\"children\":[]}]},{\"node\":\"D\",\"children\":[]}]},{\"node\":\"C\",\"children\":[{\"node\":\"D\",\"children\":[]},{\"node\":\"E\",\"children\":[]},{\"node\":\"H\",\"children\":[]},{\"node\":\"I\",\"children\":[{\"node\":\"G\",\"children\":[]},{\"node\":\"K\",\"children\":[]}]}]}]}");
     }
 
     void genAndCheck(String graph, String expected) throws JsonProcessingException {
