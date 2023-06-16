@@ -2,11 +2,15 @@ package com.qwlabs.ff;
 
 import com.qwlabs.lang.EmptyConsumer;
 import jakarta.annotation.Nullable;
-
 import jakarta.validation.constraints.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.function.Supplier;
 
 public interface FeatureFlag {
+    Logger LOGGER = LoggerFactory.getLogger(FeatureFlag.class);
+    
     @NotNull String feature();
 
     boolean enabled(@Nullable String topic);
@@ -17,6 +21,12 @@ public interface FeatureFlag {
 
     default boolean disabled(@Nullable String topic) {
         return !enabled(topic);
+    }
+
+    default void invalidateAll() {
+    }
+
+    default void invalidateBy(String... topics) {
     }
 
     default void ifEnabled(@Nullable String topic, @NotNull EmptyConsumer consumer) {
