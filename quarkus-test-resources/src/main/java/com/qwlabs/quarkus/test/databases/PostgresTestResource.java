@@ -54,8 +54,8 @@ public class PostgresTestResource implements QuarkusTestResourceLifecycleManager
     }
 
     private PostgreSQLContainer<?> create() {
-        var dockerImage = DockerImageName.parse(String.format("%s:%s", image, imageVersion));
-        dockerImage.assertCompatibleWith(DEFAULT_IMAGE_NAME);
+        var dockerImage = DockerImageName.parse(String.format("%s:%s", image, imageVersion))
+            .asCompatibleSubstituteFor(DEFAULT_IMAGE_NAME);
         return new PostgreSQLContainer<>(dockerImage)
             .withDatabaseName(databaseName)
             .withUsername(username)
