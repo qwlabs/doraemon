@@ -5,12 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.ext.ScriptUtils;
 import org.testcontainers.jdbc.JdbcDatabaseDelegate;
+import org.testcontainers.utility.DockerImageName;
 
 import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
 public class PostgresTestResource implements QuarkusTestResourceLifecycleManager {
+    private static final DockerImageName DEFAULT_IMAGE_NAME = DockerImageName.parse("postgres");
     public static final String IMAGE = "image";
     public static final String DEFAULT_IMAGE = "postgres";
     public static final String IMAGE_VERSION = "imageVersion";
@@ -45,18 +47,20 @@ public class PostgresTestResource implements QuarkusTestResourceLifecycleManager
         container.start();
         LOGGER.info("Postgres container started.");
         return Map.of(
-                "quarkus.datasource.jdbc.url", container.getJdbcUrl(),
-                "quarkus.datasource.username", container.getUsername(),
-                "quarkus.datasource.password", container.getPassword()
+            "quarkus.datasource.jdbc.url", container.getJdbcUrl(),
+            "quarkus.datasource.username", container.getUsername(),
+            "quarkus.datasource.password", container.getPassword()
         );
     }
 
     private PostgreSQLContainer<?> create() {
-        return new PostgreSQLContainer<>(String.format("%s:%s", image, imageVersion))
-                .withDatabaseName(databaseName)
-                .withUsername(username)
-                .withPassword(password)
-                .withReuse(this.reuse);
+        var dockerImage = DockerImageName.parse(String.format("%s:%s", image, imageVersion));
+        dockerImage.assertCompatibleWith(DEFAULT_IMAGE_NAME);
+        return new PostgreSQLContainer<>(dockerImage)
+            .withDatabaseName(databaseName)
+            .withUsername(username)
+            .withPassword(password)
+            .withReuse(this.reuse);
     }
 
     @Override
