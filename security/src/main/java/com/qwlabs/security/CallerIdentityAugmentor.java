@@ -17,6 +17,7 @@ public class CallerIdentityAugmentor implements SecurityIdentityAugmentor {
     private final CallerPrincipalLoader principalLoader;
     private final Instance<AnonymousCallerProvider> anonymousCallerProvider;
     private final DispatchInstance<Caller, CallerPermissionsLoader> permissionsLoader;
+    private final DispatchInstance<Caller, CallerFeaturesLoader> festuresLoader;
     private final DispatchInstance<String, CallerAttributeLoader<?, ?>> attributeLoader;
     private final CallerIdentityRolesProvider identityRolesProvider;
 
@@ -24,11 +25,13 @@ public class CallerIdentityAugmentor implements SecurityIdentityAugmentor {
     public CallerIdentityAugmentor(Instance<CallerPrincipalLoader> principalLoader,
                                    Instance<AnonymousCallerProvider> anonymousCallerProvider,
                                    Instance<CallerPermissionsLoader> permissionsLoader,
+                                   Instance<CallerFeaturesLoader> featuresLoader,
                                    Instance<CallerAttributeLoader<?, ?>> attributeLoader,
                                    Instance<CallerIdentityRolesProvider> identityRolesProvider) {
         this.principalLoader = principalLoader.get();
         this.anonymousCallerProvider = anonymousCallerProvider;
         this.permissionsLoader = DispatchInstance.of(permissionsLoader);
+        this.festuresLoader = DispatchInstance.of(featuresLoader);
         this.attributeLoader = DispatchInstance.of(attributeLoader);
         this.identityRolesProvider = identityRolesProvider.get();
     }
@@ -59,16 +62,17 @@ public class CallerIdentityAugmentor implements SecurityIdentityAugmentor {
             return AnonymousCaller.INSTANCE;
         }
         return anonymousCallerProvider.get()
-                .get(identity, permissionsLoader, attributeLoader);
+            .get(identity, permissionsLoader, attributeLoader);
     }
 
     private Caller buildAuthenticatedCaller(SecurityIdentity identity) {
         CallerPrincipal callerPrincipal = principalLoader.load(identity);
         return AuthenticatedCaller.builder()
-                .id(callerPrincipal.id())
-                .type(callerPrincipal.type())
-                .attributeLoader(attributeLoader)
-                .permissionsLoader(permissionsLoader)
-                .build();
+            .id(callerPrincipal.id())
+            .type(callerPrincipal.type())
+            .attributeLoader(attributeLoader)
+            .permissionsLoader(permissionsLoader)
+            .featuresLoader(festuresLoader)
+            .build();
     }
 }
