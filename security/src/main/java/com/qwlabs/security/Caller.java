@@ -23,6 +23,8 @@ public interface Caller {
 
     @NotNull CallerPermissions permissions();
 
+    @NotNull CallerFeatures features();
+
     @Nullable SecurityIdentity identity();
 
     default void identity(@Nullable SecurityIdentity identity) {

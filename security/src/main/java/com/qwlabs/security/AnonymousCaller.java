@@ -42,6 +42,14 @@ public class AnonymousCaller implements Caller {
         }
     };
 
+    private static final CallerFeatures FEATURES = new CallerFeatures() {
+
+        @Override
+        public @NotNull boolean has(@NotNull String feature) {
+            return false;
+        }
+    };
+
     @Override
     public @Nullable String id() {
         return null;
@@ -60,6 +68,11 @@ public class AnonymousCaller implements Caller {
     @Override
     public CallerPermissions permissions() {
         return PERMISSIONS;
+    }
+
+    @Override
+    public @NotNull CallerFeatures features() {
+        return FEATURES;
     }
 
     @Override
