@@ -68,7 +68,7 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
     }
 
     public <R> TreeNodes<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper, Location<TreeNode<N>> parentLocation) {
-        return new TreeNodes<>(stream()
+        return new TreeNodes<>(stream().parallel()
             .map(node -> node.map(mapper, parentLocation))
             .collect(Collectors.toList()));
     }
