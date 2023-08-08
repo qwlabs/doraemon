@@ -31,7 +31,7 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
 
     @Override
     public void forEach(BiConsumer<Location<TreeNode<N>>, TreeNode<N>> consumer, Location<TreeNode<N>> parentLocation) {
-        forEach(node -> node.forEach(consumer, parentLocation));
+        stream().parallel().forEach(node -> node.forEach(consumer, parentLocation));
     }
 
     @Override
@@ -58,6 +58,7 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
     @Override
     public <R> List<R> all(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper, Location<TreeNode<N>> parentLocation) {
         return stream()
+            .parallel()
             .map(node -> node.all(mapper, parentLocation))
             .flatMap(List::stream)
             .collect(Collectors.toList());
