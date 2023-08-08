@@ -9,6 +9,7 @@ pluginManagement {
         id "${grgitPluginId}" version "${grgitPluginVersion}"
         id "${lombokPluginId}" version "${lombokPluginVersion}"
         id "${nexusStagingPluginId}" version "${nexusStagingPluginVersion}"
+//        id "${jmhPluginId}" version "${jmhPluginVersion}"
     }
 }
 

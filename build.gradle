@@ -9,6 +9,7 @@ plugins {
     id 'org.kordamp.gradle.jandex' apply false
     id 'org.ajoberstar.grgit' apply false
     id 'io.codearte.nexus-staging'
+//    id 'me.champeau.jmh'
 }
 
 nexusStaging {
@@ -57,5 +58,8 @@ subprojects {
         testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
         testImplementation("org.mockito:mockito-junit-jupiter:${mockitoVersion}")
         testImplementation("org.hamcrest:hamcrest-all:${hamcrestVersion}")
+        testImplementation("org.hamcrest:hamcrest-all:${hamcrestVersion}")
+        testImplementation("org.openjdk.jmh:jmh-core:${jmhVersion}")
+        testImplementation("org.openjdk.jmh:jmh-generator-annprocess:${jmhVersion}")
     }
 }
