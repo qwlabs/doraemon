@@ -31,7 +31,7 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
 
     @Override
     public void forEach(BiConsumer<Location<TreeNode<N>>, TreeNode<N>> consumer, Location<TreeNode<N>> parentLocation) {
-        stream().parallel().forEach(node -> node.forEach(consumer, parentLocation));
+        this.stream().parallel().forEach(node -> node.forEach(consumer, parentLocation));
     }
 
     @Override
@@ -40,6 +40,7 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
             return Optional.empty();
         }
         return this.stream()
+            .parallel()
             .map(node -> node.find(path, filter))
             .filter(Optional::isPresent)
             .map(Optional::get)
@@ -49,6 +50,7 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
     @Override
     public Optional<Location<TreeNode<N>>> find(BiPredicate<Location<TreeNode<N>>, TreeNode<N>> filter, Location<TreeNode<N>> parentLocation) {
         return this.stream()
+            .parallel()
             .map(node -> node.find(filter, parentLocation))
             .filter(Optional::isPresent)
             .map(Optional::get)
@@ -75,7 +77,7 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
     }
 
     public <R> List<R> map(Function<N, R> mapper) {
-        return stream().map(node -> node.map(mapper)).collect(Collectors.toList());
+        return this.stream().parallel().map(node -> node.map(mapper)).collect(Collectors.toList());
     }
 
     public <R> List<R> map(TreeNodeFunction<N, R> mapper) {
@@ -84,7 +86,7 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
 
     public <R> List<R> map(TreeNodeFunction<N, R> mapper,
                            Location<TreeNode<N>> parentLocation) {
-        return stream().map(node -> node.map(mapper, parentLocation)).collect(Collectors.toList());
+        return stream().parallel().map(node -> node.map(mapper, parentLocation)).collect(Collectors.toList());
     }
 
     public Optional<TreeNode<N>> first() {
