@@ -19,7 +19,7 @@ public interface TreeNodeAble<N> {
     }
 
     default void forEach(@NotNull BiConsumer<Location<TreeNode<N>>, TreeNode<N>> consumer,
-                 @NotNull Location<TreeNode<N>> parentLocation){
+                         @NotNull Location<TreeNode<N>> parentLocation) {
         forEach(consumer, parentLocation, false);
     }
 
@@ -30,8 +30,8 @@ public interface TreeNodeAble<N> {
         return find(filter, Location.root());
     }
 
-    default  <E> Optional<TreeNode<N>> find(@NotNull List<E> path,
-                                   @NotNull BiPredicate<TreeNode<N>, E> filter){
+    default <E> Optional<TreeNode<N>> find(@NotNull List<E> path,
+                                           @NotNull BiPredicate<TreeNode<N>, E> filter) {
         return find(path, filter, false);
     }
 
@@ -40,17 +40,21 @@ public interface TreeNodeAble<N> {
                                    boolean parallel);
 
     default Optional<Location<TreeNode<N>>> find(@NotNull BiPredicate<Location<TreeNode<N>>, TreeNode<N>> filter,
-                                         @NotNull Location<TreeNode<N>> parentLocation){
+                                                 @NotNull Location<TreeNode<N>> parentLocation) {
         return find(filter, parentLocation, false);
     }
 
     Optional<Location<TreeNode<N>>> find(@NotNull BiPredicate<Location<TreeNode<N>>, TreeNode<N>> filter,
                                          @NotNull Location<TreeNode<N>> parentLocation, boolean parallel);
 
+    default Stream<N> all() {
+        return all(((location, treeNode) -> treeNode.getNode()));
+    }
+
     default <R> Stream<R> all(@NotNull BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper) {
         return all(mapper, Location.root());
     }
 
     <R> Stream<R> all(@NotNull BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper,
-                    @NotNull Location<TreeNode<N>> parentLocation);
+                      @NotNull Location<TreeNode<N>> parentLocation);
 }
