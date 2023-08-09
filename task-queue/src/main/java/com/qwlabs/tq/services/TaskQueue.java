@@ -97,7 +97,10 @@ public class TaskQueue {
         this.onFailed(context, recordId, exception, (r, e) -> LOGGER.error("Process task error. id={}", r.getId(), e));
     }
 
-    public <R extends TaskQueueRecord> void onFailed(TaskQueueProcessContext context, String recordId, Exception exception, BiConsumer<R, Exception> consumer) {
+    public <R extends TaskQueueRecord> void onFailed(TaskQueueProcessContext context,
+                                                     String recordId,
+                                                     Exception exception,
+                                                     BiConsumer<R, Exception> consumer) {
         QuarkusTransaction.requiringNew().run(() -> {
             requireNonNull(repository.<R>lock(recordId), (record) -> {
                 record.setFailedMessage(Throwables.getStackTraceAsString(exception));

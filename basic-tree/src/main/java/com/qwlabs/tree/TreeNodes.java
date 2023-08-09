@@ -73,6 +73,10 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
         return map(mapper, Location.root(), false);
     }
 
+    public <R> TreeNodes<R> mapParallel(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper) {
+        return map(mapper, Location.root(), true);
+    }
+
     public <R> TreeNodes<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper,
                                 boolean parallel) {
         return map(mapper, Location.root(), parallel);
@@ -81,6 +85,11 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
     public <R> TreeNodes<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper,
                                 Location<TreeNode<N>> parentLocation) {
         return map(mapper, parentLocation, false);
+    }
+
+    public <R> TreeNodes<R> mapParallel(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper,
+                                Location<TreeNode<N>> parentLocation) {
+        return map(mapper, parentLocation, true);
     }
 
     public <R> TreeNodes<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper,
@@ -95,12 +104,20 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
         return map(mapper, false);
     }
 
+    public <R> List<R> mapParallel(Function<N, R> mapper) {
+        return map(mapper, true);
+    }
+
     public <R> List<R> map(Function<N, R> mapper, boolean parallel) {
         return Streams2.parallel(this.stream(), parallel).map(node -> node.map(mapper)).collect(Collectors.toList());
     }
 
     public <R> List<R> map(TreeNodeFunction<N, R> mapper) {
         return map(mapper, Location.root(), false);
+    }
+
+    public <R> List<R> mapParallel(TreeNodeFunction<N, R> mapper) {
+        return map(mapper, Location.root(), true);
     }
 
     public <R> List<R> map(TreeNodeFunction<N, R> mapper, boolean parallel) {
@@ -110,6 +127,11 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
     public <R> List<R> map(TreeNodeFunction<N, R> mapper,
                            Location<TreeNode<N>> parentLocation) {
         return map(mapper, parentLocation, false);
+    }
+
+    public <R> List<R> mapParallel(TreeNodeFunction<N, R> mapper,
+                           Location<TreeNode<N>> parentLocation) {
+        return map(mapper, parentLocation, true);
     }
 
     public <R> List<R> map(TreeNodeFunction<N, R> mapper,

@@ -75,6 +75,10 @@ public class TreeNode<N> implements TreeNodeAble<N> {
         return map(mapper, Location.root(), false);
     }
 
+    public <R> TreeNode<R> mapParallel(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper) {
+        return map(mapper, Location.root(), true);
+    }
+
     public <R> TreeNode<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper,
                                boolean parallel) {
         return map(mapper, Location.root(), parallel);
@@ -82,6 +86,10 @@ public class TreeNode<N> implements TreeNodeAble<N> {
 
     public <R> TreeNode<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper, Location<TreeNode<N>> parentLocation) {
         return map(mapper, parentLocation, false);
+    }
+
+    public <R> TreeNode<R> mapParallel(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper, Location<TreeNode<N>> parentLocation) {
+        return map(mapper, parentLocation, true);
     }
 
     public <R> TreeNode<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper,
@@ -99,6 +107,10 @@ public class TreeNode<N> implements TreeNodeAble<N> {
         return map(mapper, Location.root(), false);
     }
 
+    public <R> R mapParallel(TreeNodeFunction<N, R> mapper) {
+        return map(mapper, Location.root(), true);
+    }
+
     public <R> R map(TreeNodeFunction<N, R> mapper, boolean parallel) {
         return map(mapper, Location.root(), parallel);
     }
@@ -106,6 +118,11 @@ public class TreeNode<N> implements TreeNodeAble<N> {
     public <R> R map(TreeNodeFunction<N, R> mapper,
                      Location<TreeNode<N>> parentLocation) {
         return map(mapper, parentLocation, false);
+    }
+
+    public <R> R mapParallel(TreeNodeFunction<N, R> mapper,
+                     Location<TreeNode<N>> parentLocation) {
+        return map(mapper, parentLocation, true);
     }
 
     public <R> R map(TreeNodeFunction<N, R> mapper,

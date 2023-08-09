@@ -14,6 +14,10 @@ public interface TreeNodeAble<N> {
         forEach(consumer, Location.root(), false);
     }
 
+    default void forEachParallel(@NotNull BiConsumer<Location<TreeNode<N>>, TreeNode<N>> consumer) {
+        forEach(consumer, Location.root(), true);
+    }
+
     default void forEach(@NotNull BiConsumer<Location<TreeNode<N>>, TreeNode<N>> consumer, boolean parallel) {
         forEach(consumer, Location.root(), parallel);
     }
@@ -23,16 +27,30 @@ public interface TreeNodeAble<N> {
         forEach(consumer, parentLocation, false);
     }
 
+    default void forEachParallel(@NotNull BiConsumer<Location<TreeNode<N>>, TreeNode<N>> consumer,
+                                 @NotNull Location<TreeNode<N>> parentLocation) {
+        forEach(consumer, parentLocation, true);
+    }
+
     void forEach(@NotNull BiConsumer<Location<TreeNode<N>>, TreeNode<N>> consumer,
                  @NotNull Location<TreeNode<N>> parentLocation, boolean parallel);
 
     default Optional<Location<TreeNode<N>>> find(@NotNull BiPredicate<Location<TreeNode<N>>, TreeNode<N>> filter) {
-        return find(filter, Location.root());
+        return find(filter, Location.root(), false);
+    }
+
+    default Optional<Location<TreeNode<N>>> findParallel(@NotNull BiPredicate<Location<TreeNode<N>>, TreeNode<N>> filter) {
+        return find(filter, Location.root(), true);
     }
 
     default <E> Optional<TreeNode<N>> find(@NotNull List<E> path,
                                            @NotNull BiPredicate<TreeNode<N>, E> filter) {
         return find(path, filter, false);
+    }
+
+    default <E> Optional<TreeNode<N>> findParallel(@NotNull List<E> path,
+                                           @NotNull BiPredicate<TreeNode<N>, E> filter) {
+        return find(path, filter, true);
     }
 
     <E> Optional<TreeNode<N>> find(@NotNull List<E> path,
@@ -42,6 +60,11 @@ public interface TreeNodeAble<N> {
     default Optional<Location<TreeNode<N>>> find(@NotNull BiPredicate<Location<TreeNode<N>>, TreeNode<N>> filter,
                                                  @NotNull Location<TreeNode<N>> parentLocation) {
         return find(filter, parentLocation, false);
+    }
+
+    default Optional<Location<TreeNode<N>>> findParallel(@NotNull BiPredicate<Location<TreeNode<N>>, TreeNode<N>> filter,
+                                                 @NotNull Location<TreeNode<N>> parentLocation) {
+        return find(filter, parentLocation, true);
     }
 
     Optional<Location<TreeNode<N>>> find(@NotNull BiPredicate<Location<TreeNode<N>>, TreeNode<N>> filter,
