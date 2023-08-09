@@ -50,7 +50,7 @@ public class TreeNode<N> implements TreeNodeAble<N> {
             return Optional.of(this);
         }
         var childPath = path.subList(1, path.size());
-        return children.find(childPath, filter);
+        return children.find(childPath, filter, parallel);
     }
 
     @Override
