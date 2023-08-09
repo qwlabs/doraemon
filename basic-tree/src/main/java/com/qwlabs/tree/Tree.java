@@ -9,7 +9,6 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class Tree {
-
     public static <N, I extends Comparable<I>> TreeNodes<N>
     of(@NotNull Stream<N> sortedSources,
        @NotNull Function<N, I> identityFunction,

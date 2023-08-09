@@ -1,7 +1,7 @@
 package com.qwlabs.tree;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Streams;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +12,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -27,14 +28,16 @@ public class TreeNode<N> implements TreeNodeAble<N> {
     }
 
     @Override
-    public void forEach(BiConsumer<Location<TreeNode<N>>, TreeNode<N>> consumer, Location<TreeNode<N>> parentLocation) {
+    public void forEach(BiConsumer<Location<TreeNode<N>>, TreeNode<N>> consumer, Location<TreeNode<N>> parentLocation, boolean parallel) {
         consumer.accept(parentLocation, this);
         var location = parentLocation.child(this);
-        safeChildren().forEach(consumer, location);
+        safeChildren().forEach(consumer, location, parallel);
     }
 
     @Override
-    public <E> Optional<TreeNode<N>> find(List<E> path, BiPredicate<TreeNode<N>, E> filter) {
+    public <E> Optional<TreeNode<N>> find(List<E> path,
+                                          BiPredicate<TreeNode<N>, E> filter,
+                                          boolean parallel) {
         if (path.isEmpty()) {
             return Optional.of(this);
         }
@@ -51,43 +54,65 @@ public class TreeNode<N> implements TreeNodeAble<N> {
     }
 
     @Override
-    public Optional<Location<TreeNode<N>>> find(BiPredicate<Location<TreeNode<N>>, TreeNode<N>> filter, Location<TreeNode<N>> parentLocation) {
+    public Optional<Location<TreeNode<N>>> find(BiPredicate<Location<TreeNode<N>>, TreeNode<N>> filter,
+                                                Location<TreeNode<N>> parentLocation,
+                                                boolean parallel) {
         var location = parentLocation.child(this);
         if (filter.test(parentLocation, this)) {
             return Optional.of(location);
         }
-        return safeChildren().find(filter, location);
+        return safeChildren().find(filter, location, parallel);
     }
 
     @Override
-    public <R> List<R> all(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper, Location<TreeNode<N>> parentLocation) {
+    public <R> Stream<R> all(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper, Location<TreeNode<N>> parentLocation) {
         var location = parentLocation.child(this);
-        List<R> results = Lists.newArrayList(safeChildren().all(mapper, location));
-        results.add(0, mapper.apply(parentLocation, this));
-        return results;
+        Stream<R> childStream = safeChildren().all(mapper, location);
+        return Streams.concat(childStream, Stream.of(mapper.apply(parentLocation, this)));
     }
 
     public <R> TreeNode<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper) {
-        return map(mapper, Location.root());
+        return map(mapper, Location.root(), false);
+    }
+
+    public <R> TreeNode<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper,
+                               boolean parallel) {
+        return map(mapper, Location.root(), parallel);
     }
 
     public <R> TreeNode<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper, Location<TreeNode<N>> parentLocation) {
+        return map(mapper, parentLocation, false);
+    }
+
+    public <R> TreeNode<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper,
+                               Location<TreeNode<N>> parentLocation,
+                               boolean parallel) {
         R newNode = mapper.apply(parentLocation, this);
         var newTreeNode = new TreeNode<R>();
         var location = parentLocation.child(this);
         newTreeNode.setNode(newNode);
-        newTreeNode.setChildren(safeChildren().map(mapper, location));
+        newTreeNode.setChildren(safeChildren().map(mapper, location, parallel));
         return newTreeNode;
     }
 
     public <R> R map(TreeNodeFunction<N, R> mapper) {
-        return map(mapper, Location.root());
+        return map(mapper, Location.root(), false);
+    }
+
+    public <R> R map(TreeNodeFunction<N, R> mapper, boolean parallel) {
+        return map(mapper, Location.root(), parallel);
     }
 
     public <R> R map(TreeNodeFunction<N, R> mapper,
                      Location<TreeNode<N>> parentLocation) {
+        return map(mapper, parentLocation, false);
+    }
+
+    public <R> R map(TreeNodeFunction<N, R> mapper,
+                     Location<TreeNode<N>> parentLocation,
+                     boolean parallel) {
         var location = parentLocation.child(this);
-        var children = safeChildren().map(mapper, location);
+        var children = safeChildren().map(mapper, location, parallel);
         return mapper.apply(parentLocation, this, children);
     }
 

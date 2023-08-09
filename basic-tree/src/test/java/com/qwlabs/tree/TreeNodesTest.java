@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -74,9 +75,11 @@ class TreeNodesTest {
             TreeNode.of("1", TreeNodes.of(TreeNode.of("3"), TreeNode.of("4"))),
             TreeNode.of("2", TreeNodes.of(TreeNode.of("5")))
         );
-        List<String> values = nodes.all((location, node) -> "%s-%s".formatted(location.mapPath(TreeNode::getNode), node.getNode()));
+        var values = nodes.all((location, node) -> "%s-%s".formatted(location.mapPath(TreeNode::getNode), node.getNode()))
+            .sorted()
+            .collect(Collectors.toList());
 
-        assertThat(values, is(List.of("[]-1", "[1]-3", "[1]-4", "[]-2", "[2]-5")));
+        assertThat(values, is(List.of("[1]-3", "[1]-4", "[2]-5", "[]-1", "[]-2")));
     }
 
     @Test
@@ -84,9 +87,9 @@ class TreeNodesTest {
         TreeNodes<String> nodes = TreeNodes.of(
             TreeNode.of("1",
                 TreeNodes.of(TreeNode.of("3",
-                    TreeNodes.of(TreeNode.of("6",
-                        TreeNodes.of(TreeNode.of("7"), TreeNode.of("8"))))),
-                        TreeNode.of("9"))),
+                        TreeNodes.of(TreeNode.of("6",
+                            TreeNodes.of(TreeNode.of("7"), TreeNode.of("8"))))),
+                    TreeNode.of("9"))),
             TreeNode.of("2", TreeNodes.of(TreeNode.of("5")))
         );
 

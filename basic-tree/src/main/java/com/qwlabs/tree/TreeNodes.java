@@ -1,6 +1,7 @@
 package com.qwlabs.tree;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.qwlabs.lang.Streams2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble<N> {
 
@@ -30,17 +32,21 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
     }
 
     @Override
-    public void forEach(BiConsumer<Location<TreeNode<N>>, TreeNode<N>> consumer, Location<TreeNode<N>> parentLocation) {
-        this.stream().parallel().forEach(node -> node.forEach(consumer, parentLocation));
+    public void forEach(BiConsumer<Location<TreeNode<N>>, TreeNode<N>> consumer,
+                        Location<TreeNode<N>> parentLocation,
+                        boolean parallel) {
+        Streams2.parallel(this.stream(), parallel).forEach(node -> node.forEach(consumer, parentLocation));
     }
 
     @Override
-    public <E> Optional<TreeNode<N>> find(List<E> path, BiPredicate<TreeNode<N>, E> filter) {
+    public <E> Optional<TreeNode<N>> find(List<E> path,
+                                          BiPredicate<TreeNode<N>, E> filter,
+                                          boolean parallel) {
         if (path.isEmpty()) {
             return Optional.empty();
         }
-        return this.stream()
-            .parallel()
+
+        return Streams2.parallel(this.stream(), parallel)
             .map(node -> node.find(path, filter))
             .filter(Optional::isPresent)
             .map(Optional::get)
@@ -48,9 +54,10 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
     }
 
     @Override
-    public Optional<Location<TreeNode<N>>> find(BiPredicate<Location<TreeNode<N>>, TreeNode<N>> filter, Location<TreeNode<N>> parentLocation) {
-        return this.stream()
-            .parallel()
+    public Optional<Location<TreeNode<N>>> find(BiPredicate<Location<TreeNode<N>>, TreeNode<N>> filter,
+                                                Location<TreeNode<N>> parentLocation,
+                                                boolean parallel) {
+        return Streams2.parallel(this.stream(), parallel)
             .map(node -> node.find(filter, parentLocation))
             .filter(Optional::isPresent)
             .map(Optional::get)
@@ -58,36 +65,60 @@ public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble
     }
 
     @Override
-    public <R> List<R> all(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper, Location<TreeNode<N>> parentLocation) {
-        return stream()
-            .parallel()
-            .map(node -> node.all(mapper, parentLocation))
-            .flatMap(List::stream)
-            .collect(Collectors.toList());
+    public <R> Stream<R> all(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper, Location<TreeNode<N>> parentLocation) {
+        return stream().flatMap(node -> node.all(mapper, parentLocation));
     }
 
     public <R> TreeNodes<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper) {
-        return map(mapper, Location.root());
+        return map(mapper, Location.root(), false);
     }
 
-    public <R> TreeNodes<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper, Location<TreeNode<N>> parentLocation) {
-        return new TreeNodes<>(stream().parallel()
+    public <R> TreeNodes<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper,
+                                boolean parallel) {
+        return map(mapper, Location.root(), parallel);
+    }
+
+    public <R> TreeNodes<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper,
+                                Location<TreeNode<N>> parentLocation) {
+        return map(mapper, parentLocation, false);
+    }
+
+    public <R> TreeNodes<R> map(BiFunction<Location<TreeNode<N>>, TreeNode<N>, R> mapper,
+                                Location<TreeNode<N>> parentLocation,
+                                boolean parallel) {
+        return new TreeNodes<>(Streams2.parallel(this.stream(), parallel)
             .map(node -> node.map(mapper, parentLocation))
             .collect(Collectors.toList()));
     }
 
     public <R> List<R> map(Function<N, R> mapper) {
-        return this.stream().parallel().map(node -> node.map(mapper)).collect(Collectors.toList());
+        return map(mapper, false);
+    }
+
+    public <R> List<R> map(Function<N, R> mapper, boolean parallel) {
+        return Streams2.parallel(this.stream(), parallel).map(node -> node.map(mapper)).collect(Collectors.toList());
     }
 
     public <R> List<R> map(TreeNodeFunction<N, R> mapper) {
-        return map(mapper, Location.root());
+        return map(mapper, Location.root(), false);
+    }
+
+    public <R> List<R> map(TreeNodeFunction<N, R> mapper, boolean parallel) {
+        return map(mapper, Location.root(), parallel);
     }
 
     public <R> List<R> map(TreeNodeFunction<N, R> mapper,
                            Location<TreeNode<N>> parentLocation) {
-        return stream().parallel().map(node -> node.map(mapper, parentLocation)).collect(Collectors.toList());
+        return map(mapper, parentLocation, false);
     }
+
+    public <R> List<R> map(TreeNodeFunction<N, R> mapper,
+                           Location<TreeNode<N>> parentLocation,
+                           boolean parallel) {
+        return Streams2.parallel(this.stream(), parallel)
+            .map(node -> node.map(mapper, parentLocation, parallel)).collect(Collectors.toList());
+    }
+
 
     public Optional<TreeNode<N>> first() {
         return stream().findFirst();

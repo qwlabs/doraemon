@@ -1,4 +1,5 @@
 dependencies {
+    api project(":lang")
     api "com.google.guava:guava:${guavaVersion}"
     api "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
     api("com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}")
