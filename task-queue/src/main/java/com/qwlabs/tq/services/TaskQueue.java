@@ -13,8 +13,10 @@ import org.eclipse.microprofile.faulttolerance.Retry;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.qwlabs.tq.models.TaskQueuePriorities.FAILED_TO_IDLE;
@@ -82,32 +84,36 @@ public class TaskQueue {
 
     public <R extends TaskQueueRecord> void onWork(String recordId, Function<R, Boolean> processor) {
         QuarkusTransaction.requiringNew().run(() -> {
-            R record = repository.lock(recordId);
-            boolean succeed = processor.apply(record);
-            record.setProcessStatus(succeed ? ProcessStatus.SUCCEED : ProcessStatus.POSTPONED);
-            record.setProcessEndAt(Instant.now());
-            repository.persist(record);
+            requireNonNull(repository.<R>lock(recordId), (record) -> {
+                boolean succeed = processor.apply(record);
+                record.setProcessStatus(succeed ? ProcessStatus.SUCCEED : ProcessStatus.POSTPONED);
+                record.setProcessEndAt(Instant.now());
+                repository.persist(record);
+            });
         });
     }
 
-    public <R extends TaskQueueRecord> void onFailed(TaskQueueProcessContext context,
-                                                     String recordId,
-                                                     Exception exception) {
+    public <R extends TaskQueueRecord> void onFailed(TaskQueueProcessContext context, String recordId, Exception exception) {
         this.onFailed(context, recordId, exception, (r, e) -> LOGGER.error("Process task error. id={}", r.getId(), e));
     }
 
-    public <R extends TaskQueueRecord> void onFailed(TaskQueueProcessContext context,
-                                                     String recordId,
-                                                     Exception exception,
-                                                     BiConsumer<R, Exception> consumer) {
+    public <R extends TaskQueueRecord> void onFailed(TaskQueueProcessContext context, String recordId, Exception exception, BiConsumer<R, Exception> consumer) {
         QuarkusTransaction.requiringNew().run(() -> {
-            R record = repository.lock(recordId);
-            record.setFailedMessage(Throwables.getStackTraceAsString(exception));
-            record.setProcessStatus(ProcessStatus.FAILED);
-            record.setProcessEndAt(Instant.now());
-            repository.persist(record);
-            context.markFailedRecord(record.getId());
-            consumer.accept(record, exception);
+            requireNonNull(repository.<R>lock(recordId), (record) -> {
+                record.setFailedMessage(Throwables.getStackTraceAsString(exception));
+                record.setProcessStatus(ProcessStatus.FAILED);
+                record.setProcessEndAt(Instant.now());
+                repository.persist(record);
+                context.markFailedRecord(record.getId());
+                consumer.accept(record, exception);
+            });
         });
+    }
+
+    private <R extends TaskQueueRecord> void requireNonNull(R record, Consumer<R> consumer) {
+        if (Objects.nonNull(record)) {
+            consumer.accept(record);
+        }
+        LOGGER.error("Can not process, because record is null.");
     }
 }
