@@ -21,7 +21,7 @@ class TreeGeneratorTest {
         genAndCheck("""
                 # A
                 """,
-            "{\"node\":\"A\",\"children\":[]}");
+            "{\"children\":[],\"node\":\"A\"}");
     }
 
     @Test
@@ -31,7 +31,7 @@ class TreeGeneratorTest {
                 ## B
                 ## C
                 """,
-            "{\"node\":\"A\",\"children\":[{\"node\":\"B\",\"children\":[]},{\"node\":\"C\",\"children\":[]}]}");
+            "{\"children\":[{\"children\":[],\"node\":\"B\"},{\"children\":[],\"node\":\"C\"}],\"node\":\"A\"}");
     }
 
     @Test
@@ -46,7 +46,7 @@ class TreeGeneratorTest {
                 ### G
                 ### C
                 """,
-            "{\"node\":\"A\",\"children\":[{\"node\":\"B\",\"children\":[{\"node\":\"C\",\"children\":[]},{\"node\":\"D\",\"children\":[]}]},{\"node\":\"E\",\"children\":[{\"node\":\"F\",\"children\":[]},{\"node\":\"G\",\"children\":[]},{\"node\":\"C\",\"children\":[]}]}]}");
+            "{\"children\":[{\"children\":[{\"children\":[],\"node\":\"C\"},{\"children\":[],\"node\":\"D\"}],\"node\":\"B\"},{\"children\":[{\"children\":[],\"node\":\"F\"},{\"children\":[],\"node\":\"G\"},{\"children\":[],\"node\":\"C\"}],\"node\":\"E\"}],\"node\":\"A\"}");
     }
 
     @Test
@@ -67,7 +67,7 @@ class TreeGeneratorTest {
                 #### G
                 #### K
                 """,
-            "{\"node\":\"A\",\"children\":[{\"node\":\"B\",\"children\":[{\"node\":\"C\",\"children\":[{\"node\":\"D\",\"children\":[]},{\"node\":\"E\",\"children\":[]},{\"node\":\"H\",\"children\":[]}]},{\"node\":\"D\",\"children\":[]}]},{\"node\":\"C\",\"children\":[{\"node\":\"D\",\"children\":[]},{\"node\":\"E\",\"children\":[]},{\"node\":\"H\",\"children\":[]},{\"node\":\"I\",\"children\":[{\"node\":\"G\",\"children\":[]},{\"node\":\"K\",\"children\":[]}]}]}]}");
+            "{\"children\":[{\"children\":[{\"children\":[{\"children\":[],\"node\":\"D\"},{\"children\":[],\"node\":\"E\"},{\"children\":[],\"node\":\"H\"}],\"node\":\"C\"},{\"children\":[],\"node\":\"D\"}],\"node\":\"B\"},{\"children\":[{\"children\":[],\"node\":\"D\"},{\"children\":[],\"node\":\"E\"},{\"children\":[],\"node\":\"H\"},{\"children\":[{\"children\":[],\"node\":\"G\"},{\"children\":[],\"node\":\"K\"}],\"node\":\"I\"}],\"node\":\"C\"}],\"node\":\"A\"}");
     }
 
     void genAndCheck(String graph, String expected) throws JsonProcessingException {

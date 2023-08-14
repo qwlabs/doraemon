@@ -16,7 +16,7 @@ class TreeNodeTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final Stream<BomNode> treeNodes = Stream.of(BomNode.of("a"), BomNode.of("ab"), BomNode.of("ac"));
-    private final String rawNode = "{\"value1\":\"a\",\"value\":\"a\",\"children\":[{\"value1\":\"ab\",\"value\":\"ab\",\"children\":null},{\"value1\":\"ac\",\"value\":\"ac\",\"children\":null}]}";
+    private final String rawNode = "{\"children\":[{\"children\":null,\"value1\":\"ab\",\"value\":\"ab\"},{\"children\":null,\"value1\":\"ac\",\"value\":\"ac\"}],\"value1\":\"a\",\"value\":\"a\"}";
     private final TypeReference<TreeNode<BomNode>> type = new TypeReference<>() {
     };
 
