@@ -125,7 +125,7 @@ public class TreeNode<N> implements TreeNodeAble<N> {
     }
 
     public <R> R mapParallel(TreeNodeFunction<N, R> mapper,
-                     Location<TreeNode<N>> parentLocation) {
+                             Location<TreeNode<N>> parentLocation) {
         return map(mapper, parentLocation, true);
     }
 
