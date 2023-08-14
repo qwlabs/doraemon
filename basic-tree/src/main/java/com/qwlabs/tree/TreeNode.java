@@ -1,5 +1,6 @@
 package com.qwlabs.tree;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.google.common.collect.Streams;
 import lombok.Getter;
@@ -16,6 +17,7 @@ import java.util.stream.Stream;
 
 @Getter
 @Setter
+@JsonPropertyOrder(alphabetic = true)
 public class TreeNode<N> implements TreeNodeAble<N> {
 
     @JsonUnwrapped
@@ -28,7 +30,9 @@ public class TreeNode<N> implements TreeNodeAble<N> {
     }
 
     @Override
-    public void forEach(BiConsumer<Location<TreeNode<N>>, TreeNode<N>> consumer, Location<TreeNode<N>> parentLocation, boolean parallel) {
+    public void forEach(BiConsumer<Location<TreeNode<N>>, TreeNode<N>> consumer,
+                        Location<TreeNode<N>> parentLocation,
+                        boolean parallel) {
         consumer.accept(parentLocation, this);
         var location = parentLocation.child(this);
         safeChildren().forEach(consumer, location, parallel);
