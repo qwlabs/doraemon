@@ -17,6 +17,7 @@ class TreeNodeTest {
 
     private final Stream<BomNode> treeNodes = Stream.of(BomNode.of("a"), BomNode.of("ab"), BomNode.of("ac"));
     private final String rawNode = "{\"children\":[{\"children\":null,\"value1\":\"ab\",\"value\":\"ab\"},{\"children\":null,\"value1\":\"ac\",\"value\":\"ac\"}],\"value1\":\"a\",\"value\":\"a\"}";
+    private final String decodedNode = "{\"children\":[{\"value1\":\"ab\",\"value\":\"ab\"},{\"value1\":\"ac\",\"value\":\"ac\"}],\"value1\":\"a\",\"value\":\"a\"}";
     private final TypeReference<TreeNode<BomNode>> type = new TypeReference<>() {
     };
 
@@ -28,7 +29,7 @@ class TreeNodeTest {
             BomNode::getValue,
             BomNode::getParent).first().get();
 
-        assertThat(objectMapper.writeValueAsString(rootNode), is(rawNode));
+        assertThat(objectMapper.writeValueAsString(rootNode), is(decodedNode));
 
         TreeNode<BomNode> decodeNode = objectMapper.readValue(rawNode, javaType);
 
@@ -44,7 +45,7 @@ class TreeNodeTest {
             BomNode::getValue,
             BomNode::getParent).first().get();
 
-        assertThat(objectMapper.writeValueAsString(rootNode), is(rawNode));
+        assertThat(objectMapper.writeValueAsString(rootNode), is(decodedNode));
 
 
         TreeNode<BomNode> decodeNode = objectMapper.readValue(rawNode, javaType);
@@ -61,7 +62,7 @@ class TreeNodeTest {
             BomNode::getValue,
             BomNode::getParent).first().get();
 
-        assertThat(objectMapper.writeValueAsString(rootNode), is(rawNode));
+        assertThat(objectMapper.writeValueAsString(rootNode), is(decodedNode));
 
         TreeNode<BomNode> decodeNode = objectMapper.readValue(rawNode, javaType);
 

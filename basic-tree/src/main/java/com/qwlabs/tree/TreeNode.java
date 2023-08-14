@@ -1,5 +1,6 @@
 package com.qwlabs.tree;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.google.common.collect.Streams;
@@ -18,6 +19,7 @@ import java.util.stream.Stream;
 @Getter
 @Setter
 @JsonPropertyOrder(alphabetic = true)
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class TreeNode<N> implements TreeNodeAble<N> {
 
     @JsonUnwrapped

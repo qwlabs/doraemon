@@ -1,6 +1,7 @@
 package com.qwlabs.tree;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.qwlabs.lang.Streams2;
 
 import java.util.ArrayList;
@@ -15,8 +16,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@JsonInclude(value = JsonInclude.Include.NON_EMPTY)
 public class TreeNodes<N> extends ArrayList<TreeNode<N>> implements TreeNodeAble<N> {
-
     private static final TreeNodes EMPTY = new TreeNodes(0);
 
     @JsonCreator

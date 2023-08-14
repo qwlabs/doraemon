@@ -18,7 +18,8 @@ class TreeTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final Stream<BomNode> treeNodes = Stream.of(BomNode.of("a"), BomNode.of("ab"), BomNode.of("c"));
-    private final String rawNodes = "[{\"children\":[{\"children\":null,\"value1\":\"ab\",\"value\":\"ab\"}],\"value1\":\"a\",\"value\":\"a\"},{\"children\":null,\"value1\":\"c\",\"value\":\"c\"}]";
+    private final String rawNodes = "[{\"children\":[{\"children\":[],\"value1\":\"ab\",\"value\":\"ab\"}],\"value1\":\"a\",\"value\":\"a\"},{\"children\":null,\"value1\":\"c\",\"value\":\"c\"}]";
+    private final String decodedNodes = "[{\"children\":[{\"value1\":\"ab\",\"value\":\"ab\"}],\"value1\":\"a\",\"value\":\"a\"},{\"value1\":\"c\",\"value\":\"c\"}]";
     private final TypeReference<TreeNodes<BomNode>> type = new TypeReference<>() {
     };
 
@@ -29,7 +30,7 @@ class TreeTest {
         var nodes = Tree.of(treeNodes,
                 BomNode::getValue,
                 BomNode::getParent);
-        assertThat(objectMapper.writeValueAsString(nodes), is(rawNodes));
+        assertThat(objectMapper.writeValueAsString(nodes), is(decodedNodes));
         TreeNodes<BomNode> decodeNodes = objectMapper.readValue(rawNodes, javaType);
         assertThat(decodeNodes.size(), is(2));
         assertThat(decodeNodes.get(0).getNode().getValue(), is("a"));
@@ -46,7 +47,7 @@ class TreeTest {
         var nodes = Tree.of(treeNodes.collect(Collectors.toList()),
                 BomNode::getValue,
                 BomNode::getParent);
-        assertThat(objectMapper.writeValueAsString(nodes), is(rawNodes));
+        assertThat(objectMapper.writeValueAsString(nodes), is(decodedNodes));
 
         TreeNodes<BomNode> decodeNodes = objectMapper.readValue(rawNodes, type);
         assertThat(decodeNodes.size(), is(2));
@@ -63,7 +64,7 @@ class TreeTest {
         var nodes = Tree.of(treeNodes.iterator(),
                 BomNode::getValue,
                 BomNode::getParent);
-        assertThat(objectMapper.writeValueAsString(nodes), is(rawNodes));
+        assertThat(objectMapper.writeValueAsString(nodes), is(decodedNodes));
 
         TreeNodes<BomNode> decodeNodes = objectMapper.readValue(rawNodes, javaType);
         assertThat(decodeNodes.size(), is(2));
