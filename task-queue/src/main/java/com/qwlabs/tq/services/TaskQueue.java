@@ -125,7 +125,6 @@ public class TaskQueue {
         if (Objects.nonNull(record)) {
             nonNullConsumer.accept(record);
         }
-        LOGGER.error("Can not process, because record is null.");
         nullConsumer.accept();
     }
 }
