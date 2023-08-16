@@ -1,7 +1,6 @@
 package com.qwlabs.tq.services;
 
 import com.google.common.base.Throwables;
-import com.qwlabs.lang.EmptyConsumer;
 import com.qwlabs.tq.models.CleanupTaskQueueCommand;
 import com.qwlabs.tq.models.ProcessStatus;
 import com.qwlabs.tq.models.TaskQueueRecord;
@@ -17,7 +16,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.qwlabs.tq.models.TaskQueuePriorities.FAILED_TO_IDLE;
@@ -42,7 +40,7 @@ public class TaskQueue {
             record.setProcessStatus(ProcessStatus.IDLE);
             record.setProcessStartAt(null);
             record.setProcessEndAt(null);
-            repository.persistRecord(record);
+            repository.persist(record);
         });
     }
 
@@ -76,25 +74,23 @@ public class TaskQueue {
                 record.setProcessStatus(ProcessStatus.PROCESSING);
                 record.setProcessStartAt(Instant.now());
                 record.setProcessEndAt(null);
-                repository.persistRecord(record);
+                repository.persist(record);
             });
             return mayRecord.map(TaskQueueRecord::getId).orElse(null);
         });
     }
 
     public <R extends TaskQueueRecord> void onWork(String recordId, Function<R, Boolean> processor) {
-        QuarkusTransaction.requiringNew().run(() ->
-            requireNonNull(repository.<R>findRecordById(recordId),
-                (record) -> {
-                    boolean succeed = processor.apply(record);
-                    record.setProcessStatus(succeed ? ProcessStatus.SUCCEED : ProcessStatus.POSTPONED);
-                    record.setProcessEndAt(Instant.now());
-                    repository.persistRecord(record);
-                },
-                () -> {
-                    throw new RuntimeException("Can not onWork because record: %s is null.".formatted(recordId));
-                })
-        );
+        QuarkusTransaction.requiringNew().run(() -> {
+            var record = repository.<R>find(recordId);
+            if (Objects.isNull(record)) {
+                throw new RuntimeException("Can not onWork because record: %s is null.".formatted(recordId));
+            }
+            boolean succeed = processor.apply(record);
+            record.setProcessStatus(succeed ? ProcessStatus.SUCCEED : ProcessStatus.POSTPONED);
+            record.setProcessEndAt(Instant.now());
+            repository.persist(record);
+        });
     }
 
     public <R extends TaskQueueRecord> void onFailed(TaskQueueProcessContext context, String recordId, Exception exception) {
@@ -105,28 +101,18 @@ public class TaskQueue {
                                                      String recordId,
                                                      Exception exception,
                                                      BiConsumer<R, Exception> consumer) {
-        QuarkusTransaction.requiringNew().run(() ->
-            requireNonNull(repository.<R>findRecordById(recordId),
-                (record) -> {
-                    record.setFailedMessage(Throwables.getStackTraceAsString(exception));
-                    record.setProcessStatus(ProcessStatus.FAILED);
-                    record.setProcessEndAt(Instant.now());
-                    repository.persistRecord(record);
-                    context.markFailedRecord(record.getId());
-                    consumer.accept(record, exception);
-                },
-                () -> LOGGER.error("Can not onFailed because record is null. can not found recordId {}.",
-                    recordId,
-                    exception))
-        );
-    }
-
-    private <R extends TaskQueueRecord> void requireNonNull(R record,
-                                                            Consumer<R> nonNullConsumer,
-                                                            EmptyConsumer nullConsumer) {
-        if (Objects.nonNull(record)) {
-            nonNullConsumer.accept(record);
-        }
-        nullConsumer.accept();
+        QuarkusTransaction.requiringNew().run(() -> {
+            var record = repository.<R>find(recordId);
+            if (Objects.isNull(record)) {
+                LOGGER.error("Can not onFailed because record is null. can not found recordId {}.", recordId, exception);
+                return;
+            }
+            record.setFailedMessage(Throwables.getStackTraceAsString(exception));
+            record.setProcessStatus(ProcessStatus.FAILED);
+            record.setProcessEndAt(Instant.now());
+            repository.persist(record);
+            context.markFailedRecord(record.getId());
+            consumer.accept(record, exception);
+        });
     }
 }
