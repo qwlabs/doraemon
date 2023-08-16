@@ -8,6 +8,7 @@ import jakarta.annotation.Nullable;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -51,7 +52,7 @@ public class QueueWorker<C, E> {
             }
         } finally {
             executeAfter(context);
-            LOGGER.info(stopWatch.prettyPrint());
+            LOGGER.info(stopWatch.prettyPrint(TimeUnit.SECONDS));
         }
     }
 

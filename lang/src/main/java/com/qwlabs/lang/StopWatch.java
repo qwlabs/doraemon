@@ -1,10 +1,11 @@
 package com.qwlabs.lang;
 
 
-
 import java.text.NumberFormat;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 
 public class StopWatch {
@@ -60,14 +61,26 @@ public class StopWatch {
     }
 
     public String shortSummary() {
-        return "StopWatch '" + getId() + "': running time = " + totalNanos + " ns";
+        return shortSummary(TimeUnit.NANOSECONDS);
+    }
+
+    public String shortSummary(TimeUnit timeUnit) {
+        return "StopWatch '%s': running time = %d %s".formatted(getId(), of(totalNanos, timeUnit), timeUnit.name());
+    }
+
+    private long of(long totalNanos, TimeUnit timeUnit) {
+        return timeUnit.convert(Duration.ofNanos(totalNanos));
     }
 
     public String prettyPrint() {
+        return prettyPrint(TimeUnit.NANOSECONDS);
+    }
+
+    public String prettyPrint(TimeUnit timeUnit) {
         StringBuilder sb = new StringBuilder(shortSummary());
         sb.append('\n');
         sb.append("---------------------------------------------\n");
-        sb.append("ns         %     Task name\n");
+        sb.append(timeUnit.name()).append("         %     Task name\n");
         sb.append("---------------------------------------------\n");
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setMinimumIntegerDigits(9);
@@ -76,7 +89,7 @@ public class StopWatch {
         pf.setMinimumIntegerDigits(3);
         pf.setGroupingUsed(false);
         this.tasks.values().forEach(task -> {
-            sb.append(nf.format(task.totalNanos)).append("  ");
+            sb.append(nf.format(of(task.totalNanos, timeUnit))).append("  ");
             sb.append(pf.format((double) task.totalNanos / totalNanos)).append("  ");
             sb.append(task.name).append('\n');
         });
