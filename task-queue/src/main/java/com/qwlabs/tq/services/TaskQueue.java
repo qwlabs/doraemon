@@ -71,7 +71,6 @@ public class TaskQueue {
             do {
                 mayRecord = repository.peekId(context.getTopic(), context.getBucket()).map(repository::lock);
                 findCompleted = mayRecord.map(record -> record.getProcessStatus() == ProcessStatus.IDLE).orElse(true);
-                LOGGER.info("task queue poll");
             } while (!findCompleted);
             mayRecord.ifPresent(record -> {
                 record.setProcessStatus(ProcessStatus.PROCESSING);

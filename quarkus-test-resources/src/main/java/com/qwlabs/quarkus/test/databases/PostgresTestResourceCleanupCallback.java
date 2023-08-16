@@ -20,7 +20,7 @@ public class PostgresTestResourceCleanupCallback implements QuarkusTestBeforeEac
                 .map(QuarkusTestResource::value)
                 .anyMatch(clazz -> Objects.equals(PostgresTestResource.class, clazz));
         if (!isPostgresTestResource) {
-            LOGGER.info("class is not PostgresTestResource, ignore cleanup.");
+            LOGGER.warn("class is not PostgresTestResource, ignore cleanup.");
             return;
         }
         PostgresTestResource.cleanup();

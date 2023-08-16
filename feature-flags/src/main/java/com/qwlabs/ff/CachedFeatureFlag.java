@@ -25,7 +25,7 @@ public abstract class CachedFeatureFlag implements FeatureFlag, CacheAware {
     @CacheResult(cacheName = CACHE_NAME)
     protected boolean enabledFromCache(@CacheKey String key, String topic) {
         var enabled = loadEnabled(topic);
-        LOGGER.info("load feature-flags by key:{}, enabled:{}", key, enabled);
+        LOGGER.debug("load feature-flags by key:{}, enabled:{}", key, enabled);
         return enabled;
     }
 

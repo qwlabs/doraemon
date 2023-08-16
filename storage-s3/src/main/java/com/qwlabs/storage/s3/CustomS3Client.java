@@ -33,7 +33,7 @@ public class CustomS3Client {
             var response = syncClient.headObject(request);
             return response.contentLength() > 0;
         } catch (NoSuchBucketException | NoSuchKeyException e) {
-            LOGGER.info("bucket={}, objectName={} not exist.", bucket, objectName);
+            LOGGER.error("bucket={}, objectName={} not exist.", bucket, objectName);
             return false;
         } catch (Throwable e) {
             LOGGER.error("Can not check object exist.", e);

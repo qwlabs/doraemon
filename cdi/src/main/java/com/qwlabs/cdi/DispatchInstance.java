@@ -52,7 +52,7 @@ public class DispatchInstance<C, D> {
 
     public D doLoad(C context) {
         D dispatcher = stream().filter(d -> matches(d, context)).findFirst().orElse(null);
-        LOGGER.info("Loaded context:{} with dispatcher: {}", context, dispatcher);
+        LOGGER.debug("Loaded context:{} with dispatcher: {}", context, dispatcher);
         return dispatcher;
     }
 

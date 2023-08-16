@@ -20,7 +20,7 @@ public class KeycloakTestResourceCleanupCallback implements QuarkusTestBeforeEac
             .map(QuarkusTestResource::value)
             .anyMatch(clazz -> Objects.equals(KeycloakTestResource.class, clazz));
         if (!isKeycloakTestResource) {
-            LOGGER.info("class is not KeycloakTestResource, ignore cleanup.");
+            LOGGER.warn("class is not KeycloakTestResource, ignore cleanup.");
             return;
         }
         KeycloakTestResource.cleanup();
