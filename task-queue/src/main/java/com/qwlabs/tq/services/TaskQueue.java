@@ -91,7 +91,9 @@ public class TaskQueue {
                     record.setProcessEndAt(Instant.now());
                     repository.persistRecord(record);
                 },
-                () -> LOGGER.error("Can not onWork because record is null. can not found recordId {}.", recordId))
+                () -> {
+                    throw new RuntimeException("Can not onWork because record: %s is null.".formatted(recordId));
+                })
         );
     }
 
