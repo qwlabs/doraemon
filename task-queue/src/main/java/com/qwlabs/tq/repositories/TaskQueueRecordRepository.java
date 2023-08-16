@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.Optional;
 
 public interface TaskQueueRecordRepository {
-    <R extends TaskQueueRecord> void persist(@NotNull R record);
+    <R extends TaskQueueRecord> void persistRecord(@NotNull R record);
 
     int resetByTimeout(@NotNull String topic, @Nullable String bucket, @NotNull Instant before, @NotNull Integer priority);
 
@@ -17,7 +17,7 @@ public interface TaskQueueRecordRepository {
 
     Optional<String> peekId(@NotNull String topic, @Nullable String bucket);
 
-    <R extends TaskQueueRecord> R findById(@NotNull String id);
+    <R extends TaskQueueRecord> R findRecordById(@NotNull String id);
 
     <R extends TaskQueueRecord> R lock(@NotNull String id);
 

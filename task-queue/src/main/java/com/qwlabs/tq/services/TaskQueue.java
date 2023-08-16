@@ -41,7 +41,7 @@ public class TaskQueue {
             record.setProcessStatus(ProcessStatus.IDLE);
             record.setProcessStartAt(null);
             record.setProcessEndAt(null);
-            repository.persist(record);
+            repository.persistRecord(record);
         });
     }
 
@@ -76,7 +76,7 @@ public class TaskQueue {
                 record.setProcessStatus(ProcessStatus.PROCESSING);
                 record.setProcessStartAt(Instant.now());
                 record.setProcessEndAt(null);
-                repository.persist(record);
+                repository.persistRecord(record);
             });
             return mayRecord.map(TaskQueueRecord::getId).orElse(null);
         });
@@ -84,11 +84,11 @@ public class TaskQueue {
 
     public <R extends TaskQueueRecord> void onWork(String recordId, Function<R, Boolean> processor) {
         QuarkusTransaction.requiringNew().run(() -> {
-            requireNonNull(repository.<R>findById(recordId), (record) -> {
+            requireNonNull(repository.<R>findRecordById(recordId), (record) -> {
                 boolean succeed = processor.apply(record);
                 record.setProcessStatus(succeed ? ProcessStatus.SUCCEED : ProcessStatus.POSTPONED);
                 record.setProcessEndAt(Instant.now());
-                repository.persist(record);
+                repository.persistRecord(record);
             });
         });
     }
@@ -102,11 +102,11 @@ public class TaskQueue {
                                                      Exception exception,
                                                      BiConsumer<R, Exception> consumer) {
         QuarkusTransaction.requiringNew().run(() -> {
-            requireNonNull(repository.<R>findById(recordId), (record) -> {
+            requireNonNull(repository.<R>findRecordById(recordId), (record) -> {
                 record.setFailedMessage(Throwables.getStackTraceAsString(exception));
                 record.setProcessStatus(ProcessStatus.FAILED);
                 record.setProcessEndAt(Instant.now());
-                repository.persist(record);
+                repository.persistRecord(record);
                 context.markFailedRecord(record.getId());
                 consumer.accept(record, exception);
             });
