@@ -84,7 +84,7 @@ public class TaskQueue {
 
     public <R extends TaskQueueRecord> void onWork(String recordId, Function<R, Boolean> processor) {
         QuarkusTransaction.requiringNew().run(() -> {
-            requireNonNull(repository.<R>lock(recordId), (record) -> {
+            requireNonNull(repository.<R>findById(recordId), (record) -> {
                 boolean succeed = processor.apply(record);
                 record.setProcessStatus(succeed ? ProcessStatus.SUCCEED : ProcessStatus.POSTPONED);
                 record.setProcessEndAt(Instant.now());
@@ -102,7 +102,7 @@ public class TaskQueue {
                                                      Exception exception,
                                                      BiConsumer<R, Exception> consumer) {
         QuarkusTransaction.requiringNew().run(() -> {
-            requireNonNull(repository.<R>lock(recordId), (record) -> {
+            requireNonNull(repository.<R>findById(recordId), (record) -> {
                 record.setFailedMessage(Throwables.getStackTraceAsString(exception));
                 record.setProcessStatus(ProcessStatus.FAILED);
                 record.setProcessEndAt(Instant.now());
