@@ -20,7 +20,8 @@ import java.util.Optional;
 @Interceptor
 @Slf4j
 public class CacheControlInterceptor {
-    private final RoutingContext routingContext;
+
+    private RoutingContext routingContext;
 
     @Inject
     public CacheControlInterceptor(RoutingContext routingContext) {
@@ -30,19 +31,26 @@ public class CacheControlInterceptor {
     @AroundInvoke
     public Object intercept(InvocationContext context) throws Exception {
         var cacheControl = context.getMethod().getAnnotation(CacheControl.class);
-        of(cacheControl).ifPresent(content -> routingContext.response().putHeader(HttpHeaders.CACHE_CONTROL, content));
+        of(cacheControl).ifPresent(content -> {
+            LOGGER.info("Added cache control:{}", content);
+            routingContext.response().putHeader(HttpHeaders.CACHE_CONTROL, content);
+        });
         return context.proceed();
     }
 
     private Optional<String> of(CacheControl cacheControl) {
-        List<String> options = new ArrayList();
+        List<String> options = new ArrayList<>();
         if (cacheControl.isPublic()) {
             options.add("public");
         }
         if (cacheControl.maxAge() >= 0) {
             options.add("max-age=%d".formatted(cacheControl.maxAge()));
         }
+        if (cacheControl.mustRevalidate()) {
+            options.add("must-revalidate");
+        }
         return Optional.of(Joiner.on(",").join(options))
             .filter(S2::isNotBlank);
     }
 }
+
