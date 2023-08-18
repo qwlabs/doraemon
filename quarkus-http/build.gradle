@@ -1,0 +1,6 @@
+dependencies {
+    api project(":lang")
+    api "jakarta.interceptor:jakarta.interceptor-api:${jakartaInterceptorVersion}"
+    api "io.vertx:vertx-web:${vertxVersion}"
+    api "jakarta.enterprise:jakarta.enterprise.cdi-api:${jakartaCdiApiVersion}"
+}
