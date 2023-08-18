@@ -31,10 +31,7 @@ public class CacheControlInterceptor {
     @AroundInvoke
     public Object intercept(InvocationContext context) throws Exception {
         var cacheControl = context.getMethod().getAnnotation(CacheControl.class);
-        of(cacheControl).ifPresent(content -> {
-            LOGGER.info("Added cache control:{}", content);
-            routingContext.response().putHeader(HttpHeaders.CACHE_CONTROL, content);
-        });
+        of(cacheControl).ifPresent(content -> routingContext.response().putHeader(HttpHeaders.CACHE_CONTROL, content));
         return context.proceed();
     }
 
