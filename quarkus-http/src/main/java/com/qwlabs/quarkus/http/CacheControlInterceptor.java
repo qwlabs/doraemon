@@ -47,8 +47,8 @@ public class CacheControlInterceptor {
         if (cacheControl.shareMaxAge() > 0) {
             options.add("s-maxage=%d".formatted(cacheControl.shareMaxAge()));
         }
-        if (cacheControl.minfresh() > 0) {
-            options.add("min-fresh=%d".formatted(cacheControl.minfresh()));
+        if (cacheControl.minFresh() > 0) {
+            options.add("min-fresh=%d".formatted(cacheControl.minFresh()));
         }
         if (cacheControl.mustRevalidate()) {
             options.add("must-revalidate");
