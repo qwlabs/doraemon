@@ -9,7 +9,6 @@ import jakarta.inject.Inject;
 import jakarta.interceptor.AroundInvoke;
 import jakarta.interceptor.Interceptor;
 import jakarta.interceptor.InvocationContext;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,6 @@ import java.util.Optional;
 @CacheControl()
 @Priority(1)
 @Interceptor
-@Slf4j
 public class CacheControlInterceptor {
 
     private RoutingContext routingContext;
@@ -40,11 +38,23 @@ public class CacheControlInterceptor {
         if (cacheControl.isPublic()) {
             options.add("public");
         }
-        if (cacheControl.maxAge() >= 0) {
+        if (cacheControl.isPrivate()) {
+            options.add("private");
+        }
+        if (cacheControl.maxAge() > 0) {
             options.add("max-age=%d".formatted(cacheControl.maxAge()));
+        }
+        if (cacheControl.shareMaxAge() > 0) {
+            options.add("s-maxage=%d".formatted(cacheControl.shareMaxAge()));
+        }
+        if (cacheControl.minfresh() > 0) {
+            options.add("min-fresh=%d".formatted(cacheControl.minfresh()));
         }
         if (cacheControl.mustRevalidate()) {
             options.add("must-revalidate");
+        }
+        if (cacheControl.immutable()) {
+            options.add("immutable");
         }
         return Optional.of(Joiner.on(",").join(options))
             .filter(S2::isNotBlank);

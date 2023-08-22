@@ -16,9 +16,22 @@ import java.lang.annotation.Target;
 public @interface CacheControl {
     @Nonbinding
     long maxAge() default -1;
+
+    @Nonbinding
+    long shareMaxAge() default -1;
+
+    @Nonbinding
+    long minFresh() default -1;
+
     @Nonbinding
     boolean mustRevalidate() default false;
 
     @Nonbinding
     boolean isPublic() default false;
+
+    @Nonbinding
+    boolean isPrivate() default false;
+
+    @Nonbinding
+    boolean immutable() default false;
 }
