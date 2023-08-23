@@ -9,6 +9,9 @@ import java.time.Instant;
 import java.util.Optional;
 
 public interface TaskQueueRecordRepository {
+
+    void clear();
+
     <R extends TaskQueueRecord> void persist(@NotNull R record);
 
     int resetByTimeout(@NotNull String topic, @Nullable String bucket, @NotNull Instant before, @NotNull Integer priority);

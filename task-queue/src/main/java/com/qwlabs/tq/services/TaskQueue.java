@@ -6,6 +6,7 @@ import com.qwlabs.tq.models.ProcessStatus;
 import com.qwlabs.tq.models.TaskQueueRecord;
 import com.qwlabs.tq.repositories.TaskQueueRecordRepository;
 import io.quarkus.narayana.jta.QuarkusTransaction;
+import io.quarkus.narayana.jta.TransactionExceptionResult;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -55,42 +56,47 @@ public class TaskQueue {
     }
 
     public void onBefore(final TaskQueueProcessContext context) {
-        QuarkusTransaction.requiringNew().run(() -> {
-            repository.resetByTimeout(context.getTopic(), context.getBucket(), Instant.now().minus(context.getTimeout()), PROCESSING_TIMEOUT);
-            repository.resetByStatus(context.getTopic(), context.getBucket(), ProcessStatus.FAILED, POSTPONED_TO_IDLE);
-            repository.resetByStatus(context.getTopic(), context.getBucket(), ProcessStatus.POSTPONED, FAILED_TO_IDLE);
-        });
+        QuarkusTransaction.requiringNew()
+            .exceptionHandler(throwable -> TransactionExceptionResult.ROLLBACK)
+            .run(() -> {
+                repository.resetByTimeout(context.getTopic(), context.getBucket(), Instant.now().minus(context.getTimeout()), PROCESSING_TIMEOUT);
+                repository.resetByStatus(context.getTopic(), context.getBucket(), ProcessStatus.FAILED, POSTPONED_TO_IDLE);
+                repository.resetByStatus(context.getTopic(), context.getBucket(), ProcessStatus.POSTPONED, FAILED_TO_IDLE);
+            });
     }
 
     public <R extends TaskQueueRecord> String poll(TaskQueueProcessContext context) {
-        return QuarkusTransaction.requiringNew().call(() -> {
-            boolean findCompleted;
-            Optional<R> mayRecord;
-            do {
-                mayRecord = repository.peekId(context.getTopic(), context.getBucket()).map(repository::lock);
-                findCompleted = mayRecord.map(record -> record.getProcessStatus() == ProcessStatus.IDLE).orElse(true);
-            } while (!findCompleted);
-            mayRecord.ifPresent(record -> {
-                record.setProcessStatus(ProcessStatus.PROCESSING);
-                record.setProcessStartAt(Instant.now());
-                record.setProcessEndAt(null);
-                repository.persist(record);
+        return QuarkusTransaction.requiringNew()
+            .call(() -> {
+                boolean findCompleted;
+                Optional<R> mayRecord;
+                do {
+                    mayRecord = repository.peekId(context.getTopic(), context.getBucket()).map(repository::lock);
+                    findCompleted = mayRecord.map(record -> record.getProcessStatus() == ProcessStatus.IDLE).orElse(true);
+                } while (!findCompleted);
+                mayRecord.ifPresent(record -> {
+                    record.setProcessStatus(ProcessStatus.PROCESSING);
+                    record.setProcessStartAt(Instant.now());
+                    record.setProcessEndAt(null);
+                    repository.persist(record);
+                });
+                return mayRecord.map(TaskQueueRecord::getId).orElse(null);
             });
-            return mayRecord.map(TaskQueueRecord::getId).orElse(null);
-        });
     }
 
     public <R extends TaskQueueRecord> void onWork(String recordId, Function<R, Boolean> processor) {
-        QuarkusTransaction.requiringNew().run(() -> {
-            var record = repository.<R>find(recordId);
-            if (Objects.isNull(record)) {
-                throw new RuntimeException("Can not onWork because record: %s is null.".formatted(recordId));
-            }
-            boolean succeed = processor.apply(record);
-            record.setProcessStatus(succeed ? ProcessStatus.SUCCEED : ProcessStatus.POSTPONED);
-            record.setProcessEndAt(Instant.now());
-            repository.persist(record);
-        });
+        QuarkusTransaction.requiringNew()
+            .run(() -> {
+                var record = repository.<R>find(recordId);
+                if (Objects.isNull(record)) {
+                    throw new RuntimeException("Can not onWork because record: %s is null.".formatted(recordId));
+                }
+                boolean succeed = processor.apply(record);
+                record.setProcessStatus(succeed ? ProcessStatus.SUCCEED : ProcessStatus.POSTPONED);
+                record.setProcessEndAt(Instant.now());
+                repository.persist(record);
+                repository.clear();
+            });
     }
 
     public <R extends TaskQueueRecord> void onFailed(TaskQueueProcessContext context, String recordId, Exception exception) {
@@ -101,18 +107,19 @@ public class TaskQueue {
                                                      String recordId,
                                                      Exception exception,
                                                      BiConsumer<R, Exception> consumer) {
-        QuarkusTransaction.requiringNew().run(() -> {
-            var record = repository.<R>find(recordId);
-            if (Objects.isNull(record)) {
-                LOGGER.error("Can not onFailed because record is null. can not found recordId {}.", recordId, exception);
-                return;
-            }
-            record.setFailedMessage(Throwables.getStackTraceAsString(exception));
-            record.setProcessStatus(ProcessStatus.FAILED);
-            record.setProcessEndAt(Instant.now());
-            repository.persist(record);
-            context.markFailedRecord(record.getId());
-            consumer.accept(record, exception);
-        });
+        QuarkusTransaction.requiringNew()
+            .run(() -> {
+                var record = repository.<R>find(recordId);
+                if (Objects.isNull(record)) {
+                    LOGGER.error("Can not onFailed because record is null. can not found recordId {}.", recordId, exception);
+                    return;
+                }
+                record.setFailedMessage(Throwables.getStackTraceAsString(exception));
+                record.setProcessStatus(ProcessStatus.FAILED);
+                record.setProcessEndAt(Instant.now());
+                repository.persist(record);
+                context.markFailedRecord(record.getId());
+                consumer.accept(record, exception);
+            });
     }
 }
