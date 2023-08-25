@@ -16,6 +16,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -97,6 +98,25 @@ public class TaskQueue {
                 repository.persist(record);
                 repository.clear();
             });
+    }
+
+    public <R extends TaskQueueRecord> void onWorkWithOutTx(String recordId, Function<R, Boolean> processor) {
+        var workRecord = repository.<R>find(recordId);
+        if (Objects.isNull(workRecord)) {
+            throw new RuntimeException("Can not onWork because record: %s is null.".formatted(recordId));
+        }
+        AtomicBoolean succeed = new AtomicBoolean(false);
+        try {
+            succeed.set(processor.apply(workRecord));
+        } finally {
+            QuarkusTransaction.requiringNew()
+                .run(() -> {
+                    var record = repository.<R>find(recordId);
+                    record.setProcessStatus(succeed.get() ? ProcessStatus.SUCCEED : ProcessStatus.POSTPONED);
+                    record.setProcessEndAt(Instant.now());
+                    repository.persist(record);
+                });
+        }
     }
 
     public <R extends TaskQueueRecord> void onFailed(TaskQueueProcessContext context, String recordId, Exception exception) {
