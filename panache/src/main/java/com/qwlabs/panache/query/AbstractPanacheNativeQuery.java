@@ -3,7 +3,7 @@ package com.qwlabs.panache.query;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Page;
 
-@SuppressWarnings("checkstyle:VisibilityModifier")
+@SuppressWarnings({"checkstyle:VisibilityModifier", "checkstyle:ClassTypeParameterName"})
 public abstract class AbstractPanacheNativeQuery<Entity> implements PanacheQuery<Entity> {
 
     protected Page page;

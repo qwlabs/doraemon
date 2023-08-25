@@ -33,6 +33,7 @@ import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
 
+@SuppressWarnings("checkstyle:MagicNumber")
 public class KeycloakContainer extends GenericContainer<KeycloakContainer> {
 
     public static final String MASTER_REALM = "master";

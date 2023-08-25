@@ -9,7 +9,7 @@ plugins {
     id 'org.kordamp.gradle.jandex' apply false
     id 'org.ajoberstar.grgit' apply false
     id 'io.codearte.nexus-staging'
-//    id 'me.champeau.jmh'
+    id 'me.champeau.jmh' apply false
 }
 
 nexusStaging {

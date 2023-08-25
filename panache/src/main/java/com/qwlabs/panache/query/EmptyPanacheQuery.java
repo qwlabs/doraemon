@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+@SuppressWarnings("checkstyle:ClassTypeParameterName")
 public final class EmptyPanacheQuery<Entity> implements PanacheQuery<Entity> {
     private Page page;
     private Range range;

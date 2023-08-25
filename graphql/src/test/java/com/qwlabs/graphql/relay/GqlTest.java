@@ -5,10 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.junit.jupiter.api.Test;
 
-import static com.qwlabs.lang.Annotations.actualTypeArgument;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 
 class GqlTest {
     @Test

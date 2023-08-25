@@ -25,6 +25,7 @@ test {
 
 task prepush(dependsOn: ["checkstyle", test, check]) {
 }
+
 prepush.mustRunAfter clean
 
 tasks.named('checkstyleMain') {

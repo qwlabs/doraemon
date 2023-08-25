@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+@SuppressWarnings("checkstyle:ClassTypeParameterName")
 public class PanacheNativePageQuery<Entity> extends AbstractPanacheNativeQuery<Entity> {
     private final EntityManager em;
     private final String dataQuery;

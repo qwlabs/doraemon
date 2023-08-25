@@ -1,3 +1,5 @@
+apply from: "${rootProject.rootDir}/gradle/jmh.gradle"
+
 dependencies {
     api "com.google.guava:guava:${guavaVersion}"
     api "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"

@@ -21,6 +21,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 @Slf4j
+@SuppressWarnings("checkstyle:MagicNumber")
 public class KeycloakTestResource implements QuarkusTestResourceLifecycleManager {
     public static final String TEST_SERVICE_CLIENT = "test-service";
     public static final String IMAGE = "imageVersion";

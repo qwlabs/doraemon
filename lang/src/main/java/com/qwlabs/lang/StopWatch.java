@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-
+@SuppressWarnings("checkstyle:MagicNumber")
 public class StopWatch {
 
     private final String id;
@@ -77,7 +77,7 @@ public class StopWatch {
     }
 
     public String prettyPrint(TimeUnit timeUnit) {
-        StringBuilder sb = new StringBuilder(shortSummary());
+        StringBuilder sb = new StringBuilder(shortSummary(timeUnit));
         sb.append('\n');
         sb.append("---------------------------------------------\n");
         sb.append(timeUnit.name()).append("         %     Task name\n");
