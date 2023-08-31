@@ -213,7 +213,6 @@ public final class C2 {
                                        Function<E, R> mapper,
                                        Predicate<R> predicate) {
         return input
-            .parallel()
             .map(mapper)
             .filter(predicate)
             .collect(Collectors.toSet());
