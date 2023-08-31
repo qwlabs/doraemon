@@ -1,5 +1,6 @@
 package com.qwlabs.tree;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 
 @Getter
 public class Location<N> {
+    public static final String DEFAULT_SEPARATOR = ".";
     private static final Location ROOT = new Location<>(List.of());
     @NotNull
     private final List<N> path;
@@ -63,6 +65,14 @@ public class Location<N> {
 
     public Optional<N> tail() {
         return isRoot() ? Optional.empty() : Optional.of(path.get(path.size() - 1));
+    }
+
+    public String raw() {
+        return raw(DEFAULT_SEPARATOR);
+    }
+
+    public String raw(String separator) {
+        return Joiner.on(Optional.ofNullable(separator).orElse(DEFAULT_SEPARATOR)).join(path);
     }
 
     @Override

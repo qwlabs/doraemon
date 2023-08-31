@@ -1,3 +1,5 @@
+//apply from: "${rootProject.rootDir}/gradle/jmh.gradle"
+
 dependencies {
     api project(":lang")
     api "com.google.guava:guava:${guavaVersion}"

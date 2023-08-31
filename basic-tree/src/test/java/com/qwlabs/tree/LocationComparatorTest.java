@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 class LocationComparatorTest {
     @Test
-    void should_compare_null() {
+    void should_compare() {
         List<Location<String>> locations = Lists.newArrayList(
             null,
             null,

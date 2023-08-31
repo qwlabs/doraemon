@@ -41,4 +41,12 @@ class LocationTest {
         assertFalse(location.parent().get().isRoot());
         assertThat(location.map(n -> n + "dd"), is(Location.of("add", "bdd")));
     }
+
+    @Test
+    void should_raw() {
+        assertThat(Location.root().raw(), is(""));
+        assertThat(Location.of("a", "b").raw(), is("a.b"));
+        assertThat(Location.of("a", "b").raw(","), is("a,b"));
+        assertThat(Location.of("a", "b").raw(";;;"), is("a;;;b"));
+    }
 }

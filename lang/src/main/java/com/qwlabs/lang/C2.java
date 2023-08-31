@@ -212,7 +212,9 @@ public final class C2 {
     private static <E, R> Set<R> doSet(Stream<E> input,
                                        Function<E, R> mapper,
                                        Predicate<R> predicate) {
-        return input.map(mapper)
+        return input
+            .parallel()
+            .map(mapper)
             .filter(predicate)
             .collect(Collectors.toSet());
     }
