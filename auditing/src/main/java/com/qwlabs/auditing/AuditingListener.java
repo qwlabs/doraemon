@@ -21,14 +21,14 @@ public class AuditingListener {
             touchCreated((CreatedAuditedEntity) entity);
         }
         if (entity instanceof AuditedEntity) {
-            touchUpdated((AuditedEntity) entity);
+            touchUpdated((AuditedEntity) entity, false);
         }
     }
 
     @PreUpdate
     public void preUpdate(Object entity) {
         if (entity instanceof AuditedEntity) {
-            touchUpdated((AuditedEntity) entity);
+            touchUpdated((AuditedEntity) entity, true);
         }
     }
 
@@ -39,10 +39,11 @@ public class AuditingListener {
                 .orElseGet(() -> getAuditorId(entity, PersistPhase.PRE_PERSIST).orElse(null)));
     }
 
-    private static void touchUpdated(AuditedEntity entity) {
+    private static void touchUpdated(AuditedEntity entity, boolean force) {
         entity.setUpdatedAt(Instant.now(Clock.systemUTC()));
         entity.setUpdatedBy(Optional.ofNullable(entity.getUpdatedBy())
-                .orElseGet(() -> getAuditorId(entity, PersistPhase.PRE_UPDATE).orElse(null)));
+            .filter(by -> !force)
+            .orElseGet(() -> getAuditorId(entity, PersistPhase.PRE_UPDATE).orElse(null)));
     }
 
     private static Optional<String> getAuditorId(Object entity, PersistPhase phase) {
