@@ -1,6 +1,7 @@
 package com.qwlabs.tree;
 
 import com.google.common.base.Splitter;
+import com.qwlabs.lang.NumberStringComparator;
 
 import java.util.Comparator;
 import java.util.Objects;
@@ -51,7 +52,7 @@ public class RawLocationComparator implements Comparator<String> {
         for (var index = 0; index < o1List.size(); index++) {
             var v1 = o1List.get(index);
             var v2 = o2List.get(index);
-            int indexCompare = Objects.compare(v1, v2, Comparator.naturalOrder());
+            int indexCompare = NumberStringComparator.NOT_CHECK_NULL.compare(v1, v2);
             if (indexCompare != 0) {
                 return indexCompare;
             }
