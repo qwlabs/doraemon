@@ -8,8 +8,9 @@ import static graphql.Assert.assertNotNull;
 
 @PublicApi
 public class Edge<T> {
+    @NotNull
     private final T node;
-
+    @NotNull
     private final String cursor;
 
     public Edge(T node, String cursor) {
@@ -17,12 +18,10 @@ public class Edge<T> {
         this.node = assertNotNull(node, () -> "node can not be null");
     }
 
-    @NotNull
     public T getNode() {
         return node;
     }
 
-    @NotNull
     public String getCursor() {
         return cursor;
     }

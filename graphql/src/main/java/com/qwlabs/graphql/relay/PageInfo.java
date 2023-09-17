@@ -7,10 +7,13 @@ import jakarta.validation.constraints.NotNull;
 
 @PublicApi
 public class PageInfo {
-
+    @NotNull
     private final String startCursor;
+    @NotNull
     private final String endCursor;
+    @NotNull
     private final boolean hasPreviousPage;
+    @NotNull
     private final boolean hasNextPage;
 
     public PageInfo(String startCursor, String endCursor,
@@ -21,22 +24,18 @@ public class PageInfo {
         this.hasNextPage = hasNextPage;
     }
 
-    @NotNull
     public String getStartCursor() {
         return startCursor;
     }
 
-    @NotNull
     public String getEndCursor() {
         return endCursor;
     }
 
-    @NotNull
     public boolean isHasPreviousPage() {
         return hasPreviousPage;
     }
 
-    @NotNull
     public boolean isHasNextPage() {
         return hasNextPage;
     }
