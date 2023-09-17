@@ -4,8 +4,8 @@ import com.google.common.primitives.Ints;
 import com.qwlabs.panache.Ranged;
 import io.quarkus.panache.common.Range;
 import io.smallrye.common.constraint.Nullable;
-
 import jakarta.validation.constraints.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -53,10 +53,10 @@ public final class Relays {
             lastCursor = edges.get(edges.size() - 1).getCursor();
         }
         return new PageInfo(
-                firstCursor,
-                lastCursor,
-                ranged.hasPreviousPage(),
-                ranged.hasNextPage()
+            firstCursor,
+            lastCursor,
+            ranged.hasPreviousPage(),
+            ranged.hasNextPage()
         );
     }
 

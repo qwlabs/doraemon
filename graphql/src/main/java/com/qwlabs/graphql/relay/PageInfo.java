@@ -2,7 +2,6 @@ package com.qwlabs.graphql.relay;
 
 
 import graphql.PublicApi;
-
 import jakarta.validation.constraints.NotNull;
 
 @PublicApi

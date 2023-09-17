@@ -2,8 +2,8 @@ package com.qwlabs.graphql.relay;
 
 import com.google.common.collect.ImmutableList;
 import graphql.PublicApi;
-
 import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 
 import static graphql.Assert.assertNotNull;
@@ -22,6 +22,7 @@ public class Connection<T> {
         this.pageInfo = assertNotNull(pageInfo, () -> "page info cannot be null");
         this.totalCount = assertNotNull(totalCount, () -> "total count cannot be null");
     }
+
     public List<Edge<T>> getEdges() {
         return edges;
     }
