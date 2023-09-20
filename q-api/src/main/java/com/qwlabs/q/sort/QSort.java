@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class Sort {
+public class QSort {
     private static final String DEFAULT = "";
     private static final String FORMAT_SEPARATOR = " ";
     private static final String DEFAULT_FORMAT_JOIN_FLAG = ",";
@@ -27,7 +27,7 @@ public class Sort {
     private final String raw;
     private final Supplier<List<Segment>> segmentsSupplier = Suppliers.memoize(this::parseSegments);
 
-    private Sort(String raw) {
+    private QSort(String raw) {
         this.raw = Optional.ofNullable(raw).map(String::trim).orElse(null);
     }
 
@@ -127,8 +127,8 @@ public class Sort {
         return format(DEFAULT);
     }
 
-    public static Sort of(String raw) {
-        return new Sort(raw);
+    public static QSort of(String raw) {
+        return new QSort(raw);
     }
 
     private static class Segment {
