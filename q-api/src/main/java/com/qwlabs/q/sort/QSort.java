@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -49,6 +50,10 @@ public class QSort {
                         Function<String, O> descFormatter,
                         BiFunction<O, O, O> merger,
                         Supplier<O> defaultSupplier) {
+        Map<QSortDirection, Function<String, O>> directionFormatter = Map.of(
+            QSortDirection.ASCENDING, ascFormatter,
+            QSortDirection.DESCENDING, descFormatter
+        );
         var segments = segmentsSupplier.get();
         if (segments.isEmpty()) {
             return defaultSupplier.get();
@@ -57,7 +62,7 @@ public class QSort {
         O value = null;
         do {
             var segment = iter.next();
-            var currentValue = (segment.asc ? ascFormatter : descFormatter).apply(segment.field);
+            var currentValue = directionFormatter.get(segment.direction).apply(segment.field);
             if (value == null) {
                 value = currentValue;
                 continue;
@@ -133,28 +138,29 @@ public class QSort {
 
     private static class Segment {
         private final String field;
-        private final boolean asc;
+        private final QSortDirection direction;
 
-        private Segment(String field, boolean asc) {
+        private Segment(String field, QSortDirection direction) {
             this.field = field;
-            this.asc = asc;
+            this.direction = direction;
         }
 
         private static Segment of(String raw) {
-            Boolean asc = isAsc(raw);
-            if (Objects.isNull(asc)) {
+            QSortDirection direction = ofDirection(raw);
+            if (Objects.isNull(direction)) {
                 return null;
             }
             var filed = raw.substring(0, raw.length() - RAW_SEGMENT_FLAG_LENGTH).trim();
-            return new Segment(filed, asc);
+            return new Segment(filed, direction);
         }
 
-        private static Boolean isAsc(String raw) {
+
+        private static QSortDirection ofDirection(String raw) {
             if (raw.endsWith(RAW_ASC_FLAG)) {
-                return Boolean.TRUE;
+                return QSortDirection.ASCENDING;
             }
             if (raw.endsWith(RAW_DESC_FLAG)) {
-                return Boolean.FALSE;
+                return QSortDirection.DESCENDING;
             }
             return null;
         }
