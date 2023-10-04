@@ -136,6 +136,15 @@ public class QSort {
         return new QSort(raw);
     }
 
+    @Override
+    public String toString() {
+        return format();
+    }
+
+    public static QSort fromString(String raw) {
+        return of(raw);
+    }
+
     private static class Segment {
         private final String field;
         private final QSortDirection direction;
