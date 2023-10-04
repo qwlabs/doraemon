@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class QSort {
+    private static final QSort EMPTY = QSort.of(null);
     private static final String DEFAULT = "";
     private static final String FORMAT_SEPARATOR = " ";
     private static final String DEFAULT_FORMAT_JOIN_FLAG = ",";
@@ -134,6 +135,9 @@ public class QSort {
 
     public static QSort of(String raw) {
         return new QSort(raw);
+    }
+    public static QSort empty() {
+        return EMPTY;
     }
 
     @Override
