@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -28,6 +29,7 @@ public class QSort {
     private static final int RAW_SEGMENT_FLAG_LENGTH = 1;
     private final String raw;
     private final Supplier<List<Segment>> segmentsSupplier = Suppliers.memoize(this::parseSegments);
+    private Set<String> includes;
 
     private QSort(String raw) {
         this.raw = Optional.ofNullable(raw).map(String::trim).orElse(null);
@@ -55,7 +57,7 @@ public class QSort {
             QSortDirection.ASCENDING, ascFormatter,
             QSortDirection.DESCENDING, descFormatter
         );
-        var segments = segmentsSupplier.get();
+        var segments = filteredSegments();
         if (segments.isEmpty()) {
             return defaultSupplier.get();
         }
@@ -71,6 +73,16 @@ public class QSort {
             value = merger.apply(value, currentValue);
         } while (iter.hasNext());
         return value;
+    }
+
+    private List<Segment> filteredSegments() {
+        var segments = segmentsSupplier.get();
+        if (Objects.isNull(includes)) {
+            return segments;
+        }
+        return segments.stream()
+            .filter(segment -> includes.contains(segment.field))
+            .collect(Collectors.toList());
     }
 
     public <O> O format(Function<String, O> ascFormatter,
@@ -133,9 +145,20 @@ public class QSort {
         return format(DEFAULT);
     }
 
+    public QSort includeAll() {
+        this.includes = null;
+        return this;
+    }
+
+    public QSort includes(Set<String> includes) {
+        this.includes = includes;
+        return this;
+    }
+
     public static QSort of(String raw) {
         return new QSort(raw);
     }
+
     public static QSort empty() {
         return EMPTY;
     }
