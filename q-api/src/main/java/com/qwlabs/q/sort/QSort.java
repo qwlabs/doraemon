@@ -63,6 +63,7 @@ public class QSort {
         var formatted = segments.stream()
             .filter(predicate::test)
             .map(segment -> formatter.format(prefix, segment))
+            .filter(Objects::nonNull)
             .toList();
         return formatter.join(formatted);
     }
@@ -81,6 +82,6 @@ public class QSort {
 
     @Override
     public String toString() {
-        return format(QSortStringFormatter.DEFAULT);
+        return format(StringQSortFormatter.DEFAULT);
     }
 }

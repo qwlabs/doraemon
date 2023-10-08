@@ -1,4 +1,5 @@
 dependencies {
     api project(":lang")
+    api project(":q-api")
     api "io.quarkus:quarkus-hibernate-orm-panache:${quarkusVersion}"
 }

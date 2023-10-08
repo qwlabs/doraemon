@@ -1,11 +1,11 @@
-package com.qwlabs.jpa.q;
+package com.qwlabs.panache.q;
 
 import com.google.common.base.CaseFormat;
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.qwlabs.q.sort.QSort;
 import com.qwlabs.q.sort.QSortPredicate;
 import com.qwlabs.q.sort.QSortPredicates;
+import io.quarkus.panache.common.Sort;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
@@ -13,31 +13,31 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class JpaQSort {
+public class PanacheQSort {
     private final QSort sort;
     private final boolean nativeQuery;
     private final List<Formatter> formatters;
 
-    private JpaQSort(QSort sort, boolean nativeQuery) {
+    private PanacheQSort(QSort sort, boolean nativeQuery) {
         this.sort = Optional.ofNullable(sort).orElse(QSort.empty());
         this.nativeQuery = nativeQuery;
         this.formatters = Lists.newArrayList();
     }
 
-    public JpaQSort clear() {
+    public PanacheQSort clear() {
         formatters.clear();
         return this;
     }
 
-    private JpaQSortFormatter formatter() {
-        return nativeQuery ? JpaQSortFormatter.NATIVE_QUERY : JpaQSortFormatter.QUERY;
+    private PanacheQSortFormatter formatter() {
+        return nativeQuery ? PanacheQSortFormatter.NATIVE_QUERY : PanacheQSortFormatter.QUERY;
     }
 
-    public JpaQSort with(QSortPredicate predicate) {
+    public PanacheQSort with(QSortPredicate predicate) {
         return with(predicate, "");
     }
 
-    public JpaQSort with(QSortPredicate predicate, String prefix) {
+    public PanacheQSort with(QSortPredicate predicate, String prefix) {
         formatters.add(Formatter.builder()
             .prefix(prefix)
             .formatter(formatter())
@@ -46,47 +46,46 @@ public class JpaQSort {
         return this;
     }
 
-    public String format() {
+    public Sort format() {
         return format(QSort.empty());
     }
 
-    public String format(QSort defaultSort) {
+    public Sort format(QSort defaultSort) {
         return format(defaultSort, QSortPredicates.all());
     }
 
-    public String format(QSort defaultSort, String... fields) {
+    public Sort format(QSort defaultSort, String... fields) {
         return format(defaultSort, QSortPredicates.includes(fields));
     }
 
-    public String format(String defaultSort) {
+    public Sort format(String defaultSort) {
         return format(QSort.of(defaultSort), QSortPredicates.all());
     }
 
-    public String format(QSort defaultSort, QSortPredicate defaultPredicate) {
+    public Sort format(QSort defaultSort, QSortPredicate defaultPredicate) {
         if (formatters.isEmpty()) {
             with(defaultPredicate);
         }
-        List<String> sql = formatters.stream()
+        List<Sort> sorts = formatters.stream()
             .map(formatter -> formatter.format(sort))
-            .map(Strings::emptyToNull)
             .filter(Objects::nonNull)
             .toList();
-        if (sql.isEmpty()) {
+        if (sorts.isEmpty()) {
             return defaultSort.format(QSortPredicates.all(), formatter());
         }
-        return formatter().join(sql);
+        return formatter().join(sorts);
     }
 
-    public static JpaQSort ofNative(QSort sort) {
-        return new JpaQSort(sort, true);
+    public static PanacheQSort ofNative(QSort sort) {
+        return new PanacheQSort(sort, true);
     }
 
-    public static JpaQSort of(QSort sort) {
-        return new JpaQSort(sort, false);
+    public static PanacheQSort of(QSort sort) {
+        return new PanacheQSort(sort, false);
     }
 
-    public static JpaQSort of(QSort sort, boolean nativeQuery) {
-        return new JpaQSort(sort, nativeQuery);
+    public static PanacheQSort of(QSort sort, boolean nativeQuery) {
+        return new PanacheQSort(sort, nativeQuery);
     }
 
     public static String nativeField(String filed) {
@@ -97,10 +96,10 @@ public class JpaQSort {
     @AllArgsConstructor
     private static class Formatter {
         private QSortPredicate predicate;
-        private JpaQSortFormatter formatter;
+        private PanacheQSortFormatter formatter;
         private String prefix;
 
-        public String format(QSort sort) {
+        public Sort format(QSort sort) {
             return sort.format(predicate, formatter, prefix);
         }
     }

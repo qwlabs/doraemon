@@ -1,16 +1,17 @@
 package com.qwlabs.jpa.q;
 
 import com.google.common.base.Strings;
-import com.qwlabs.q.sort.QSortStringFormatter;
+import com.qwlabs.q.sort.StringQSortFormatter;
 
 import static com.qwlabs.jpa.q.JpaQSort.nativeField;
 
-public class QSortJpaFormatter extends QSortStringFormatter {
-    public static final QSortJpaFormatter NATIVE_QUERY = new QSortJpaFormatter(true);
-    public static final QSortJpaFormatter QUERY = new QSortJpaFormatter(false);
+public class JpaQSortFormatter extends StringQSortFormatter {
+    public static final JpaQSortFormatter NATIVE_QUERY = new JpaQSortFormatter(true);
+    public static final JpaQSortFormatter QUERY = new JpaQSortFormatter(false);
     private final boolean nativeQuery;
-    private QSortJpaFormatter(boolean nativeQuery) {
-        super("asc", "desc", ",", true, true);
+
+    private JpaQSortFormatter(boolean nativeQuery) {
+        super("asc", "desc", ",");
         this.nativeQuery = nativeQuery;
     }
 
