@@ -1,6 +1,7 @@
 package com.qwlabs.panache.q;
 
 import com.google.common.base.Strings;
+import com.qwlabs.lang.C2;
 import com.qwlabs.q.sort.QSortFormatter;
 import io.quarkus.panache.common.Sort;
 
@@ -45,10 +46,11 @@ public class PanacheQSortFormatter implements QSortFormatter<Sort> {
     @Override
     public Sort join(List<Sort> segments) {
         var result = Sort.empty();
-        for (Sort segment : segments) {
-            var field = segment.getColumns().get(0);
-            result.and(field.getName(), field.getDirection());
-        }
+        segments.stream()
+            .map(Sort::getColumns)
+            .filter(C2::isNotEmpty)
+            .map(columns -> columns.get(0))
+            .forEach(column -> result.and(column.getName(), column.getDirection()));
         return result;
     }
 }
