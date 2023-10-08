@@ -28,12 +28,12 @@ public class StringQSortFormatter implements QSortFormatter<String> {
     }
 
     @Override
-    public String formatAsc(String prefix, String field) {
+    public String formatAsc(@NotNull String prefix, @NotNull String field) {
         return "%s%s%s".formatted(prefix, field, ascBy);
     }
 
     @Override
-    public String formatDesc(String prefix, String field) {
+    public String formatDesc(@NotNull String prefix, @NotNull String field) {
         return "%s%s%s".formatted(prefix, field, descBy);
     }
 

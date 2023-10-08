@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 public interface QSortFormatter<O> {
-    default O format(String prefix, @NotNull QSortSegment segment) {
+    default O format(@NotNull String prefix, @NotNull QSortSegment segment) {
         if (segment.getDirection().isAsc()) {
             return formatAsc(prefix, segment.getField());
         } else {
@@ -13,7 +13,7 @@ public interface QSortFormatter<O> {
         }
     }
     O emptyValue();
-    O formatAsc(String prefix, String field);
-    O formatDesc(String prefix, String field);
-    O join(List<O> segments);
+    O formatAsc(@NotNull String prefix, @NotNull String field);
+    O formatDesc(@NotNull String prefix, @NotNull String field);
+    O join(@NotNull List<O> segments);
 }

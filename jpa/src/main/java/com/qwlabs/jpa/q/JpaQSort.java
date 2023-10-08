@@ -104,5 +104,5 @@ public class JpaQSort {
             return sort.format(predicate, formatter, prefix);
         }
     }
-    
+
 }

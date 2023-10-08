@@ -2,6 +2,7 @@ package com.qwlabs.jpa.q;
 
 import com.google.common.base.Strings;
 import com.qwlabs.q.sort.StringQSortFormatter;
+import jakarta.validation.constraints.NotNull;
 
 import static com.qwlabs.jpa.q.JpaQSort.nativeField;
 
@@ -15,7 +16,7 @@ public class JpaQSortFormatter extends StringQSortFormatter {
         this.nativeQuery = nativeQuery;
     }
 
-    private String field(String prefix, String field) {
+    private String field(@NotNull String prefix, @NotNull String field) {
         if (nativeQuery) {
             field = nativeField(field);
         }
@@ -26,12 +27,12 @@ public class JpaQSortFormatter extends StringQSortFormatter {
     }
 
     @Override
-    public String formatAsc(String prefix, String field) {
+    public String formatAsc(@NotNull String prefix, @NotNull String field) {
         return "%s %s".formatted(field(prefix, field), ascBy);
     }
 
     @Override
-    public String formatDesc(String prefix, String field) {
+    public String formatDesc(@NotNull String prefix, @NotNull String field) {
         return "%s %s".formatted(field(prefix, field), descBy);
     }
 }
