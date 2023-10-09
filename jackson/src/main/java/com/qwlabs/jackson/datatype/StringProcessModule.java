@@ -16,6 +16,6 @@ public class StringProcessModule extends SimpleModule {
 
     @Override
     public void setupModule(SetupContext setupContext) {
-        setupContext.addDeserializers(new StringProcessDeserializers());
+        setupContext.addDeserializers(StringProcessDeserializers.INSTANCE);
     }
 }
