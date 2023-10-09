@@ -1,0 +1,3 @@
+dependencies {
+    api "jakarta.json:jakarta.json-api:${jakartaJsonApiVersion}"
+}
