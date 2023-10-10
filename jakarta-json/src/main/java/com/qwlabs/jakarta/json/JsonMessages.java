@@ -17,12 +17,13 @@
 package com.qwlabs.jakarta.json;
 
 
-import jakarta.json.stream.JsonLocation;
-import jakarta.json.stream.JsonParser;
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
+import jakarta.json.stream.JsonLocation;
+import jakarta.json.stream.JsonParser;
+
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
 
 /**
  * Defines string formatting method for each constant in the resource file
@@ -31,7 +32,7 @@ import jakarta.json.JsonValue;
  */
 final class JsonMessages {
     private static final ResourceBundle BUNDLE =
-            ResourceBundle.getBundle("com.qwlabs.jakarta.json");
+        ResourceBundle.getBundle("com.qwlabs.jakarta.json");
 
     // global/shared messages
     static String INTERNAL_ERROR() {
@@ -155,7 +156,6 @@ final class JsonMessages {
     }
 
 
-
     // writer messages
     static String WRITER_WRITE_ALREADY_CALLED() {
         return localize("writer.write.already.called");
@@ -274,7 +274,7 @@ final class JsonMessages {
     }
 
 
-    private static String localize(String key, Object ... args) {
+    private static String localize(String key, Object... args) {
         try {
             String msg = BUNDLE.getString(key);
             return MessageFormat.format(msg, args);
@@ -283,7 +283,7 @@ final class JsonMessages {
         }
     }
 
-    private static String getDefaultMessage(String key, Object ... args) {
+    private static String getDefaultMessage(String key, Object... args) {
         StringBuilder sb = new StringBuilder();
         sb.append("[failed to localize] ");
         sb.append(key);

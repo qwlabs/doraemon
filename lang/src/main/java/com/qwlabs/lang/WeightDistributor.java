@@ -5,28 +5,33 @@ import com.google.common.primitives.Ints;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 
-public class AverageDistributor {
+public class WeightDistributor {
     private final List<Integer> totals;
     private final List<Integer> requires;
     private TreeMap<Integer, Integer> leftTotals;
     private Map<Integer, Integer> distributed;
     private Map<Distribution, Distribution> distributions;
     private boolean distributedFlag;
+    private boolean exceed;
 
-    private AverageDistributor(int total, @NotNull List<@NotNull Integer> requires) {
-        this(List.of(total), requires);
+    private WeightDistributor(int total, @NotNull List<@NotNull Integer> requires, boolean exceed) {
+        this(List.of(total), requires, exceed);
     }
 
-    private AverageDistributor(@NotNull List<@NotNull Integer> totals, @NotNull List<@NotNull Integer> requires) {
+    private WeightDistributor(@NotNull List<@NotNull Integer> totals, @NotNull List<@NotNull Integer> requires, boolean exceed) {
         this.totals = totals;
         this.requires = requires;
+        this.exceed = exceed;
         init();
     }
 
@@ -37,7 +42,7 @@ public class AverageDistributor {
         this.leftTotals = buildLeftTotals();
     }
 
-    public AverageDistributor distribute() {
+    public WeightDistributor distribute() {
         if (this.distributedFlag) {
             return this;
         }
@@ -79,10 +84,11 @@ public class AverageDistributor {
         }
         var totalEntry = leftTotals.firstEntry();
         int left = totalEntry.getValue();
-        int avg = Integer.max(left / leftRequires.size(), 1);
+        var weights = calculateWeights(left, leftRequires);
         Map<Integer, Integer> nextLeftRequires = Maps.newHashMap();
         for (Map.Entry<Integer, Integer> entry : leftRequires.entrySet()) {
-            int distribution = Ints.min(entry.getValue(), avg, left);
+            var weight = weights.getOrDefault(entry.getKey(), 1);
+            int distribution = exceed ? Ints.min(weight, left) : Ints.min(entry.getValue(), weight, left);
             int leftRequired = entry.getValue();
             if (distribution > 0) {
                 left -= distribution;
@@ -95,6 +101,22 @@ public class AverageDistributor {
         }
         put(leftTotals, totalEntry.getKey(), left);
         doDistribute(nextLeftRequires);
+    }
+
+    private Map<Integer, Integer> calculateWeights(int left, Map<Integer, Integer> leftRequires) {
+        var tmpLeft = BigDecimal.valueOf(left);
+        int scale = String.valueOf(left).length();
+        var totalRequires = BigDecimal.valueOf(leftRequires.values().stream().mapToInt(v -> v).sum());
+        Map<Integer, Integer> weights = new HashMap<>(leftRequires.size());
+        for (Map.Entry<Integer, Integer> entry : leftRequires.entrySet()) {
+            var weight = BigDecimal.valueOf(entry.getValue())
+                .divide(totalRequires, scale, RoundingMode.UP)
+                .multiply(tmpLeft)
+                .setScale(0, RoundingMode.UP)
+                .intValue();
+            weights.put(entry.getKey(), weight);
+        }
+        return weights;
     }
 
     public Set<Distribution> getDistributions() {
@@ -115,12 +137,20 @@ public class AverageDistributor {
         return leftTotals.getOrDefault(index, 0);
     }
 
-    public static AverageDistributor of(int total, @NotNull List<@NotNull Integer> requires) {
-        return new AverageDistributor(total, requires);
+    public static WeightDistributor of(int total, @NotNull List<@NotNull Integer> requires) {
+        return new WeightDistributor(total, requires, false);
     }
 
-    public static AverageDistributor of(@NotNull List<@NotNull Integer> totals, @NotNull List<@NotNull Integer> requires) {
-        return new AverageDistributor(totals, requires);
+    public static WeightDistributor of(int total, @NotNull List<@NotNull Integer> requires, boolean exceed) {
+        return new WeightDistributor(total, requires, exceed);
+    }
+
+    public static WeightDistributor of(@NotNull List<@NotNull Integer> totals, @NotNull List<@NotNull Integer> requires) {
+        return new WeightDistributor(totals, requires, false);
+    }
+
+    public static WeightDistributor of(@NotNull List<@NotNull Integer> totals, @NotNull List<@NotNull Integer> requires, boolean exceed) {
+        return new WeightDistributor(totals, requires, exceed);
     }
 
     @Getter
