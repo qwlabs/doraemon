@@ -61,8 +61,8 @@ class WeightDistributorTest {
         var distributor = WeightDistributor.of(100, List.of(2, 1), true);
         distributor.distribute();
         assertThat(distributor.getLeft(), is(0));
-        assertThat(distributor.getDistributed(0), is(67));
-        assertThat(distributor.getDistributed(1), is(33));
+        assertThat(distributor.getDistributed(0), is(66));
+        assertThat(distributor.getDistributed(1), is(34));
         assertThat(distributor.getDistributions().size(), is(2));
     }
 
@@ -82,9 +82,38 @@ class WeightDistributorTest {
         distributor.distribute();
         assertThat(distributor.getLeft(), is(0));
         assertThat(distributor.getDistributed(0), is(4998));
-        assertThat(distributor.getDistributed(1), is(4998));
-        assertThat(distributor.getDistributed(2), is(4));
+        assertThat(distributor.getDistributed(1), is(4996));
+        assertThat(distributor.getDistributed(2), is(6));
         assertThat(distributor.getDistributions().size(), is(3));
+    }
+
+    @Test
+    void should_single_total_9() {
+        var distributor = WeightDistributor.of(2001, List.of(1000, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), true);
+        distributor.distribute();
+        assertThat(distributor.getLeft(), is(0));
+        assertThat(distributor.getDistributed(0), is(1941));
+        assertThat(distributor.getDistributed(1), is(3));
+        assertThat(distributor.getDistributed(2), is(3));
+        assertThat(distributor.getDistributed(3), is(3));
+        assertThat(distributor.getDistributed(4), is(3));
+        assertThat(distributor.getDistributed(5), is(3));
+        assertThat(distributor.getDistributed(6), is(3));
+        assertThat(distributor.getDistributed(7), is(3));
+        assertThat(distributor.getDistributed(8), is(3));
+        assertThat(distributor.getDistributed(9), is(3));
+        assertThat(distributor.getDistributed(10), is(3));
+        assertThat(distributor.getDistributed(11), is(3));
+        assertThat(distributor.getDistributed(12), is(3));
+        assertThat(distributor.getDistributed(13), is(3));
+        assertThat(distributor.getDistributed(14), is(3));
+        assertThat(distributor.getDistributed(15), is(3));
+        assertThat(distributor.getDistributed(16), is(3));
+        assertThat(distributor.getDistributed(17), is(3));
+        assertThat(distributor.getDistributed(18), is(3));
+        assertThat(distributor.getDistributed(19), is(3));
+        assertThat(distributor.getDistributed(20), is(3));
+        assertThat(distributor.getDistributions().size(), is(21));
     }
 
     @Test

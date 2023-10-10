@@ -108,13 +108,17 @@ public class WeightDistributor {
         int scale = String.valueOf(left).length();
         var totalRequires = BigDecimal.valueOf(leftRequires.values().stream().mapToInt(v -> v).sum());
         Map<Integer, Integer> weights = new HashMap<>(leftRequires.size());
-        for (Map.Entry<Integer, Integer> entry : leftRequires.entrySet()) {
+        var orderedLefts = C2.stream(leftRequires.entrySet())
+            .sorted(Map.Entry.comparingByValue())
+            .toList();
+        for (Map.Entry<Integer, Integer> entry : orderedLefts) {
             var weight = BigDecimal.valueOf(entry.getValue())
                 .divide(totalRequires, scale, RoundingMode.UP)
                 .multiply(tmpLeft)
                 .setScale(0, RoundingMode.UP)
                 .intValue();
-            weights.put(entry.getKey(), weight);
+            weights.put(entry.getKey(), Math.min(left, weight));
+            left -= weight;
         }
         return weights;
     }
