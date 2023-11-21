@@ -1,0 +1,62 @@
+{
+    "sheet": {
+        "index": 1,
+        "name": ""
+    },
+    "mode": "ROW/COLUMN",
+    "startBy": "fixed:1",
+    "endBy": "all-empty",
+    "ignoreBy": "all-empty",
+    "autoTrim": "",
+    "fields":[
+        {
+            "type": "filed",
+            "name": "partCode",
+            "index": 1
+        },
+        {
+            "type": "filed",
+            "name": "operationNumber",
+            "index": 2
+        },
+        {
+            "type": "filed",
+            "name": "operationName",
+            "index": 3
+        },
+        {
+            "type": "filed",
+            "name": "operationCycle",
+            "index": 4
+        },
+        {
+            "type": "loop_range",
+            "startBy": "fixed:5",
+            "endBy": "all-empty",
+            "ignoreBy": "all-empty",
+            "splitBy": "fixed:2",
+            "max": 1000,
+            "fields": [
+                {
+                    "type": "field",
+                    "name": "seriesNumber",
+                    "title": ["零件序列号"],
+                    "columnIndex": 1,
+                    "rowIndex": 3
+                },
+                {
+                    "type": "field",
+                    "name": "plannedFinishDate",
+                    "title": ["计划完成时间"],
+                    "index": 1
+                },
+                {
+                    "type": "field",
+                    "name": "actualFinishDate",
+                    "title": ["实际完成时间"],
+                    "index": 2
+                }
+            ]
+        }
+    ]
+}

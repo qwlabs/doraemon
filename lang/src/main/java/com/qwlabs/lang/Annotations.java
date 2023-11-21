@@ -33,16 +33,17 @@ public final class Annotations {
     }
 
     public static boolean isAnnotationPresent(Class<?> element, Class<? extends Annotation> annotationType) {
+        return getAnnotation(element, annotationType) != null;
+    }
+
+    public static <A extends Annotation> A getAnnotation(Class<?> element, Class<A> annotationType) {
         if (element == null) {
-            return false;
+            return null;
         }
-        if (element.isAnnotationPresent(annotationType)) {
-            return true;
+        var may = element.getAnnotation(annotationType);
+        if (may != null) {
+            return may;
         }
-        Class<?> superClass = element.getSuperclass();
-        if (superClass == null) {
-            return false;
-        }
-        return isAnnotationPresent(superClass, annotationType);
+        return getAnnotation(element.getSuperclass(), annotationType);
     }
 }

@@ -16,6 +16,7 @@ pluginManagement {
 rootProject.name = 'doraemon'
 
 include 'lang'
+include 'excel'
 include 'exceptions'
 include 'panache'
 include 'jakarta-json'
