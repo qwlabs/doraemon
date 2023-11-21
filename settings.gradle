@@ -41,6 +41,8 @@ include 'feature-flags'
 include 'task-queue'
 include 'test-builder'
 include 'quarkus-test'
-include 'quarkus-test-resources'
+include 'quarkus-test-resource-keycloak'
+include 'quarkus-test-resource-postgres'
+include 'quarkus-test-resource-qdrant'
 
 

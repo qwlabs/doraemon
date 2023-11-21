@@ -1,4 +1,4 @@
-package com.qwlabs.quarkus.test.databases;
+package com.qwlabs.quarkus.test.postgres;
 
 import com.qwlabs.lang.C2;
 import io.quarkus.test.common.QuarkusTestResource;

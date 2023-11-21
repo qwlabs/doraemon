@@ -1,0 +1,4 @@
+dependencies {
+    api project(":lang")
+    api "io.quarkus:quarkus-junit5:${quarkusVersion}"
+}

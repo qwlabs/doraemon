@@ -1,4 +1,4 @@
-package com.qwlabs.quarkus.test.databases;
+package com.qwlabs.quarkus.test.postgres;
 
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 import lombok.extern.slf4j.Slf4j;

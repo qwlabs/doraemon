@@ -4,5 +4,4 @@ dependencies {
     api "io.quarkus:quarkus-keycloak-admin-client-reactive:${quarkusVersion}"
     api "io.rest-assured:rest-assured:${restAssuredVersion}"
     api "org.jboss.shrinkwrap:shrinkwrap-api:${shrinkwrapVersion}"
-    api "org.testcontainers:postgresql:${testcontainersVersion}"
 }
