@@ -7,10 +7,9 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class GetUploadUrlsCommand {
+public class UploadUrl {
     private final String provider;
     private final String bucket;
     private final String objectName;
-    private final Integer partCount;
-    private final String contentType;
+    private final String url;
 }

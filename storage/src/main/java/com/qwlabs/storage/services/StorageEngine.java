@@ -5,14 +5,20 @@ import com.qwlabs.storage.messages.StorageMessages;
 import com.qwlabs.storage.models.CompleteUploadCommand;
 import com.qwlabs.storage.models.GetDownloadUrlCommand;
 import com.qwlabs.storage.models.GetObjectCommand;
+import com.qwlabs.storage.models.GetUploadUrlCommand;
 import com.qwlabs.storage.models.GetUploadUrlsCommand;
 import com.qwlabs.storage.models.PutObjectCommand;
 import com.qwlabs.storage.models.StorageObject;
+import com.qwlabs.storage.models.UploadUrl;
 import com.qwlabs.storage.models.UploadUrls;
 
 import java.io.InputStream;
 
 public interface StorageEngine {
+
+    default UploadUrl createUploadUrl(GetUploadUrlCommand command) {
+        throw StorageMessages.INSTANCE.notImplemented();
+    }
 
     default UploadUrls createUploadUrls(GetUploadUrlsCommand command) {
         throw StorageMessages.INSTANCE.notImplemented();

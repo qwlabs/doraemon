@@ -60,6 +60,25 @@ public class CustomMinioClient extends MinioAsyncClient {
         }
     }
 
+    protected String createUploadUrl(String bucket, String objectName) {
+        Map<String, String> queryParams = Map.of();
+        var args = GetPresignedObjectUrlArgs.builder()
+            .method(Method.PUT)
+            .expiry(UPLOAD_EXPIRES_IN_DAYS, TimeUnit.DAYS)
+            .bucket(bucket)
+            .object(objectName)
+            .extraQueryParams(queryParams)
+            .build();
+        try {
+            return this.getPresignedObjectUrl(args);
+        } catch (NoSuchAlgorithmException | InsufficientDataException | IOException | InvalidKeyException
+                 | ServerException | XmlParserException | ErrorResponseException | InternalException
+                 | InvalidResponseException e) {
+            LOGGER.error("Can not create upload url.", e);
+            throw new StorageException("Can not create upload url.", e);
+        }
+    }
+
     protected String createUploadUrl(String bucket, String objectName, String uploadId, Integer partNumber) {
         Map<String, String> queryParams = Map.of("uploadId", uploadId, "partNumber", partNumber.toString());
         var args = GetPresignedObjectUrlArgs.builder()

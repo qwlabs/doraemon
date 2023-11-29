@@ -6,9 +6,11 @@ import com.qwlabs.storage.messages.StorageMessages;
 import com.qwlabs.storage.models.CompleteUploadCommand;
 import com.qwlabs.storage.models.GetDownloadUrlCommand;
 import com.qwlabs.storage.models.GetObjectCommand;
+import com.qwlabs.storage.models.GetUploadUrlCommand;
 import com.qwlabs.storage.models.GetUploadUrlsCommand;
 import com.qwlabs.storage.models.PutObjectCommand;
 import com.qwlabs.storage.models.StorageObject;
+import com.qwlabs.storage.models.UploadUrl;
 import com.qwlabs.storage.models.UploadUrls;
 import com.qwlabs.storage.services.StorageEngine;
 import io.minio.messages.ListPartsResult;
@@ -25,30 +27,47 @@ public class MinioStorageEngine implements StorageEngine {
     }
 
     @Override
+    public UploadUrl createUploadUrl(GetUploadUrlCommand command) {
+        setupBucket(command.getBucket());
+        var url = minioClient.createUploadUrl(command.getBucket(), command.getObjectName());
+        return UploadUrl.builder()
+            .provider(command.getProvider())
+            .bucket(command.getBucket())
+            .objectName(command.getObjectName())
+            .url(url)
+            .build();
+    }
+
+    @Override
     public UploadUrls createUploadUrls(GetUploadUrlsCommand command) {
         setupBucket(command.getBucket());
         String uploadId = minioClient.createUploadId(command.getBucket(),
-                command.getObjectName(), command.getContentType());
+            command.getObjectName(), command.getContentType());
         List<String> urls = Lists.newArrayList();
         for (int partNumber = 1; partNumber <= command.getPartCount(); partNumber++) {
             urls.add(minioClient.createUploadUrl(command.getBucket(), command.getObjectName(),
-                    uploadId, partNumber));
+                uploadId, partNumber));
         }
-        return new UploadUrls(command.getProvider(), command.getBucket(),
-                command.getObjectName(), uploadId, urls);
+        return UploadUrls.builder()
+            .provider(command.getProvider())
+            .bucket(command.getBucket())
+            .objectName(command.getObjectName())
+            .uploadId(uploadId)
+            .urls(urls)
+            .build();
     }
 
     @Override
     public String completeUpload(CompleteUploadCommand command) {
         ListPartsResult result = minioClient.listParts(
-                command.getBucket(), command.getObjectName(), command.getUploadId());
+            command.getBucket(), command.getObjectName(), command.getUploadId());
         if (result.partList().size() != command.getPartCount()) {
             throw StorageMessages.INSTANCE.invalidPartCount(command.getPartCount(),
-                    result.partList().size());
+                result.partList().size());
         }
         List<Part> parts = result.partList();
         minioClient.completeUpload(command.getBucket(), command.getObjectName(),
-                command.getUploadId(), parts);
+            command.getUploadId(), parts);
         return minioClient.createDownloadUrl(command.getBucket(), command.getObjectName());
     }
 

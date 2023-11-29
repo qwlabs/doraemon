@@ -11,10 +11,10 @@ import java.util.Map;
 import java.util.Optional;
 
 public class StorageContext {
-    private static final String ATTRIBUTE_FILE_NAME = "fileName";
-    private static final String ATTRIBUTE_FILE_HASH = "fileHash";
-    private static final String ATTRIBUTE_FILE_PART_COUNT = "filePartCount";
-    private static final String ATTRIBUTE_FILE_CONTENT_TYPE = "fileContentType";
+    public static final String ATTRIBUTE_FILE_NAME = "fileName";
+    public static final String ATTRIBUTE_FILE_HASH = "fileHash";
+    public static final String ATTRIBUTE_FILE_PART_COUNT = "filePartCount";
+    public static final String ATTRIBUTE_FILE_CONTENT_TYPE = "fileContentType";
     private final String businessType;
     private final Map<String, Object> attributes;
 
