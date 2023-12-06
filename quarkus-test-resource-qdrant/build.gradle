@@ -1,4 +1,6 @@
 dependencies {
     api project(":lang")
     api "io.quarkus:quarkus-junit5:${quarkusVersion}"
+    api "org.testcontainers:testcontainers:${testcontainersVersion}"
 }
+checkstyleMain.exclude '**/quarkus/test/qdrant/**'
