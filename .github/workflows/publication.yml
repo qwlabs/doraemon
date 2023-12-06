@@ -17,9 +17,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
+          distribution: 'adopt'
+          cache: 'gradle'
       - name: Deploy artifacts
         run: |
           export VERSION_HEADER=$'Version: GnuPG v2\n\n'
