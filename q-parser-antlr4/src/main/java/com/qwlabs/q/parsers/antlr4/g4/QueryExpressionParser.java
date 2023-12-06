@@ -1,4 +1,4 @@
-// Generated from /Users/pipinet/workspace/doraemon/q-parser-antlr4/src/main/java/com/qwlabs/q/parsers/antlr4/g4/QueryExpression.g4 by ANTLR 4.10.1
+// Generated from java-escape by ANTLR 4.11.1
 package com.qwlabs.q.parsers.antlr4.g4;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 
-@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
+@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue"})
 public class QueryExpressionParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.10.1", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.11.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -83,7 +83,7 @@ public class QueryExpressionParser extends Parser {
 	}
 
 	@Override
-	public String getGrammarFileName() { return "QueryExpression.g4"; }
+	public String getGrammarFileName() { return "java-escape"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }
@@ -99,6 +99,7 @@ public class QueryExpressionParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class QueryContext extends ParserRuleContext {
 		public ConditionsContext conditions() {
 			return getRuleContext(ConditionsContext.class,0);
@@ -143,6 +144,7 @@ public class QueryExpressionParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class ConditionsContext extends ParserRuleContext {
 		public ConditionsContext conditions() {
 			return getRuleContext(ConditionsContext.class,0);
@@ -222,6 +224,7 @@ public class QueryExpressionParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class ConditionContext extends ParserRuleContext {
 		public ConditionLeftContext conditionLeft() {
 			return getRuleContext(ConditionLeftContext.class,0);
@@ -353,6 +356,7 @@ public class QueryExpressionParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class ConditionLeftContext extends ParserRuleContext {
 		public List<TerminalNode> IDENTIFIER() { return getTokens(QueryExpressionParser.IDENTIFIER); }
 		public TerminalNode IDENTIFIER(int i) {
@@ -419,6 +423,7 @@ public class QueryExpressionParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class ConditionRightContext extends ParserRuleContext {
 		public TerminalNode LIKE() { return getToken(QueryExpressionParser.LIKE, 0); }
 		public TerminalNode STRING() { return getToken(QueryExpressionParser.STRING, 0); }
@@ -564,7 +569,7 @@ public class QueryExpressionParser extends Parser {
 				match(EQ);
 				setState(68);
 				_la = _input.LA(1);
-				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << STRING) | (1L << NUMBER) | (1L << DATETIME))) != 0)) ) {
+				if ( !(((_la) & ~0x3f) == 0 && ((1L << _la) & 1245184L) != 0) ) {
 				_errHandler.recoverInline(this);
 				}
 				else {
@@ -589,6 +594,7 @@ public class QueryExpressionParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class InExprContext extends ParserRuleContext {
 		public TerminalNode OPEN_PAREN() { return getToken(QueryExpressionParser.OPEN_PAREN, 0); }
 		public List<InItemContext> inItem() {
@@ -663,6 +669,7 @@ public class QueryExpressionParser extends Parser {
 		return _localctx;
 	}
 
+	@SuppressWarnings("CheckReturnValue")
 	public static class InItemContext extends ParserRuleContext {
 		public TerminalNode STRING() { return getToken(QueryExpressionParser.STRING, 0); }
 		public TerminalNode NUMBER() { return getToken(QueryExpressionParser.NUMBER, 0); }
