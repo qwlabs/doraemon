@@ -1,5 +1,6 @@
 dependencies {
     api project(":lang")
+    api project(":exceptions")
     api "io.quarkus.arc:arc:${quarkusVersion}"
     api "jakarta.enterprise:jakarta.enterprise.cdi-api:${jakartaCdiApiVersion}"
     api "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"

@@ -1,7 +1,7 @@
 package com.qwlabs.quarkus.tenant;
 
 import com.google.common.base.Suppliers;
-import com.qwlabs.cdi.DispatchInstance;
+import com.qwlabs.cdi.dispatch.DispatchInstance;
 import com.qwlabs.lang.C2;
 import io.vertx.ext.web.RoutingContext;
 import jakarta.enterprise.context.RequestScoped;

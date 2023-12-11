@@ -1,7 +1,7 @@
 package com.qwlabs.security;
 
 import com.google.common.collect.Maps;
-import com.qwlabs.cdi.DispatchInstance;
+import com.qwlabs.cdi.dispatch.DispatchInstance;
 
 import jakarta.validation.constraints.NotNull;
 import java.util.Map;

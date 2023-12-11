@@ -1,6 +1,6 @@
 package com.qwlabs.security;
 
-import com.qwlabs.cdi.DispatchInstance;
+import com.qwlabs.cdi.dispatch.DispatchInstance;
 import io.quarkus.security.identity.AuthenticationRequestContext;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.security.identity.SecurityIdentityAugmentor;

@@ -1,6 +1,6 @@
 package com.qwlabs.q.cdi;
 
-import com.qwlabs.cdi.DispatchInstance;
+import com.qwlabs.cdi.dispatch.DispatchInstance;
 import com.qwlabs.exceptions.ServiceException;
 import com.qwlabs.lang.S2;
 import com.qwlabs.q.QEngine;

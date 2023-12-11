@@ -1,4 +1,4 @@
-package com.qwlabs.cdi;
+package com.qwlabs.cdi.dispatch;
 
 import io.quarkus.arc.ClientProxy;
 

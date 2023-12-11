@@ -1,7 +1,7 @@
 package com.qwlabs.q.cdi;
 
 import com.google.common.base.Suppliers;
-import com.qwlabs.cdi.Dispatchable;
+import com.qwlabs.cdi.dispatch.Dispatchable;
 import com.qwlabs.lang.Annotations;
 import com.qwlabs.q.QEngine;
 import com.qwlabs.q.conditions.QCondition;

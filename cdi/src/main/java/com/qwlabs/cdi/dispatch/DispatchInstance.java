@@ -1,6 +1,7 @@
-package com.qwlabs.cdi;
+package com.qwlabs.cdi.dispatch;
 
 
+import com.qwlabs.cdi.Arcs;
 import com.qwlabs.lang.F2;
 import jakarta.annotation.Nullable;
 import jakarta.enterprise.inject.Instance;
