@@ -2,13 +2,10 @@ package com.qwlabs.lang;
 
 import com.google.common.base.Supplier;
 
-import javax.annotation.CheckForNull;
-
 public class RuntimeExpiringMemoizingSupplier<T> implements Supplier<T> {
     private final Supplier<WithExpiring<T>> delegate;
-    @CheckForNull
-    private transient volatile T value;
-    private transient volatile long expirationNanos;
+    private T value;
+    private volatile long expirationNanos;
 
     public RuntimeExpiringMemoizingSupplier(Supplier<WithExpiring<T>> delegate) {
         this.delegate = delegate;
@@ -24,7 +21,7 @@ public class RuntimeExpiringMemoizingSupplier<T> implements Supplier<T> {
             }
         }
         long now = System.nanoTime();
-        if (now > expirationNanos) {
+        if (now < expirationNanos) {
             return this.value;
         }
         synchronized (this) {
