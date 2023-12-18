@@ -2,7 +2,7 @@ package com.qwlabs.storage.graphql.models;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.qwlabs.jackson.Jackson;
-import com.qwlabs.storage.messages.StorageMessages;
+import com.qwlabs.storage.messages.Messages;
 import com.qwlabs.storage.services.StorageContext;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
@@ -45,8 +45,8 @@ public class CreateUploadUrlsInput {
         }
         if (context instanceof String) {
             return Jackson.read((String) context, CONTENT_TYPE)
-                    .orElseThrow(() -> StorageMessages.INSTANCE.invalidContent((String) context));
+                    .orElseThrow(() -> Messages.INSTANCE.invalidContent((String) context));
         }
-        throw StorageMessages.INSTANCE.invalidContent(context.toString());
+        throw Messages.INSTANCE.invalidContent(context.toString());
     }
 }

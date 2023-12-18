@@ -7,10 +7,13 @@ import org.jboss.logging.annotations.MessageBundle;
 
 import static org.jboss.logging.Messages.getBundle;
 
-@MessageBundle(projectCode = "CDI")
-public interface CdiMessages {
+@SuppressWarnings("checkstyle:MagicNumber")
+@MessageBundle(projectCode = "DORA")
+public interface Messages {
+    int BASE = 0;
     @Inject
-    CdiMessages INSTANCE = getBundle(CdiMessages.class);
-    @Message(value = "代码错误: {0}", format = Message.Format.MESSAGE_FORMAT)
+    Messages INSTANCE = getBundle(Messages.class);
+
+    @Message(id = BASE + 1, value = "Code error: {0}", format = Message.Format.MESSAGE_FORMAT)
     CodeException codeError(String message);
 }

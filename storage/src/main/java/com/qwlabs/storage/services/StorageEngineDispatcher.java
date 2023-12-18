@@ -2,7 +2,7 @@ package com.qwlabs.storage.services;
 
 import com.qwlabs.cdi.dispatch.DispatchInstance;
 import com.qwlabs.cdi.Primary;
-import com.qwlabs.storage.messages.StorageMessages;
+import com.qwlabs.storage.messages.Messages;
 import com.qwlabs.storage.models.CompleteUploadCommand;
 import com.qwlabs.storage.models.GetDownloadUrlCommand;
 import com.qwlabs.storage.models.GetObjectCommand;
@@ -29,7 +29,7 @@ public class StorageEngineDispatcher implements StorageEngine {
 
     private StorageEngine get(String provider) {
         return dispatcher.getOptional(provider)
-                .orElseThrow(() -> StorageMessages.INSTANCE.notFoundStorageService(provider));
+                .orElseThrow(() -> Messages.INSTANCE.notFoundStorageService(provider));
     }
 
     @Override

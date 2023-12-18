@@ -1,6 +1,6 @@
 package com.qwlabs.cdi.partition;
 
-import com.qwlabs.cdi.CdiMessages;
+import com.qwlabs.cdi.Messages;
 
 import java.util.List;
 import java.util.Set;
@@ -25,7 +25,7 @@ public class PartitionResult {
         if (Long.TYPE.isAssignableFrom(returnType) || Long.class.isAssignableFrom(returnType)) {
             return (R) getLongData(data);
         }
-        throw CdiMessages.INSTANCE.codeError("PartitionResult can not support type " + returnType.getName());
+        throw Messages.INSTANCE.codeError("PartitionResult can not support type " + returnType.getName());
     }
 
     private static <R> Long getLongData(Stream<R> data) {

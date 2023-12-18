@@ -65,6 +65,6 @@ class PartitionResultTest {
 
         var exception = assertThrows(CodeException.class, () -> PartitionResult.get(data, Map.class));
 
-        assertThat(exception.getMessage(), is("代码错误: PartitionResult can not support type java.util.Map"));
+        assertThat(exception.getMessage(), is("DORA000001: Code error: PartitionResult can not support type java.util.Map"));
     }
 }

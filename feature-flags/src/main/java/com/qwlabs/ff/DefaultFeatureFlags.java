@@ -25,6 +25,6 @@ public class DefaultFeatureFlags implements FeatureFlags {
         return instances.stream()
             .filter(instance -> Objects.equals(instance.feature(), feature))
             .findFirst()
-            .orElseThrow(() -> FeatureFlagsMessages.INSTANCE.featureNotFound(feature));
+            .orElseThrow(() -> Messages.INSTANCE.featureNotFound(feature));
     }
 }

@@ -1,9 +1,9 @@
 package com.qwlabs.lang;
 
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
-import jakarta.annotation.Nullable;
 
 import java.time.Duration;
 import java.util.Objects;
