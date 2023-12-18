@@ -1,25 +1,7 @@
 package com.qwlabs.exceptions;
 
+import lombok.experimental.StandardException;
+
+@StandardException
 public class InternalServerException extends ServiceException {
-    public InternalServerException() {
-    }
-
-    public InternalServerException(String message) {
-        super(message);
-    }
-
-    public InternalServerException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public InternalServerException(Throwable cause) {
-        super(cause);
-    }
-
-    public InternalServerException(String message,
-                                   Throwable cause,
-                                   boolean enableSuppression,
-                                   boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 }
