@@ -1,7 +1,7 @@
 package com.qwlabs.storage.minio;
 
 import com.qwlabs.lang.S2;
-import com.qwlabs.storage.messages.Messages;
+import com.qwlabs.storage.messages.StorageMessages;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,13 +16,13 @@ public class MinioConfig {
 
     public void validate() {
         if (S2.isBlank(url)) {
-            throw Messages.INSTANCE.lostConfig("url");
+            throw StorageMessages.INSTANCE.lostConfig("url");
         }
         if (S2.isBlank(accessKey)) {
-            throw Messages.INSTANCE.lostConfig("accessKey");
+            throw StorageMessages.INSTANCE.lostConfig("accessKey");
         }
         if (S2.isBlank(secretKey)) {
-            throw Messages.INSTANCE.lostConfig("secretKey");
+            throw StorageMessages.INSTANCE.lostConfig("secretKey");
         }
     }
 }

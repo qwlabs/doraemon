@@ -1,7 +1,7 @@
 package com.qwlabs.storage.services;
 
 
-import com.qwlabs.storage.messages.Messages;
+import com.qwlabs.storage.messages.StorageMessages;
 import com.qwlabs.storage.models.CompleteUploadCommand;
 import com.qwlabs.storage.models.GetDownloadUrlCommand;
 import com.qwlabs.storage.models.GetObjectCommand;
@@ -17,27 +17,27 @@ import java.io.InputStream;
 public interface StorageEngine {
 
     default UploadUrl createUploadUrl(GetUploadUrlCommand command) {
-        throw Messages.INSTANCE.notImplemented();
+        throw StorageMessages.INSTANCE.notImplemented();
     }
 
     default UploadUrls createUploadUrls(GetUploadUrlsCommand command) {
-        throw Messages.INSTANCE.notImplemented();
+        throw StorageMessages.INSTANCE.notImplemented();
     }
 
     default String completeUpload(CompleteUploadCommand command) {
-        throw Messages.INSTANCE.notImplemented();
+        throw StorageMessages.INSTANCE.notImplemented();
     }
 
     default String getDownloadUrl(GetDownloadUrlCommand command) {
-        throw Messages.INSTANCE.notImplemented();
+        throw StorageMessages.INSTANCE.notImplemented();
     }
 
     default InputStream getObject(GetObjectCommand command) {
-        throw Messages.INSTANCE.notImplemented();
+        throw StorageMessages.INSTANCE.notImplemented();
     }
 
     default StorageObject putObject(PutObjectCommand command) {
-        throw Messages.INSTANCE.notImplemented();
+        throw StorageMessages.INSTANCE.notImplemented();
     }
 
     default String putObjectForUrl(PutObjectCommand command) {

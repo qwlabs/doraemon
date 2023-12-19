@@ -2,7 +2,7 @@ package com.qwlabs.storage.url;
 
 
 import com.qwlabs.cdi.dispatch.Dispatchable;
-import com.qwlabs.storage.messages.Messages;
+import com.qwlabs.storage.messages.StorageMessages;
 import com.qwlabs.storage.models.CompleteUploadCommand;
 import com.qwlabs.storage.models.GetDownloadUrlCommand;
 import com.qwlabs.storage.models.GetObjectCommand;
@@ -23,12 +23,12 @@ public class UrlStorageEngine implements StorageEngine, Dispatchable<String> {
 
     @Override
     public UploadUrls createUploadUrls(GetUploadUrlsCommand command) {
-        throw Messages.INSTANCE.notSupported(PROVIDER, "upload");
+        throw StorageMessages.INSTANCE.notSupported(PROVIDER, "upload");
     }
 
     @Override
     public String completeUpload(CompleteUploadCommand command) {
-        throw Messages.INSTANCE.notSupported(PROVIDER, "upload");
+        throw StorageMessages.INSTANCE.notSupported(PROVIDER, "upload");
     }
 
     @Override
@@ -38,12 +38,12 @@ public class UrlStorageEngine implements StorageEngine, Dispatchable<String> {
 
     @Override
     public InputStream getObject(GetObjectCommand command) {
-        throw Messages.INSTANCE.notSupported(PROVIDER, "download");
+        throw StorageMessages.INSTANCE.notSupported(PROVIDER, "download");
     }
 
     @Override
     public StorageObject putObject(PutObjectCommand command) {
-        throw Messages.INSTANCE.notSupported(PROVIDER, "putObject");
+        throw StorageMessages.INSTANCE.notSupported(PROVIDER, "putObject");
     }
 
     @Override

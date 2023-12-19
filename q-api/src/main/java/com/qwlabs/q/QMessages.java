@@ -11,10 +11,10 @@ import static org.jboss.logging.Messages.getBundle;
 
 @SuppressWarnings("checkstyle:MagicNumber")
 @MessageBundle(projectCode = "DORA")
-public interface Messages {
+public interface QMessages {
     int BASE = 1000;
     @Inject
-    Messages INSTANCE = getBundle(Messages.class);
+    QMessages INSTANCE = getBundle(QMessages.class);
 
     @Message(id = BASE, value = "Invalid dialect: {0}", format = Message.Format.MESSAGE_FORMAT)
     CodeException invalidDialect(String dialect);

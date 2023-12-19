@@ -4,7 +4,7 @@ package com.qwlabs.storage.services;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
-import com.qwlabs.storage.messages.Messages;
+import com.qwlabs.storage.messages.StorageMessages;
 import jakarta.annotation.Nullable;
 
 import java.util.Map;
@@ -29,22 +29,22 @@ public class StorageContext {
 
     public String getFileName() {
         return getString(ATTRIBUTE_FILE_NAME)
-                .orElseThrow(() -> Messages.INSTANCE.notFoundContextAttribute(ATTRIBUTE_FILE_NAME));
+                .orElseThrow(() -> StorageMessages.INSTANCE.notFoundContextAttribute(ATTRIBUTE_FILE_NAME));
     }
 
     public String getFileHash() {
         return getString(ATTRIBUTE_FILE_HASH)
-                .orElseThrow(() -> Messages.INSTANCE.notFoundContextAttribute(ATTRIBUTE_FILE_HASH));
+                .orElseThrow(() -> StorageMessages.INSTANCE.notFoundContextAttribute(ATTRIBUTE_FILE_HASH));
     }
 
     public String getFileContentType() {
         return getString(ATTRIBUTE_FILE_CONTENT_TYPE)
-                .orElseThrow(() -> Messages.INSTANCE.notFoundContextAttribute(ATTRIBUTE_FILE_CONTENT_TYPE));
+                .orElseThrow(() -> StorageMessages.INSTANCE.notFoundContextAttribute(ATTRIBUTE_FILE_CONTENT_TYPE));
     }
 
     public Integer getFilePartCount() {
         return getInteger(ATTRIBUTE_FILE_PART_COUNT)
-                .orElseThrow(() -> Messages.INSTANCE.notFoundContextAttribute(ATTRIBUTE_FILE_PART_COUNT));
+                .orElseThrow(() -> StorageMessages.INSTANCE.notFoundContextAttribute(ATTRIBUTE_FILE_PART_COUNT));
     }
 
     public StorageContext put(String attributeName, String attributeValue) {

@@ -12,11 +12,11 @@ import static org.jboss.logging.Messages.getBundle;
 
 @SuppressWarnings("checkstyle:MagicNumber")
 @MessageBundle(projectCode = "DORA")
-public interface Messages {
+public interface StorageMessages {
     int BASE = 2000;
 
     @Inject
-    Messages INSTANCE = getBundle(Messages.class);
+    StorageMessages INSTANCE = getBundle(StorageMessages.class);
 
     @Message(id = BASE, value = "{0} does not support {1} operation", format = Message.Format.MESSAGE_FORMAT)
     BadRequestException notSupported(String provider, String operation);
