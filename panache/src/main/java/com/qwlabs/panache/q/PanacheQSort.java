@@ -2,6 +2,7 @@ package com.qwlabs.panache.q;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.Lists;
+import com.qwlabs.lang.C2;
 import com.qwlabs.q.sort.QSort;
 import com.qwlabs.q.sort.QSortPredicate;
 import com.qwlabs.q.sort.QSortPredicates;
@@ -69,6 +70,7 @@ public class PanacheQSort {
         List<Sort> sorts = formatters.stream()
             .map(formatter -> formatter.format(sort))
             .filter(Objects::nonNull)
+            .filter(sort -> C2.isNotEmpty(sort.getColumns()))
             .toList();
         if (sorts.isEmpty()) {
             return defaultSort.format(QSortPredicates.all(), formatter());

@@ -5,6 +5,7 @@ import com.qwlabs.lang.C2;
 import com.qwlabs.q.sort.QSortFormatter;
 import io.quarkus.panache.common.Sort;
 
+import java.util.Collection;
 import java.util.List;
 
 import static com.qwlabs.panache.q.PanacheQSort.nativeField;
@@ -49,7 +50,7 @@ public class PanacheQSortFormatter implements QSortFormatter<Sort> {
         segments.stream()
             .map(Sort::getColumns)
             .filter(C2::isNotEmpty)
-            .map(columns -> columns.get(0))
+            .flatMap(Collection::stream)
             .forEach(column -> result.and(column.getName(), column.getDirection()));
         return result;
     }
