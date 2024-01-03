@@ -32,6 +32,7 @@ class SingleRowReaderTest {
             SheetReadOptions.builder().sheetNo(0).build(),
             1
         );
+        
         valid(data1);
         valid(data2);
     }
