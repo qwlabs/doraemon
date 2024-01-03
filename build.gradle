@@ -8,19 +8,13 @@ buildscript {
 plugins {
     id 'org.kordamp.gradle.jandex' apply false
     id 'org.ajoberstar.grgit' apply false
-    id 'io.codearte.nexus-staging'
+    id 'io.github.gradle-nexus.publish-plugin' apply false
     id 'me.champeau.jmh' apply false
 }
-
-nexusStaging {
-    serverUrl = "https://s01.oss.sonatype.org/service/local/"
-    username = System.getenv("OSSRH_TOKEN_USERNAME") ?: ""
-    password = System.getenv("OSSRH_TOKEN_PASSWORD") ?: ""
-}
+apply from: "${rootProject.rootDir}/gradle/nexus.gradle"
 
 subprojects {
     apply plugin: 'java-library'
-    apply plugin: 'org.kordamp.gradle.jandex'
     apply from: "${rootProject.rootDir}/gradle/bom.gradle"
     apply from: "${rootProject.rootDir}/gradle/jandex.gradle"
     apply from: "${rootProject.rootDir}/gradle/version.gradle"

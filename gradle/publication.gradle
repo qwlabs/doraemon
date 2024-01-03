@@ -11,6 +11,7 @@ task javadocJar(type: Jar) {
     from javadoc
 }
 
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -41,16 +42,6 @@ publishing {
                     connection = "scm:git:git://github.com/qwlabs/${rootProject.name}.git"
                     developerConnection = "scm:git:ssh://github.com/qwlabs/${rootProject.name}.git"
                 }
-            }
-        }
-    }
-
-    repositories {
-        maven {
-            url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-            credentials {
-                username System.getenv("OSSRH_TOKEN_USERNAME") ?: ""
-                password System.getenv("OSSRH_TOKEN_PASSWORD") ?: ""
             }
         }
     }
