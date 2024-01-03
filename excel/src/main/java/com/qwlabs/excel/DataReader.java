@@ -43,7 +43,7 @@ public class DataReader {
 
         @Override
         public void invokeHeadMap(Map<Integer, String> headMap, AnalysisContext context) {
-            this.indexFields.putAll(ExcelHeaders.lookupHeaders(headMap, headMapping));
+            this.indexFields.putAll(ExcelHelper.lookupHeaders(headMap, headMapping));
         }
 
         @Override

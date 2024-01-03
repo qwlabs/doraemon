@@ -32,7 +32,7 @@ class SingleRowReaderTest {
             SheetReadOptions.builder().sheetNo(0).build(),
             1
         );
-        
+
         valid(data1);
         valid(data2);
     }
@@ -46,12 +46,12 @@ class SingleRowReaderTest {
         assertThat(data.get(4), is("发动机型号"));
         assertThat(data.get(5), is("发动机序列号"));
         assertThat(data.get(6), is("航站"));
-        assertThat(data.get(7), is("ATA章节"));
-        assertThat(data.get(8), is("故障描述"));
-        assertThat(data.get(9), is("处置措施"));
-        assertThat(data.get(10), is("故障发生时间"));
-        assertThat(data.get(11), is("故障记录时间"));
-        assertThat(data.get(12), is("故障关闭时间"));
+        assertThat(data.get(8), is("ATA章节"));
+        assertThat(data.get(9), is("故障描述"));
+        assertThat(data.get(10), is("处置措施"));
+        assertThat(data.get(11), is("故障发生时间"));
+        assertThat(data.get(12), is("故障记录时间"));
+        assertThat(data.get(13), is("故障关闭时间"));
     }
 
     private InputStream read(String path) {

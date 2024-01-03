@@ -7,7 +7,6 @@ import com.qwlabs.lang.InputStreams;
 
 import java.io.InputStream;
 import java.util.Map;
-import java.util.Optional;
 
 public class SingleRowReader {
     private final InputStream inputStream;
@@ -22,11 +21,12 @@ public class SingleRowReader {
         options.config(EasyExcel.read(inputStream, listener))
             .headRowNumber(rowIndex + 1)
             .doRead();
-        return listener.getData();
+        return ExcelHelper.cleanup(listener.getData());
     }
 
     private static final class Listener extends AnalysisEventListener<Map<Integer, String>> {
         private Map<Integer, String> data;
+
         @Override
         public boolean hasNext(AnalysisContext context) {
             return false;
@@ -44,7 +44,6 @@ public class SingleRowReader {
 
         @Override
         public void doAfterAllAnalysed(AnalysisContext context) {
-            this.data = Optional.ofNullable(this.data).orElseGet(Map::of);
         }
 
         public Map<Integer, String> getData() {
