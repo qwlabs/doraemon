@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import lombok.Getter;
 import lombok.Setter;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,10 +20,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import static com.qwlabs.jackson.Jackson.asBoolean;
 import static com.qwlabs.jackson.Jackson.asText;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -61,7 +63,7 @@ public class JacksonTest {
         when(objectMapper.writeValueAsString(jacksonClass)).thenThrow(exception);
 
         Optional<String> mayResult = Jackson.write(jacksonClass);
-        Assertions.assertFalse(mayResult.isPresent());
+        assertFalse(mayResult.isPresent());
 
         verify(objectMapper).writeValueAsString(jacksonClass);
     }
@@ -69,33 +71,33 @@ public class JacksonTest {
     @Test
     void should_return_when_unmarshal_success_with_TypeReference() {
         var mayResult = Jackson.read("{\"value\":\"v1\"}", typeReference);
-        Assertions.assertTrue(mayResult.isPresent());
+        assertTrue(mayResult.isPresent());
         assertThat(mayResult.get().getValue(), is("v1"));
     }
 
     @Test
     void should_return_empty_when_unmarshal_fail_with_TypeReference(@Mock JsonProcessingException exception) throws JsonProcessingException {
         var mayResult = Jackson.read("{\"value\": v1}", typeReference);
-        Assertions.assertTrue(mayResult.isEmpty());
+        assertTrue(mayResult.isEmpty());
     }
 
     @Test
     void should_return_when_unmarshal_success_with_class() {
         var mayResult = Jackson.read("{\"value\":\"v1\"}", TestJacksonClass.class);
-        Assertions.assertTrue(mayResult.isPresent());
+        assertTrue(mayResult.isPresent());
         assertThat(mayResult.get().getValue(), is("v1"));
     }
 
     @Test
     void should_return_empty_when_unmarshal_fail_with_class() {
         var mayResult = Jackson.read("{\"value\": v1}", TestJacksonClass.class);
-        Assertions.assertTrue(mayResult.isEmpty());
+        assertTrue(mayResult.isEmpty());
     }
 
     @Test
     void should_return_when_unmarshal_success_with_java_type() {
         var mayResult = Jackson.read("{\"value\":\"v1\"}", javaType);
-        Assertions.assertTrue(mayResult.isPresent());
+        assertTrue(mayResult.isPresent());
         assertThat(((TestJacksonClass) mayResult.get()).getValue(), is("v1"));
     }
 
@@ -103,7 +105,7 @@ public class JacksonTest {
     @Test
     void should_return_empty_when_unmarshal_fail_with_java_type() {
         var mayResult = Jackson.read("json", javaType);
-        Assertions.assertTrue(mayResult.isEmpty());
+        assertTrue(mayResult.isEmpty());
     }
 
 
@@ -112,14 +114,14 @@ public class JacksonTest {
         var node = Jackson.createObjectNode();
         node.set("name", new TextNode("value"));
         var mayResult = Jackson.read(Jackson.write(node).orElse(null));
-        Assertions.assertTrue(mayResult.isPresent());
+        assertTrue(mayResult.isPresent());
         assertThat(mayResult.get().get("name").asText(), is("value"));
     }
 
     @Test
     void should_return_empty_when_unmarshal_fail(@Mock JsonProcessingException exception) throws JsonProcessingException {
         var mayResult = Jackson.read("{\"value\": v1}");
-        Assertions.assertTrue(mayResult.isEmpty());
+        assertTrue(mayResult.isEmpty());
     }
 
     @Test
@@ -135,6 +137,23 @@ public class JacksonTest {
         assertThat(asText(DecimalNode.valueOf(new BigDecimal("1.2222222222222222222222222222222222"))), is("1.2222222222222222222222222222222222"));
         assertThat(asText(DecimalNode.valueOf(new BigDecimal("1.2222222222222222222222222222222222")), null), is("1.2222222222222222222222222222222222"));
         assertThat(asText(Jackson.createObjectNode().put("a", "1.2222222222222222222222222222222222"), "a"), is("1.2222222222222222222222222222222222"));
+    }
+
+    @Test
+    void should_asBoolean() {
+        assertNull(asBoolean(null));
+        assertNull(asBoolean(null, null));
+        assertNull(asBoolean(NullNode.getInstance()));
+        assertNull(asBoolean(NullNode.getInstance(), null));
+        assertTrue(asBoolean(BooleanNode.TRUE));
+        assertFalse(asBoolean(BooleanNode.FALSE));
+        assertNull(asBoolean(DecimalNode.valueOf(new BigDecimal("1.2222222222222222222222222222222222"))));
+        assertNull(asBoolean(DecimalNode.valueOf(new BigDecimal("1.2222222222222222222222222222222222")), null));
+        assertNull(asBoolean(Jackson.createObjectNode().put("a", "1.2222222222222222222222222222222222"), "a"));
+        assertTrue(asBoolean(Jackson.createObjectNode().put("a", "true"), "a"));
+        assertFalse(asBoolean(Jackson.createObjectNode().put("a", "false"), "a"));
+        assertTrue(asBoolean(Jackson.createObjectNode().put("a", Boolean.TRUE), "a"));
+        assertFalse(asBoolean(Jackson.createObjectNode().put("a", Boolean.FALSE), "a"));
     }
 
     @Getter

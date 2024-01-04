@@ -27,9 +27,9 @@ public final class Jackson {
     private static ObjectMapper get() {
         if (objectMapper == null) {
             Jackson.objectMapper = SafeCDI.current()
-                    .map(cdi -> cdi.select(ObjectMapper.class))
-                    .map(Instance::get)
-                    .orElseGet(ObjectMapper::new);
+                .map(cdi -> cdi.select(ObjectMapper.class))
+                .map(Instance::get)
+                .orElseGet(ObjectMapper::new);
         }
         return Jackson.objectMapper;
     }
@@ -91,13 +91,31 @@ public final class Jackson {
         }
     }
 
+    public static Boolean asBoolean(@Nullable JsonNode node) {
+        return asBoolean(node, null);
+    }
+
+    public static Boolean asBoolean(@Nullable JsonNode node, @Nullable String propertyName) {
+        return Optional.ofNullable(asText(node, propertyName))
+            .map(value -> {
+                if (value.equals(Boolean.TRUE.toString())) {
+                    return Boolean.TRUE;
+                }
+                if (value.equals(Boolean.FALSE.toString())) {
+                    return Boolean.FALSE;
+                }
+                return null;
+            })
+            .orElse(null);
+    }
+
     public static String asText(@Nullable JsonNode node, @Nullable String propertyName) {
         if (propertyName == null) {
             return asText(node);
         }
         return Optional.ofNullable(node.get(propertyName))
-                .map(Jackson::asText)
-                .orElse(null);
+            .map(Jackson::asText)
+            .orElse(null);
     }
 
     public static String asText(@Nullable JsonNode node) {
