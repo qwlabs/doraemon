@@ -17,19 +17,24 @@ public class SingleRowReader {
 
     public Map<Integer, String> read(SheetReadOptions options, int rowIndex) {
         InputStreams.reset(inputStream);
-        var listener = new Listener();
+        var listener = new Listener(rowIndex);
         options.config(EasyExcel.read(inputStream, listener))
-            .headRowNumber(rowIndex + 1)
+            .headRowNumber(0)
             .doRead();
         return ExcelHelper.cleanup(listener.getData());
     }
 
     private static final class Listener extends AnalysisEventListener<Map<Integer, String>> {
         private Map<Integer, String> data;
+        private int rowIndex;
+
+        private Listener(int rowIndex) {
+            this.rowIndex = rowIndex;
+        }
 
         @Override
         public boolean hasNext(AnalysisContext context) {
-            return false;
+            return context.readRowHolder().getRowIndex() < rowIndex;
         }
 
         @Override
@@ -39,7 +44,9 @@ public class SingleRowReader {
 
         @Override
         public void invoke(Map<Integer, String> data, AnalysisContext context) {
-
+            if (context.readRowHolder().getRowIndex() == rowIndex) {
+                this.data = data;
+            }
         }
 
         @Override

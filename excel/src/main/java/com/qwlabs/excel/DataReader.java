@@ -21,11 +21,21 @@ public class DataReader {
 
     public List<Map<String, String>> read(SheetReadOptions options,
                                           Map<String, String> headMapping,
-                                          int headRowNumber) {
+                                          int headRowIndex) {
+        return read(options, headMapping, headRowIndex, headRowIndex + 1);
+    }
+
+    public List<Map<String, String>> read(SheetReadOptions options,
+                                          Map<String, String> headMapping,
+                                          int headRowStartIndex,
+                                          int dataRowStartIndex) {
+        if (headRowStartIndex >= dataRowStartIndex) {
+            throw ExcelMessages.INSTANCE.conflictHeadAndDataRowIndex(headRowStartIndex, dataRowStartIndex);
+        }
         InputStreams.reset(inputStream);
-        var listener = new Listener(headMapping);
+        var listener = new Listener(headMapping, headRowStartIndex, dataRowStartIndex);
         options.config(EasyExcel.read(inputStream, listener))
-            .headRowNumber(headRowNumber)
+            .headRowNumber(0)
             .doRead();
         return listener.getData();
     }
@@ -34,21 +44,27 @@ public class DataReader {
         private final Map<String, String> headMapping;
         private final Map<Integer, String> indexFields;
         private final List<Map<String, String>> data;
+        private final int headRowStartIndex;
+        private final int dataRowStartIndex;
 
-        public Listener(Map<String, String> headMapping) {
+        public Listener(Map<String, String> headMapping,
+                        int headRowStartIndex,
+                        int dataRowStartIndex) {
             this.headMapping = headMapping;
+            this.headRowStartIndex = headRowStartIndex;
+            this.dataRowStartIndex = dataRowStartIndex;
             this.indexFields = Maps.newHashMap();
             this.data = Lists.newArrayList();
         }
 
         @Override
-        public void invokeHeadMap(Map<Integer, String> headMap, AnalysisContext context) {
-            this.indexFields.putAll(ExcelHelper.lookupHeaders(headMap, headMapping));
-        }
-
-        @Override
         public void invoke(Map<Integer, String> data, AnalysisContext context) {
-            this.data.add(buildRowData(data));
+            var currentRowIndex = context.readRowHolder().getRowIndex();
+            if (currentRowIndex == headRowStartIndex) {
+                this.indexFields.putAll(ExcelHelper.lookupHeaders(data, headMapping));
+            } else if (currentRowIndex >= dataRowStartIndex) {
+                this.data.add(buildRowData(data));
+            }
         }
 
         private Map<String, String> buildRowData(Map<Integer, String> data) {

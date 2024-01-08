@@ -22,7 +22,7 @@ class DataReaderTest {
         var data = Excels.dataReader(inputStream).read(
             SheetReadOptions.builder().sheetNo(0).build(),
             headMapping,
-            1
+            0
         );
 
         assertThat(data.size(), is(1));

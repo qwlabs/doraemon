@@ -15,7 +15,7 @@ class SingleRowReaderTest {
         var inputStream = read("single-row-reader.xlsx");
         var data = Excels.singleRowReader(inputStream).read(
             SheetReadOptions.builder().sheetNo(0).build(),
-            1
+            0
         );
         valid(data);
     }
@@ -26,11 +26,11 @@ class SingleRowReaderTest {
 
         var data1 = Excels.singleRowReader(inputStream).read(
             SheetReadOptions.builder().sheetNo(0).build(),
-            1
+            0
         );
         var data2 = Excels.singleRowReader(inputStream).read(
             SheetReadOptions.builder().sheetNo(0).build(),
-            1
+            0
         );
 
         valid(data1);
