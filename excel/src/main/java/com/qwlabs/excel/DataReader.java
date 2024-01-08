@@ -6,6 +6,7 @@ import com.alibaba.excel.event.AnalysisEventListener;
 import com.google.common.collect.Maps;
 import com.qwlabs.lang.InputStreams;
 import org.apache.commons.compress.utils.Lists;
+import org.apache.logging.log4j.util.Strings;
 
 import java.io.InputStream;
 import java.util.List;
@@ -22,18 +23,26 @@ public class DataReader {
     public List<Map<String, String>> read(SheetReadOptions options,
                                           Map<String, String> headMapping,
                                           int headRowIndex) {
-        return read(options, headMapping, headRowIndex, headRowIndex + 1);
+        return read(options, headMapping, headRowIndex, headRowIndex + 1, null);
+    }
+
+    public List<Map<String, String>> read(SheetReadOptions options,
+                                          Map<String, String> headMapping,
+                                          int headRowIndex,
+                                          String rowField) {
+        return read(options, headMapping, headRowIndex, headRowIndex + 1, rowField);
     }
 
     public List<Map<String, String>> read(SheetReadOptions options,
                                           Map<String, String> headMapping,
                                           int headRowStartIndex,
-                                          int dataRowStartIndex) {
+                                          int dataRowStartIndex,
+                                          String rowField) {
         if (headRowStartIndex >= dataRowStartIndex) {
             throw ExcelMessages.INSTANCE.conflictHeadAndDataRowIndex(headRowStartIndex, dataRowStartIndex);
         }
         InputStreams.reset(inputStream);
-        var listener = new Listener(headMapping, headRowStartIndex, dataRowStartIndex);
+        var listener = new Listener(headMapping, headRowStartIndex, dataRowStartIndex, rowField);
         options.config(EasyExcel.read(inputStream, listener))
             .headRowNumber(0)
             .doRead();
@@ -46,15 +55,19 @@ public class DataReader {
         private final List<Map<String, String>> data;
         private final int headRowStartIndex;
         private final int dataRowStartIndex;
+        private final String rowField;
 
         public Listener(Map<String, String> headMapping,
                         int headRowStartIndex,
-                        int dataRowStartIndex) {
+                        int dataRowStartIndex,
+                        String rowField) {
             this.headMapping = headMapping;
             this.headRowStartIndex = headRowStartIndex;
             this.dataRowStartIndex = dataRowStartIndex;
+            this.rowField = rowField;
             this.indexFields = Maps.newHashMap();
             this.data = Lists.newArrayList();
+
         }
 
         @Override
@@ -63,18 +76,22 @@ public class DataReader {
             if (currentRowIndex == headRowStartIndex) {
                 this.indexFields.putAll(ExcelHelper.lookupHeaders(data, headMapping));
             } else if (currentRowIndex >= dataRowStartIndex) {
-                this.data.add(buildRowData(data));
+                this.data.add(buildRowData(data, context));
             }
         }
 
-        private Map<String, String> buildRowData(Map<Integer, String> data) {
-            Map<String, String> rowData = Maps.newLinkedHashMapWithExpectedSize(data.size());
-            data.forEach((rowIndex, value) -> {
-                var field = this.indexFields.get(rowIndex);
+        private Map<String, String> buildRowData(Map<Integer, String> data, AnalysisContext context) {
+            var hasRowField = Strings.isNotEmpty(rowField);
+            Map<String, String> rowData = Maps.newLinkedHashMapWithExpectedSize(data.size() + (hasRowField ? 1 : 0));
+            data.forEach((columnIndex, value) -> {
+                var field = this.indexFields.get(columnIndex);
                 if (Objects.nonNull(field)) {
                     rowData.putIfAbsent(field, value);
                 }
             });
+            if (hasRowField) {
+                rowData.put(rowField, String.valueOf(ExcelHelper.toNaturalSequence(context.readRowHolder().getRowIndex())));
+            }
             return rowData;
         }
 

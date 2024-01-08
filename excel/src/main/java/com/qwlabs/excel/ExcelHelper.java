@@ -12,6 +12,14 @@ public final class ExcelHelper {
     private ExcelHelper() {
     }
 
+    public static int toIndex(int rowOrColumn) {
+        return rowOrColumn - 1;
+    }
+
+    public static int toNaturalSequence(int index) {
+        return index + 1;
+    }
+
     public static Map<Integer, String> cleanup(Map<Integer, String> data) {
         return cleanup(data, (index, value) -> Objects.nonNull(value));
     }
