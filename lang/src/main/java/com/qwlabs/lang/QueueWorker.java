@@ -110,6 +110,7 @@ public class QueueWorker<C, E> {
             stopWatch.start("work");
             executeBeforeEach(context, element);
             onWork.accept(context, element);
+            executeAfterEach(context, element);
         } catch (Exception e) {
             boolean shouldContinue = isContinue(context, element, e);
             executeOnFailed(context, element, e);
@@ -118,7 +119,6 @@ public class QueueWorker<C, E> {
                 return false;
             }
         } finally {
-            executeAfterEach(context, element);
             stopWatch.stop();
         }
         if (Objects.isNull(spinDuration)) {
@@ -129,8 +129,8 @@ public class QueueWorker<C, E> {
 
     private boolean isOutOfMaxRuns(int runs) {
         return Optional.ofNullable(maxRuns)
-                .map(mr -> mr < runs)
-                .orElse(false);
+            .map(mr -> mr < runs)
+            .orElse(false);
     }
 
     private void spin() {
@@ -149,9 +149,9 @@ public class QueueWorker<C, E> {
 
     private boolean isContinue(C context, E element, Exception e) {
         return Objects.nonNull(element)
-                && Optional.ofNullable(continueWhen)
-                .map(f -> f.test(context, element, e))
-                .orElse(true);
+            && Optional.ofNullable(continueWhen)
+            .map(f -> f.test(context, element, e))
+            .orElse(true);
     }
 
     @FunctionalInterface
