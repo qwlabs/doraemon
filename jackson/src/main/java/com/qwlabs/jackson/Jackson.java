@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.primitives.Ints;
 import com.qwlabs.cdi.SafeCDI;
 import jakarta.annotation.Nullable;
 import jakarta.enterprise.inject.Instance;
@@ -89,6 +90,16 @@ public final class Jackson {
             LOGGER.warn("can not read json: \"{}\" to json node.", json);
             return Optional.empty();
         }
+    }
+
+    public static Integer asInteger(@Nullable JsonNode node) {
+        return asInteger(node, null);
+    }
+
+    public static Integer asInteger(@Nullable JsonNode node, @Nullable String propertyName) {
+        return Optional.ofNullable(asText(node, propertyName))
+            .map(Ints::tryParse)
+            .orElse(null);
     }
 
     public static Boolean asBoolean(@Nullable JsonNode node) {
