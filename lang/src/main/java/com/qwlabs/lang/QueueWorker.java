@@ -79,7 +79,11 @@ public class QueueWorker<C, E> {
     }
 
     private void executeAfterEach(C context, E element) {
-        F2.ifPresent(onAfterEach, () -> onAfterEach.accept(context, element));
+        try {
+            F2.ifPresent(onAfterEach, () -> onAfterEach.accept(context, element));
+        } catch (Exception e) {
+            LOGGER.error("execute after each error.", e);
+        }
     }
 
     private void executeOnFailed(C context, E element, Exception e) {
@@ -110,7 +114,6 @@ public class QueueWorker<C, E> {
             stopWatch.start("work");
             executeBeforeEach(context, element);
             onWork.accept(context, element);
-            executeAfterEach(context, element);
         } catch (Exception e) {
             boolean shouldContinue = isContinue(context, element, e);
             executeOnFailed(context, element, e);
@@ -119,6 +122,7 @@ public class QueueWorker<C, E> {
                 return false;
             }
         } finally {
+            executeAfterEach(context, element);
             stopWatch.stop();
         }
         if (Objects.isNull(spinDuration)) {
@@ -148,10 +152,15 @@ public class QueueWorker<C, E> {
     }
 
     private boolean isContinue(C context, E element, Exception e) {
-        return Objects.nonNull(element)
-            && Optional.ofNullable(continueWhen)
-            .map(f -> f.test(context, element, e))
-            .orElse(true);
+        try {
+            return Objects.nonNull(element)
+                && Optional.ofNullable(continueWhen)
+                .map(f -> f.test(context, element, e))
+                .orElse(true);
+        } catch (Exception continueError) {
+            LOGGER.error("Confirm continue error", continueError);
+            return false;
+        }
     }
 
     @FunctionalInterface
