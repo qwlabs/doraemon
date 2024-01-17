@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import static com.qwlabs.jackson.Jackson.asBoolean;
@@ -154,6 +155,15 @@ public class JacksonTest {
         assertFalse(asBoolean(Jackson.createObjectNode().put("a", "false"), "a"));
         assertTrue(asBoolean(Jackson.createObjectNode().put("a", Boolean.TRUE), "a"));
         assertFalse(asBoolean(Jackson.createObjectNode().put("a", Boolean.FALSE), "a"));
+    }
+
+    @Test
+    void should_asList() {
+        var node = Jackson.read("{\"a\": [\"1\",\"2\"], \"b\": [1, 2], \"c\": \"2\"}").get();
+
+        assertNull(Jackson.asList(node, "c", Jackson::asText));
+        assertThat(Jackson.asList(node, "a", Jackson::asText), is(List.of("1", "2")));
+        assertThat(Jackson.asList(node, "b", Jackson::asInteger), is(List.of(1, 2)));
     }
 
     @Getter
