@@ -2,6 +2,7 @@ package com.qwlabs.storage.minio;
 
 
 import com.google.common.collect.Lists;
+import com.qwlabs.cdi.dispatch.Dispatchable;
 import com.qwlabs.storage.messages.StorageMessages;
 import com.qwlabs.storage.models.CompleteUploadCommand;
 import com.qwlabs.storage.models.GetDownloadUrlCommand;
@@ -15,11 +16,14 @@ import com.qwlabs.storage.models.UploadUrls;
 import com.qwlabs.storage.services.StorageEngine;
 import io.minio.messages.ListPartsResult;
 import io.minio.messages.Part;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Objects;
 
-public class MinioStorageEngine implements StorageEngine {
+public class MinioStorageEngine implements StorageEngine, Dispatchable<String> {
+    private static final String PROVIDER = "minio";
     protected final CustomMinioClient minioClient;
 
     public MinioStorageEngine(CustomMinioClient minioClient) {
@@ -91,5 +95,10 @@ public class MinioStorageEngine implements StorageEngine {
         if (!minioClient.bucketExists(bucket)) {
             minioClient.makeBucket(bucket);
         }
+    }
+
+    @Override
+    public boolean dispatchable(@Nullable String context) {
+        return Objects.equals(PROVIDER, context);
     }
 }
