@@ -6,13 +6,17 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Lists;
 import com.google.common.primitives.Ints;
 import com.qwlabs.cdi.SafeCDI;
 import jakarta.annotation.Nullable;
 import jakarta.enterprise.inject.Instance;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Slf4j
 public final class Jackson {
@@ -90,6 +94,25 @@ public final class Jackson {
             LOGGER.warn("can not read json: \"{}\" to json node.", json);
             return Optional.empty();
         }
+    }
+
+    public static <T> List<T> asList(@Nullable JsonNode node, Function<JsonNode, T> mapper) {
+        if (Objects.isNull(node)) {
+            return (List<T>) null;
+        }
+        if (!node.isArray()) {
+            return (List<T>) null;
+        }
+        List<T> result = Lists.newArrayList();
+        node.iterator().forEachRemaining(element -> result.add(mapper.apply(element)));
+        return result;
+    }
+
+    public static <T> List<T> asList(@Nullable JsonNode node, @Nullable String propertyName, Function<JsonNode, T> mapper) {
+        return Optional.ofNullable(node)
+            .map(n -> n.get(propertyName))
+            .map(n -> Jackson.asList(n, mapper))
+            .orElse(null);
     }
 
     public static Integer asInteger(@Nullable JsonNode node) {
