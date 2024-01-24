@@ -34,7 +34,7 @@ public class LazyRolesSecurityIdentity implements SecurityIdentity {
             return roles;
         }
         if (roles.isEmpty()) {
-            return roles;
+            return lazyRoles.get();
         }
         Set<String> result = Sets.newHashSet(roles);
         result.addAll(lazyRoles.get());
