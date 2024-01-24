@@ -19,9 +19,9 @@ public final class S3StorageHelper {
 
     public static CustomS3Client createS3Client(S3Config config) {
         return new CustomS3Client(
-                createS3SyncClient(config),
-                createS3AsyncClient(config),
-                createS3Presigner(config)
+            createS3SyncClient(config),
+            createS3AsyncClient(config),
+            createS3Presigner(config)
         );
     }
 
@@ -47,7 +47,7 @@ public final class S3StorageHelper {
                                   S3Config config) {
         config.validate();
         builder.credentialsProvider(StaticCredentialsProvider.create(
-                AwsBasicCredentials.create(config.getAccessKey(), config.getSecretKey())));
+            AwsBasicCredentials.create(config.getAccessKey(), config.getSecretKey())));
         if (!S2.isBlank(config.getRegion())) {
             builder.region(Region.of(config.getRegion()));
         }
@@ -58,7 +58,7 @@ public final class S3StorageHelper {
                                   S3Config config) {
         config.validate();
         builder.credentialsProvider(StaticCredentialsProvider.create(
-                AwsBasicCredentials.create(config.getAccessKey(), config.getSecretKey())));
+            AwsBasicCredentials.create(config.getAccessKey(), config.getSecretKey())));
         if (!S2.isBlank(config.getRegion())) {
             builder.region(Region.of(config.getRegion()));
         }

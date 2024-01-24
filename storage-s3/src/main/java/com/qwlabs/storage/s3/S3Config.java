@@ -16,6 +16,9 @@ public class S3Config {
     private final String secretKey;
 
     public void validate() {
+        if (S2.isBlank(region)) {
+            throw StorageMessages.INSTANCE.lostConfig("region");
+        }
         if (S2.isBlank(url)) {
             throw StorageMessages.INSTANCE.lostConfig("url");
         }
