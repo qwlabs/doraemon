@@ -68,7 +68,7 @@ public class LazyRolesSecurityIdentity implements SecurityIdentity {
 
     @Override
     public boolean hasRole(String role) {
-        return roles.contains(role);
+        return getRoles().contains(role);
     }
 
     @Override
