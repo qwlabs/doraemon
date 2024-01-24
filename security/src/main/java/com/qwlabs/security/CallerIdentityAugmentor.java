@@ -4,7 +4,6 @@ import com.qwlabs.cdi.dispatch.DispatchInstance;
 import io.quarkus.security.identity.AuthenticationRequestContext;
 import io.quarkus.security.identity.SecurityIdentity;
 import io.quarkus.security.identity.SecurityIdentityAugmentor;
-import io.quarkus.security.runtime.QuarkusSecurityIdentity;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
@@ -49,10 +48,8 @@ public class CallerIdentityAugmentor implements SecurityIdentityAugmentor {
     }
 
     private SecurityIdentity buildSecurityIdentity(SecurityIdentity oldIdentity, Caller caller) {
-        QuarkusSecurityIdentity.Builder builder = QuarkusSecurityIdentity.builder(oldIdentity);
-        var roles = identityRolesProvider.get(caller);
-        builder.setAnonymous(caller.isAnonymous());
-        builder.addRoles(roles);
+        var builder = LazyRolesSecurityIdentity.builder(oldIdentity);
+        builder.setLazyRoles(() -> identityRolesProvider.get(caller));
         builder.addAttribute(Caller.class.getName(), caller);
         return builder.build();
     }
