@@ -31,7 +31,7 @@ public class SheetReadOptions {
     @Builder.Default
     private final boolean mandatoryUseInputStream = false;
     @Builder.Default
-    private final boolean ignoreEmptyRow = false;
+    private final boolean ignoreEmptyRow = true;
 
     protected ExcelReaderSheetBuilder config(ExcelReaderBuilder builder) {
         return builder
