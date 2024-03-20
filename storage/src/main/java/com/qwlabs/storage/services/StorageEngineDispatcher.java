@@ -38,7 +38,7 @@ public class StorageEngineDispatcher implements StorageEngine {
     }
 
     @Override
-    public String completeUpload(CompleteUploadCommand command) {
+    public StorageObject completeUpload(CompleteUploadCommand command) {
         return get(command.getProvider()).completeUpload(command);
     }
 

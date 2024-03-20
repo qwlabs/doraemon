@@ -62,7 +62,7 @@ public class MinioStorageEngine implements StorageEngine, Dispatchable<String> {
     }
 
     @Override
-    public String completeUpload(CompleteUploadCommand command) {
+    public StorageObject completeUpload(CompleteUploadCommand command) {
         ListPartsResult result = minioClient.listParts(
             command.getBucket(), command.getObjectName(), command.getUploadId());
         if (result.partList().size() != command.getPartCount()) {
@@ -72,7 +72,12 @@ public class MinioStorageEngine implements StorageEngine, Dispatchable<String> {
         List<Part> parts = result.partList();
         minioClient.completeUpload(command.getBucket(), command.getObjectName(),
             command.getUploadId(), parts);
-        return minioClient.createDownloadUrl(command.getBucket(), command.getObjectName());
+        return StorageObject.builder()
+            .provider(PROVIDER)
+            .bucket(command.getBucket())
+            .objectName(command.getObjectName())
+            .name(command.getName())
+            .build();
     }
 
     @Override
@@ -88,7 +93,7 @@ public class MinioStorageEngine implements StorageEngine, Dispatchable<String> {
     @Override
     public StorageObject putObject(PutObjectCommand command) {
         setupBucket(command.getBucket());
-        return minioClient.putObject(command.getBucket(), command.getObjectName(), command.getInputStream());
+        return minioClient.putObject(command);
     }
 
     private void setupBucket(String bucket) {

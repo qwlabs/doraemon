@@ -24,7 +24,7 @@ public interface StorageEngine {
         throw StorageMessages.INSTANCE.notImplemented();
     }
 
-    default String completeUpload(CompleteUploadCommand command) {
+    default StorageObject completeUpload(CompleteUploadCommand command) {
         throw StorageMessages.INSTANCE.notImplemented();
     }
 

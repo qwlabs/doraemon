@@ -2,6 +2,7 @@ package com.qwlabs.storage.minio;
 
 import com.google.common.collect.HashMultimap;
 import com.qwlabs.storage.exceptions.StorageException;
+import com.qwlabs.storage.models.PutObjectCommand;
 import com.qwlabs.storage.models.StorageObject;
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
@@ -23,7 +24,6 @@ import io.minio.messages.Part;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -53,8 +53,8 @@ public class CustomMinioClient extends MinioAsyncClient {
                 objectName, headers, null);
             return response.result().uploadId();
         } catch (NoSuchAlgorithmException | InsufficientDataException | IOException | InvalidKeyException
-            | ServerException | XmlParserException | ErrorResponseException | InternalException
-            | InvalidResponseException e) {
+                 | ServerException | XmlParserException | ErrorResponseException | InternalException
+                 | InvalidResponseException e) {
             LOGGER.error("Can not create upload id.", e);
             throw new StorageException("Can not create upload id.", e);
         }
@@ -91,8 +91,8 @@ public class CustomMinioClient extends MinioAsyncClient {
         try {
             return this.getPresignedObjectUrl(args);
         } catch (NoSuchAlgorithmException | InsufficientDataException | IOException | InvalidKeyException
-            | ServerException | XmlParserException | ErrorResponseException | InternalException
-            | InvalidResponseException e) {
+                 | ServerException | XmlParserException | ErrorResponseException | InternalException
+                 | InvalidResponseException e) {
             LOGGER.error("Can not create upload url.", e);
             throw new StorageException("Can not create upload url.", e);
         }
@@ -108,8 +108,8 @@ public class CustomMinioClient extends MinioAsyncClient {
         try {
             return this.getPresignedObjectUrl(args);
         } catch (ErrorResponseException | InsufficientDataException | InternalException | InvalidKeyException
-            | InvalidResponseException | IOException | NoSuchAlgorithmException | XmlParserException
-            | ServerException e) {
+                 | InvalidResponseException | IOException | NoSuchAlgorithmException | XmlParserException
+                 | ServerException e) {
             LOGGER.error("Can not get download url.", e);
             throw new StorageException("Can not create download url.", e);
         }
@@ -120,8 +120,8 @@ public class CustomMinioClient extends MinioAsyncClient {
         try {
             return this.bucketExists(args).get();
         } catch (InsufficientDataException | InternalException | InvalidKeyException
-            | IOException | NoSuchAlgorithmException
-            | XmlParserException | InterruptedException | ExecutionException e) {
+                 | IOException | NoSuchAlgorithmException
+                 | XmlParserException | InterruptedException | ExecutionException e) {
             LOGGER.error("Can not check bucket exists.", e);
             throw new StorageException(e);
         }
@@ -134,8 +134,8 @@ public class CustomMinioClient extends MinioAsyncClient {
         try {
             this.makeBucket(args).get();
         } catch (InsufficientDataException | InternalException | InvalidKeyException
-            | IOException | NoSuchAlgorithmException
-            | XmlParserException | InterruptedException | ExecutionException e) {
+                 | IOException | NoSuchAlgorithmException
+                 | XmlParserException | InterruptedException | ExecutionException e) {
             LOGGER.error("Can not make bucket.", e);
             throw new StorageException("Can not make bucket.", e);
         }
@@ -144,12 +144,12 @@ public class CustomMinioClient extends MinioAsyncClient {
     public ListPartsResult listParts(String bucket, String objectName, String uploadId) {
         try {
             return this.listPartsAsync(bucket, null, objectName, MAX_PART_COUNT, null,
-                uploadId, null, null)
+                    uploadId, null, null)
                 .get()
                 .result();
         } catch (InsufficientDataException | InternalException | InvalidKeyException
-            | NoSuchAlgorithmException | XmlParserException | InterruptedException
-            | ExecutionException | IOException e) {
+                 | NoSuchAlgorithmException | XmlParserException | InterruptedException
+                 | ExecutionException | IOException e) {
             LOGGER.error("Can not list multipart uploads.", e);
             throw new StorageException("Can not list multipart uploads.", e);
         }
@@ -159,11 +159,11 @@ public class CustomMinioClient extends MinioAsyncClient {
                                               String uploadId, List<Part> parts) {
         try {
             return this.completeMultipartUploadAsync(bucket, null, objectName, uploadId,
-                parts.toArray(new Part[]{}), null, null)
+                    parts.toArray(new Part[]{}), null, null)
                 .get();
         } catch (InsufficientDataException | InternalException | InvalidKeyException
-            | IOException | NoSuchAlgorithmException
-            | XmlParserException | InterruptedException | ExecutionException e) {
+                 | IOException | NoSuchAlgorithmException
+                 | XmlParserException | InterruptedException | ExecutionException e) {
             LOGGER.error("Can not complete multipart upload.", e);
             throw new StorageException("Can not complete multipart upload.", e);
         }
@@ -178,26 +178,31 @@ public class CustomMinioClient extends MinioAsyncClient {
                     .build());
             return future.get();
         } catch (InsufficientDataException | InternalException | InvalidKeyException
-            | IOException | NoSuchAlgorithmException
-            | XmlParserException | InterruptedException | ExecutionException e) {
+                 | IOException | NoSuchAlgorithmException
+                 | XmlParserException | InterruptedException | ExecutionException e) {
             LOGGER.error("Can not get object", e);
             throw new StorageException("Can not get object", e);
         }
     }
 
-    public StorageObject putObject(String bucket, String objectName, InputStream stream) {
+    public StorageObject putObject(PutObjectCommand command) {
         try {
             CompletableFuture<ObjectWriteResponse> future = this.putObject(
                 PutObjectArgs.builder()
-                    .bucket(bucket)
-                    .object(objectName)
-                    .stream(stream, stream.available(), STREAM_PART_DEFAULT_SIZE)
+                    .bucket(command.getBucket())
+                    .object(command.getObjectName())
+                    .stream(command.getInputStream(), command.getInputStream().available(), STREAM_PART_DEFAULT_SIZE)
                     .build());
             ObjectWriteResponse result = future.get();
-            return StorageObject.of(result.bucket(), result.object());
+            return StorageObject.builder()
+                .provider(command.getProvider())
+                .bucket(result.bucket())
+                .objectName(result.object())
+                .name(command.getName())
+                .build();
         } catch (InsufficientDataException | InternalException | InvalidKeyException
-            | IOException | NoSuchAlgorithmException
-            | XmlParserException | InterruptedException | ExecutionException e) {
+                 | IOException | NoSuchAlgorithmException
+                 | XmlParserException | InterruptedException | ExecutionException e) {
             LOGGER.error("Can not get object", e);
             throw new StorageException("Can not get object", e);
         }

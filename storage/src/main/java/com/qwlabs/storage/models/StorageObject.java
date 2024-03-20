@@ -2,7 +2,10 @@ package com.qwlabs.storage.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
@@ -10,6 +13,9 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class StorageObject implements Serializable {
     private String provider;
     @NotNull
@@ -18,23 +24,6 @@ public class StorageObject implements Serializable {
     private String objectName;
 
     private String name;
-
-    public static StorageObject of(String bucket, String objectName) {
-        return of(bucket, objectName, null);
-    }
-
-    public static StorageObject of(String bucket, String objectName, String provider) {
-        return of(bucket, objectName, provider, null);
-    }
-
-    public static StorageObject of(String bucket, String objectName, String provider, String name) {
-        StorageObject storageObject = new StorageObject();
-        storageObject.setBucket(bucket);
-        storageObject.setObjectName(objectName);
-        storageObject.setProvider(provider);
-        storageObject.setName(name);
-        return storageObject;
-    }
 
     @JsonIgnore
     public boolean isValid() {

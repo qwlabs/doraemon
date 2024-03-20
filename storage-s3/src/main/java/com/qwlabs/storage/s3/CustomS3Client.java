@@ -1,6 +1,7 @@
 package com.qwlabs.storage.s3;
 
 import com.qwlabs.storage.exceptions.StorageException;
+import com.qwlabs.storage.models.PutObjectCommand;
 import com.qwlabs.storage.models.StorageObject;
 import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.core.ResponseInputStream;
@@ -32,7 +33,6 @@ import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignReques
 import software.amazon.awssdk.services.s3.presigner.model.UploadPartPresignRequest;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -211,15 +211,20 @@ public class CustomS3Client {
         }
     }
 
-    public StorageObject putObject(String bucket, String objectName, InputStream stream) {
+    public StorageObject putObject(PutObjectCommand command) {
         try {
             PutObjectRequest request = PutObjectRequest.builder()
-                .bucket(bucket)
-                .key(objectName)
+                .bucket(command.getBucket())
+                .key(command.getObjectName())
                 .build();
-            RequestBody requestBody = RequestBody.fromInputStream(stream, stream.available());
+            RequestBody requestBody = RequestBody.fromInputStream(command.getInputStream(), command.getInputStream().available());
             syncClient.putObject(request, requestBody);
-            return StorageObject.of(bucket, objectName);
+            return StorageObject.builder()
+                .provider(command.getProvider())
+                .bucket(command.getBucket())
+                .objectName(command.getObjectName())
+                .name(command.getName())
+                .build();
         } catch (S3Exception | IOException e) {
             LOGGER.error("Can not get object", e);
             throw new StorageException("Can not get object", e);

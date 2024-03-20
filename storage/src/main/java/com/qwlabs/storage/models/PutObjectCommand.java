@@ -15,5 +15,6 @@ public class PutObjectCommand {
     private final String provider;
     private final String bucket;
     private final String objectName;
+    private final String name;
     private final InputStream inputStream;
 }

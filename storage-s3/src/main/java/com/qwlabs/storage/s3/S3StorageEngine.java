@@ -60,7 +60,7 @@ public class S3StorageEngine implements StorageEngine, Dispatchable<String> {
     }
 
     @Override
-    public String completeUpload(CompleteUploadCommand command) {
+    public StorageObject completeUpload(CompleteUploadCommand command) {
         ListPartsResponse result = s3Client.listParts(command.getBucket(), command.getObjectName(), command.getUploadId());
         if (result.parts().size() != command.getPartCount()) {
             throw StorageMessages.INSTANCE.invalidPartCount(command.getPartCount(),
@@ -68,7 +68,12 @@ public class S3StorageEngine implements StorageEngine, Dispatchable<String> {
         }
         List<Part> parts = result.parts();
         s3Client.completeUpload(command.getBucket(), command.getObjectName(), command.getUploadId(), parts);
-        return s3Client.createDownloadUrl(command.getBucket(), command.getObjectName());
+        return StorageObject.builder()
+            .provider(PROVIDER)
+            .bucket(command.getBucket())
+            .objectName(command.getObjectName())
+            .name(command.getName())
+            .build();
     }
 
 
@@ -85,7 +90,7 @@ public class S3StorageEngine implements StorageEngine, Dispatchable<String> {
     @Override
     public StorageObject putObject(PutObjectCommand command) {
         setupBucket(command.getBucket());
-        return s3Client.putObject(command.getBucket(), command.getObjectName(), command.getInputStream());
+        return s3Client.putObject(command);
     }
 
     private void setupBucket(String bucket) {

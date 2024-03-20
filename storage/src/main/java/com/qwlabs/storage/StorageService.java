@@ -7,6 +7,7 @@ import com.qwlabs.storage.models.GetObjectCommand;
 import com.qwlabs.storage.models.GetUploadUrlCommand;
 import com.qwlabs.storage.models.GetUploadUrlsCommand;
 import com.qwlabs.storage.models.PutObjectCommand;
+import com.qwlabs.storage.models.StorageObject;
 import com.qwlabs.storage.models.StoragePlan;
 import com.qwlabs.storage.models.UploadUrl;
 import com.qwlabs.storage.models.UploadUrls;
@@ -56,7 +57,7 @@ public class StorageService {
         return engine.createUploadUrls(command);
     }
 
-    public String completeUpload(CompleteUploadCommand command) {
+    public StorageObject completeUpload(CompleteUploadCommand command) {
         return storageEngines.get().completeUpload(command);
     }
 

@@ -28,7 +28,6 @@ public class CreateUploadUrlsInput {
     @NotNull
     private String businessType;
 
-    //       TODO use Variables
     @Nullable
     private Object context;
 

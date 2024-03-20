@@ -27,7 +27,7 @@ public class UrlStorageEngine implements StorageEngine, Dispatchable<String> {
     }
 
     @Override
-    public String completeUpload(CompleteUploadCommand command) {
+    public StorageObject completeUpload(CompleteUploadCommand command) {
         throw StorageMessages.INSTANCE.notSupported(PROVIDER, "upload");
     }
 
