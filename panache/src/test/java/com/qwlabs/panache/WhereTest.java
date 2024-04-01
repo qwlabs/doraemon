@@ -10,14 +10,14 @@ public class WhereTest {
     @Test
     public void test_sort() {
         Assertions.assertEquals(true, Where.create().getSort().isEmpty());
-        Assertions.assertEquals(" ORDER BY abc DESC", Where.create().sort(Sort.descending("abc")).getSort().get());
+        Assertions.assertEquals(" ORDER BY `abc` DESC", Where.create().sort(Sort.descending("abc")).getSort().get());
     }
 
     @Test
     public void test_get() {
         Assertions.assertEquals("", Where.create().get());
 
-        Assertions.assertEquals("name=:name ORDER BY abc DESC",
+        Assertions.assertEquals("name=:name ORDER BY `abc` DESC",
                 Where.create().and("name=:name", "name", "zhangsan")
                         .sort(Sort.descending("abc")).get());
 
@@ -40,7 +40,7 @@ public class WhereTest {
                 Where.create().and("name=:name", "name", "zhangsan")
                         .getAll());
 
-        Assertions.assertEquals(" where name=:name ORDER BY abc DESC",
+        Assertions.assertEquals(" where name=:name ORDER BY `abc` DESC",
                 Where.create().and("name=:name", "name", "zhangsan")
                         .sort(Sort.descending("abc")).getAll());
 

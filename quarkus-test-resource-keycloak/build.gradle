@@ -1,7 +1,7 @@
 dependencies {
     api project(":lang")
     api "io.quarkus:quarkus-junit5:${quarkusVersion}"
-    api "io.quarkus:quarkus-keycloak-admin-client-reactive:${quarkusVersion}"
+    api "io.quarkus:quarkus-keycloak-admin-resteasy-client:${quarkusVersion}"
     api "io.rest-assured:rest-assured:${restAssuredVersion}"
     api "org.jboss.shrinkwrap:shrinkwrap-api:${shrinkwrapVersion}"
     api "org.testcontainers:testcontainers:${testcontainersVersion}"
