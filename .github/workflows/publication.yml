@@ -15,19 +15,21 @@ jobs:
     name: Deploy Artifacts
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: checkout
+        uses: actions/checkout@v4
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'adopt'
           cache: 'gradle'
-      - name: Deploy artifacts
+      - name: check
+        run: ./gradlew clean test --stacktrace --no-parallel
+      - name: publish
         run: |
           export VERSION_HEADER=$'Version: GnuPG v2\n\n'
           export ORG_GRADLE_PROJECT_signingKey=${GPG_PRIVATE_KEY#"$VERSION_HEADER"}
           export ORG_GRADLE_PROJECT_signingPassword="$GPG_PASSPHRASE"
-          ./gradlew clean test --stacktrace --no-parallel
           ./gradlew clean publish --stacktrace --no-parallel
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
