@@ -54,7 +54,7 @@ subprojects {
         testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
         testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
         testImplementation("org.mockito:mockito-junit-jupiter:${mockitoVersion}")
-        testImplementation("org.hamcrest:hamcrest-all:${hamcrestVersion}")
+        testImplementation("org.hamcrest:hamcrest-core:${hamcrestVersion}")
         testImplementation("org.openjdk.jmh:jmh-core:${jmhVersion}")
         testImplementation("org.openjdk.jmh:jmh-generator-annprocess:${jmhVersion}")
     }

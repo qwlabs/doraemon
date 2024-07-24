@@ -17,7 +17,7 @@ jmh {
     batchSize = 8
     forceGC = true
     fork = 1
-    jmhVersion = '1.37'
+    jmhVersion = "${jmhVersion}"
     resultFormat = 'JSON'
     synchronizeIterations = true
 //    humanOutputFile = project.file("${project.buildDir}/reports/jmh/human.txt")
@@ -28,3 +28,10 @@ checkstyleJmh {
     configFile = file("${rootProject.projectDir}/gradle/config/checkstyle/checkstyle-test.xml")
 }
 
+
+dependencies {
+    jmh "commons-io:commons-io:2.7"
+    jmh "org.openjdk.jmh:jmh-core:${jmhVersion}"
+    jmh "org.openjdk.jmh:jmh-generator-annprocess:${jmhVersion}"
+    jmh "org.openjdk.jmh:jmh-generator-bytecode:${jmhVersion}"
+}

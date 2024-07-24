@@ -1,6 +1,6 @@
 VERSION 0.8
 ARG --global BASE_IMAGE=earthly/dind:alpine
-ARG --global GRADLE_IMAGE=bitnami/gradle:8.9.0
+ARG --global BUILD_IMAGE=bitnami/gradle:8.7.0
 
 FROM ${BASE_IMAGE}
 WORKDIR /app
@@ -10,16 +10,15 @@ ARG --global APP_BASE_VERSION=$(cat .version)
 ARG --global APP_VERSION=${APP_BASE_VERSION}.${PIPELINE_ID}
 
 build-base:
-  FROM ${GRADLE_IMAGE}
+  FROM ${BUILD_IMAGE}
   WORKDIR /app
-  CACHE --sharing shared /home/gradle/.gradle
-  CACHE --sharing shared /root/.m2
   COPY . .
   RUN ./gradlew clean
 
 check:
   FROM +build-base
-  RUN ./gradlew clean test
+#  RUN ./gradlew :basic-tree:test --no-parallel --no-daemon
+  RUN ./gradlew prepush --no-parallel --no-daemon
 
 publish:
   FROM +build-base
@@ -28,7 +27,7 @@ publish:
   RUN --secret GPG_PASSPHRASE export ORG_GRADLE_PROJECT_signingPassword="$GPG_PASSPHRASE"
   RUN --secret OSSRH_TOKEN_USERNAME export OSSRH_TOKEN_USERNAME="$OSSRH_TOKEN_USERNAME"
   RUN --secret OSSRH_TOKEN_PASSWORD export OSSRH_TOKEN_PASSWORD="$OSSRH_TOKEN_PASSWORD"
-  RUN ./gradlew clean publish
+  RUN ./gradlew publish --no-parallel --no-daemon
 
 ci-check:
   BUILD +check

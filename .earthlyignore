@@ -1,0 +1,12 @@
+.idea
+.gradle
+.gocd
+.jenkins
+**/build
+**/target
+*.hprof
+README.md
+.editorconfig
+.gitattributes
+.gitmodules
+.sdkmanrc
