@@ -1,0 +1,39 @@
+name: Commit check
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  COMMIT_OWNER: ${{ github.event.pusher.name }}
+  COMMIT_SHA: ${{ github.sha }}
+  PIPELINE_ID: ${{ github.run_number }}
+  FORCE_COLOR: 1
+
+jobs:
+  commit:
+    name: commit-workflow
+    runs-on: ubuntu-latest
+    steps:
+      - uses: earthly/actions-setup@v1
+        with:
+          version: "latest"
+
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: check
+        run: |
+          earthly --ci --allow-privileged +ci-check \
+          --PIPELINE_ID=${{ env.PIPELINE_ID }}
+
+      - name: publish
+        run: |
+          earthly --ci --allow-privileged --push \
+          --secret GPG_PRIVATE_KEY=${{ secrets.GPG_PRIVATE_KEY }} \
+          --secret GPG_PASSPHRASE=${{ secrets.GPG_PASSPHRASE }} \
+          --secret OSSRH_TOKEN_USERNAME=${{ secrets.OSSRH_TOKEN_USERNAME }} \
+          --secret OSSRH_TOKEN_PASSWORD=${{ secrets.OSSRH_TOKEN_PASSWORD }} \
+           +ci-publish \
+          --PIPELINE_ID=${{ env.PIPELINE_ID }}
