@@ -24,13 +24,13 @@ jobs:
           distribution: 'adopt'
           cache: 'gradle'
       - name: check
-        run: ./gradlew clean test --stacktrace --no-parallel
+        run: ./gradlew clean test --stacktrace -Dorg.gradle.caching=false
       - name: publish
         run: |
           export VERSION_HEADER=$'Version: GnuPG v2\n\n'
           export ORG_GRADLE_PROJECT_signingKey=${GPG_PRIVATE_KEY#"$VERSION_HEADER"}
           export ORG_GRADLE_PROJECT_signingPassword="$GPG_PASSPHRASE"
-          ./gradlew clean publish --stacktrace --no-parallel
+          ./gradlew clean publish --stacktrace -Dorg.gradle.caching=false
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
