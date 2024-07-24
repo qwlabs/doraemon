@@ -1,6 +1,6 @@
 VERSION 0.8
 ARG --global BASE_IMAGE=earthly/dind:alpine
-ARG --global BUILD_IMAGE=bitnami/gradle:8.7.0
+ARG --global BUILD_IMAGE=bitnami/gradle:8.9.0
 
 FROM ${BASE_IMAGE}
 WORKDIR /app
