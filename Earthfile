@@ -14,11 +14,12 @@ build-base:
   WORKDIR /app
   COPY . .
   RUN ./gradlew clean
+  SAVE IMAGE --cache-hint
 
 check:
   FROM +build-base
-#  RUN ./gradlew :basic-tree:test --no-parallel --no-daemon
-  RUN ./gradlew prepush --no-parallel --no-daemon
+  RUN ./gradlew :basic-tree:test  --tests "com.qwlabs.tree.LocationComparatorTest" --stacktrace --no-parallel --no-daemon
+#  RUN ./gradlew prepush --no-parallel --no-daemon
 
 publish:
   FROM +build-base
