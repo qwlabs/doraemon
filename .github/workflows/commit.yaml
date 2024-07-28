@@ -27,10 +27,9 @@ jobs:
         run: |
           earthly --ci --allow-privileged +ci-check \
           --PIPELINE_ID=${{ env.PIPELINE_ID }}
-      - name: write private key
-        run: echo "${{ secrets.GPG_PRIVATE_KEY }}" >> gpg_private_key
       - name: publish
         run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" >> ./gpg_private_key && \
           earthly --ci --allow-privileged --push \
           --secret GPG_PASSPHRASE=${{ secrets.GPG_PASSPHRASE }} \
           --secret OSSRH_TOKEN_USERNAME=${{ secrets.OSSRH_TOKEN_USERNAME }} \
