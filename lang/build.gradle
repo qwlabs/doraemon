@@ -1,4 +1,4 @@
-//apply from: "${rootProject.rootDir}/gradle/jmh.gradle"
+apply from: "${rootProject.rootDir}/gradle/jmh.gradle"
 
 dependencies {
     api "com.google.guava:guava:${guavaVersion}"

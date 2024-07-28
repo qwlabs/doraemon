@@ -13,13 +13,14 @@ build-base:
   FROM ${BUILD_IMAGE}
   WORKDIR /app
   COPY . .
-  RUN ./gradlew clean
+  RUN gradle clean
   SAVE IMAGE --cache-hint
 
 check:
   FROM +build-base
-  RUN ./gradlew :basic-tree:test  --tests "com.qwlabs.tree.LocationComparatorTest" --stacktrace --no-parallel --no-daemon
-#  RUN ./gradlew prepush --no-parallel --no-daemon
+#  RUN gradle :lang:test --stacktrace --no-parallel --no-daemon
+#  RUN gradle :basic-tree:test  --tests "com.qwlabs.tree.LocationComparatorTest" --stacktrace --no-parallel --no-daemon
+  RUN gradle prepush --no-parallel --no-daemon
 
 publish:
   FROM +build-base
@@ -28,7 +29,7 @@ publish:
   RUN --secret GPG_PASSPHRASE export ORG_GRADLE_PROJECT_signingPassword="$GPG_PASSPHRASE"
   RUN --secret OSSRH_TOKEN_USERNAME export OSSRH_TOKEN_USERNAME="$OSSRH_TOKEN_USERNAME"
   RUN --secret OSSRH_TOKEN_PASSWORD export OSSRH_TOKEN_PASSWORD="$OSSRH_TOKEN_PASSWORD"
-  RUN ./gradlew publish --no-parallel --no-daemon
+  RUN gradle publish --no-parallel --no-daemon
 
 ci-check:
   BUILD +check
