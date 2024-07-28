@@ -1,6 +1,6 @@
 VERSION 0.8
 ARG --global BASE_IMAGE=earthly/dind:alpine
-ARG --global BUILD_IMAGE=bitnami/gradle:8.9.0
+ARG --global BUILD_IMAGE=gradle:8.9.0-jdk17-alpine
 
 FROM ${BASE_IMAGE}
 WORKDIR /app
@@ -12,14 +12,15 @@ ARG --global APP_VERSION=${APP_BASE_VERSION}.${PIPELINE_ID}
 build-base:
   FROM ${BUILD_IMAGE}
   WORKDIR /app
+#  CACHE --sharing shared /home/gradle/.gradle
+#  CACHE --sharing shared /root/.m2
   COPY . .
-  RUN gradle clean
+  RUN gradle build
   SAVE IMAGE --cache-hint
 
 check:
   FROM +build-base
-#  RUN gradle :lang:test --stacktrace --no-parallel --no-daemon
-#  RUN gradle :basic-tree:test  --tests "com.qwlabs.tree.LocationComparatorTest" --stacktrace --no-parallel --no-daemon
+  RUN gradle :basic-tree:test  --tests "com.qwlabs.tree.LocationComparatorTest" --stacktrace --no-parallel --no-daemon
   RUN gradle prepush --no-parallel --no-daemon
 
 publish:
