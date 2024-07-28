@@ -20,14 +20,14 @@ build-base:
 check:
   FROM +build-base
   COPY . .
-#  RUN gradle :basic-tree:test  --tests "com.qwlabs.tree.LocationComparatorTest" --stacktrace --no-parallel --no-daemon
   RUN gradle prepush --no-parallel --no-daemon
 
 publish:
   FROM +build-base
   COPY . .
+  RUN export GPG_PRIVATE_KEY=$(cat ./gpg_private_key)
   RUN export VERSION_HEADER=$'Version: GnuPG v2\n\n'
-  RUN --secret GPG_PRIVATE_KEY export ORG_GRADLE_PROJECT_signingKey=${GPG_PRIVATE_KEY#"$VERSION_HEADER"}
+  RUN export ORG_GRADLE_PROJECT_signingKey=${GPG_PRIVATE_KEY#"$VERSION_HEADER"}
   RUN --secret GPG_PASSPHRASE export ORG_GRADLE_PROJECT_signingPassword="$GPG_PASSPHRASE"
   RUN --secret OSSRH_TOKEN_USERNAME export OSSRH_TOKEN_USERNAME="$OSSRH_TOKEN_USERNAME"
   RUN --secret OSSRH_TOKEN_PASSWORD export OSSRH_TOKEN_PASSWORD="$OSSRH_TOKEN_PASSWORD"
