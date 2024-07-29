@@ -8,7 +8,6 @@ COPY .version .
 ARG --global PIPELINE_ID
 ARG --global APP_BASE_VERSION=$(cat .version | head -1)
 ARG --global APP_VERSION=${APP_BASE_VERSION}.${PIPELINE_ID}
-ARG --global GPG_PRIVATE_KEY
 ARG --global GPG_PASSPHRASE
 ARG --global OSSRH_TOKEN_USERNAME
 ARG --global OSSRH_TOKEN_PASSWORD
@@ -29,7 +28,7 @@ check:
 publish:
   FROM +build-base
   COPY . .
-  RUN echo ${GPG_PRIVATE_KEY}
+  RUN echo $(cat ./gpg_private_key)
   RUN echo ${GPG_PASSPHRASE}
   RUN echo ${OSSRH_TOKEN_USERNAME}
   RUN echo ${OSSRH_TOKEN_PASSWORD}

@@ -27,12 +27,12 @@ jobs:
 #        run: |
 #          earthly --ci --allow-privileged +ci-check \
 #          --PIPELINE_ID=${{ env.PIPELINE_ID }}
-      
+
       - name: publish
         run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" >> ./gpg_private_key
           earthly --ci --allow-privileged --push \
           +ci-publish \
-          --GPG_PRIVATE_KEY=${{ secrets.GPG_PRIVATE_KEY }} \
           --GPG_PASSPHRASE=${{ secrets.GPG_PASSPHRASE }} \
           --OSSRH_TOKEN_USERNAME=${{ secrets.OSSRH_TOKEN_USERNAME }} \
           --OSSRH_TOKEN_PASSWORD=${{ secrets.OSSRH_TOKEN_PASSWORD }} \
