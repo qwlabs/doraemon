@@ -23,27 +23,17 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
 
-      - name: check
-        run: |
-          earthly --ci --allow-privileged +ci-check \
-          --PIPELINE_ID=${{ env.PIPELINE_ID }}
-      - name: echo
-        run: |
-          echo $GPG_PRIVATE_KEY_1
-          echo $GPG_PASSPHRASE_1
-          echo $OSSRH_TOKEN_USERNAME_1
-          echo $OSSRH_TOKEN_PASSWORD_1
-        env:
-          GPG_PRIVATE_KEY_1: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSPHRASE_1: ${{ secrets.GPG_PASSPHRASE }}
-          OSSRH_TOKEN_USERNAME_1: ${{ secrets.OSSRH_TOKEN_USERNAME }}
-          OSSRH_TOKEN_PASSWORD_1: ${{ secrets.OSSRH_TOKEN_PASSWORD }}
-#      - name: publish
+#      - name: check
 #        run: |
-#          echo "${{ secrets.GPG_PRIVATE_KEY }}" >> ./gpg_private_key
-#          earthly --ci --allow-privileged --push \
-#          --secret GPG_PASSPHRASE=${{ secrets.GPG_PASSPHRASE }} \
-#          --secret OSSRH_TOKEN_USERNAME=${{ secrets.OSSRH_TOKEN_USERNAME }} \
-#          --secret OSSRH_TOKEN_PASSWORD=${{ secrets.OSSRH_TOKEN_PASSWORD }} \
-#          +ci-publish \
+#          earthly --ci --allow-privileged +ci-check \
 #          --PIPELINE_ID=${{ env.PIPELINE_ID }}
+      
+      - name: publish
+        run: |
+          earthly --ci --allow-privileged --push \
+          +ci-publish \
+          --GPG_PRIVATE_KEY=${{ secrets.GPG_PRIVATE_KEY }} \
+          --GPG_PASSPHRASE=${{ secrets.GPG_PASSPHRASE }} \
+          --OSSRH_TOKEN_USERNAME=${{ secrets.OSSRH_TOKEN_USERNAME }} \
+          --OSSRH_TOKEN_PASSWORD=${{ secrets.OSSRH_TOKEN_PASSWORD }} \
+          --PIPELINE_ID=${{ env.PIPELINE_ID }}
