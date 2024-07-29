@@ -29,15 +29,15 @@ jobs:
           --PIPELINE_ID=${{ env.PIPELINE_ID }}
       - name: echo
         run: |
-          echo $GPG_PRIVATE_KEY
-          echo $GPG_PASSPHRASE
-          echo $OSSRH_TOKEN_USERNAME
-          echo $OSSRH_TOKEN_PASSWORD
+          echo $GPG_PRIVATE_KEY_1
+          echo $GPG_PASSPHRASE_1
+          echo $OSSRH_TOKEN_USERNAME_1
+          echo $OSSRH_TOKEN_PASSWORD_1
         env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          OSSRH_TOKEN_USERNAME: ${{ secrets.OSSRH_TOKEN_USERNAME }}
-          OSSRH_TOKEN_PASSWORD: ${{ secrets.OSSRH_TOKEN_PASSWORD }}
+          GPG_PRIVATE_KEY_1: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE_1: ${{ secrets.GPG_PASSPHRASE }}
+          OSSRH_TOKEN_USERNAME_1: ${{ secrets.OSSRH_TOKEN_USERNAME }}
+          OSSRH_TOKEN_PASSWORD_1: ${{ secrets.OSSRH_TOKEN_PASSWORD }}
 #      - name: publish
 #        run: |
 #          echo "${{ secrets.GPG_PRIVATE_KEY }}" >> ./gpg_private_key
