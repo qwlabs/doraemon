@@ -13,7 +13,7 @@ Useful java tools
 <dependency>
     <groupId>com.qwlabs.doraemon</groupId>
     <artifactId>lang</artifactId>
-    <version>0.2.*</version>
+    <version>0.3.*</version>
     <type>pom</type>
 </dependency>
 ```
@@ -25,7 +25,7 @@ api 'com.qwlabs.doraemon:lang:0.2.*'
 ```
 
 # Document
-- [auditing](auditing/README.md) Base auditing entity/listener for jpa  
+- [auditing](auditing/README.md) Base auditing entity/listener for jpa
 - [basic-tree](basic-tree/README.md) Basic Tree definition and operation
 - [cdi](cdi/README.md) CDI Utils and Dispatchable definition for your business code
 - [exceptions](exceptions/README.md) Generic exception definition
@@ -38,7 +38,7 @@ api 'com.qwlabs.doraemon:lang:0.2.*'
 - [mptt-tree](mptt-tree/README.md) The tree use MPTT structure
 - [panache](panache/README.md) Extends panache in paging and native query
 - [q-api](q-api/README.md) Query string condition api definition
-- [q-parser-antlr4](q-parser-antlr4/README.md) Query string condition parser with antlr4 
+- [q-parser-antlr4](q-parser-antlr4/README.md) Query string condition parser with antlr4
 - [quarkus-cache](quarkus-cache/README.md) Help for quarkus cache
 - [quarkus-tenant](quarkus-tenant/README.md) Quarkus provide tenant from http
 - [quarkus-test](quarkus-test/README.md) Quarkus utils for test

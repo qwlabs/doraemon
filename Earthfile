@@ -10,8 +10,8 @@ ARG --global APP_BASE_VERSION=$(cat .version | head -1)
 ARG --global APP_VERSION=${APP_BASE_VERSION}.${PIPELINE_ID}
 ARG --global MAVEN_SONATYPE_USERNAME
 ARG --global MAVEN_SONATYPE_PASSWORD
-ARG --global GPG_PRIVATE_KEY
-ARG --global GPG_PASSPHRASE
+ARG --global MAVEN_GPG_PRIVATE_KEY
+ARG --global MAVEN_GPG_PRIVATE_KEY_PASSWORD
 
 build-base:
   FROM ${BUILD_IMAGE}
@@ -29,9 +29,6 @@ check:
 publish:
   FROM +build-base
   COPY . .
-  RUN export VERSION_HEADER=$'Version: GnuPG v2\n\n'
-  RUN export ORG_GRADLE_PROJECT_signingKey=${GPG_PRIVATE_KEY#"$VERSION_HEADER"}
-  RUN export ORG_GRADLE_PROJECT_signingPassword="$GPG_PASSPHRASE"
   RUN gradle publishAllPublicationsToCentralPortal --no-parallel --no-daemon
 
 ci-check:

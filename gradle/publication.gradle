@@ -47,8 +47,9 @@ publishing {
 }
 
 signing {
-    def signingKey = findProperty("signingKey")
-    def signingPassword = findProperty("signingPassword")
-    useInMemoryPgpKeys(signingKey, signingPassword)
-    sign publishing.publications.mavenJava
+    sign(publishing.publications)
+    useInMemoryPgpKeys(
+        System.getenv("MAVEN_GPG_PRIVATE_KEY"),
+        System.getenv("MAVEN_GPG_PRIVATE_KEY_PASSWORD")
+    )
 }
