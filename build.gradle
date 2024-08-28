@@ -10,10 +10,9 @@ buildscript {
 plugins {
     id 'org.kordamp.gradle.jandex' apply false
     id 'org.ajoberstar.grgit' apply false
-    id 'io.github.gradle-nexus.publish-plugin' apply false
     id 'me.champeau.jmh' apply false
+    id 'com.gradleup.nmcp' apply false
 }
-apply from: "${rootProject.rootDir}/gradle/nexus.gradle"
 
 subprojects {
     apply plugin: 'java-library'
@@ -26,6 +25,7 @@ subprojects {
     apply from: "${rootProject.rootDir}/gradle/check.gradle"
     apply from: "${rootProject.rootDir}/gradle/build.gradle"
     apply from: "${rootProject.rootDir}/gradle/publication.gradle"
+    apply from: "${rootProject.rootDir}/gradle/nmcp.gradle"
 
     repositories {
         mavenLocal()
@@ -50,6 +50,7 @@ subprojects {
     test {
         useJUnitPlatform()
     }
+
 
     dependencies {
         testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"

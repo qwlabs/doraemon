@@ -23,17 +23,17 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
 
-#      - name: check
-#        run: |
-#          earthly --ci --allow-privileged +ci-check \
-#          --PIPELINE_ID=${{ env.PIPELINE_ID }}
+      - name: check
+        run: |
+          earthly --ci --allow-privileged +ci-check \
+          --PIPELINE_ID=${{ env.PIPELINE_ID }}
 
       - name: publish
         run: |
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" >> ./gpg_private_key
           earthly --ci --allow-privileged --push \
           +ci-publish \
-          --GPG_PASSPHRASE=${{ secrets.GPG_PASSPHRASE }} \
-          --OSSRH_TOKEN_USERNAME=${{ secrets.OSSRH_TOKEN_USERNAME }} \
-          --OSSRH_TOKEN_PASSWORD=${{ secrets.OSSRH_TOKEN_PASSWORD }} \
-          --PIPELINE_ID=${{ env.PIPELINE_ID }}
+          --PIPELINE_ID=${{ env.PIPELINE_ID }} \
+          --MAVEN_SONATYPE_USERNAME=${{ secrets.MAVEN_SONATYPE_USERNAME }} \
+          --MAVEN_SONATYPE_PASSWORD=${{ secrets.MAVEN_SONATYPE_PASSWORD }} \
+          --GPG_PRIVATE_KEY=${{ secrets.GPG_PRIVATE_KEY }} \
+          --GPG_PASSPHRASE=${{ secrets.GPG_PASSPHRASE }}

@@ -11,7 +11,7 @@ pluginManagement {
         id "${jandexPluginId}" version "${jandexPluginVersion}"
         id "${grgitPluginId}" version "${grgitPluginVersion}"
         id "${lombokPluginId}" version "${lombokPluginVersion}"
-        id "${nexusPublishPluginId}" version "${nexusPublishPluginVersion}"
+        id "${nmcpPluginId}" version "${nmcpPluginVersion}"
         id "${jmhPluginId}" version "${jmhPluginVersion}"
     }
 }

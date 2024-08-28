@@ -1,0 +1,11 @@
+apply plugin: 'com.gradleup.nmcp'
+
+
+nmcp {
+    publishAllPublications {
+        username = System.getenv("MAVEN_SONATYPE_USERNAME") ?: ""
+        password = System.getenv("MAVEN_SONATYPE_PASSWORD") ?: ""
+        publicationType = "USER_MANAGED"
+        publicationType = "AUTOMATIC"
+    }
+}
