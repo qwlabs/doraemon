@@ -1,5 +1,5 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.qwlabs.doraemon/lang.svg?label=Maven%20Central&style=for-the-badge&logo=appveyor)](https://search.maven.org/search?q=g:%22com.qwlabs.doraemon%22)
-[![Build](https://img.shields.io/github/actions/workflow/status/qwlabs/doraemon/commit.yml?style=for-the-badge&logo=appveyor)](https://github.com/qwlabs/doraemon/actions/workflows/commit.yaml)
+[![Build](https://img.shields.io/github/actions/workflow/status/qwlabs/doraemon/commit.yaml?style=for-the-badge&logo=appveyor)](https://github.com/qwlabs/doraemon/actions/workflows/commit.yaml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg?&style=for-the-badge&logo=appveyor)](https://www.gnu.org/licenses/gpl-3.0)
 
 Useful java tools
