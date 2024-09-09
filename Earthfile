@@ -10,7 +10,6 @@ ARG --global APP_BASE_VERSION=$(cat .version | head -1)
 ARG --global APP_VERSION=${APP_BASE_VERSION}.${PIPELINE_ID}
 ARG --global MAVEN_SONATYPE_USERNAME
 ARG --global MAVEN_SONATYPE_PASSWORD
-ARG --global MAVEN_GPG_PRIVATE_KEY
 ARG --global MAVEN_GPG_PRIVATE_KEY_PASSWORD
 
 build-base:
@@ -29,6 +28,7 @@ check:
 publish:
   FROM +build-base
   COPY . .
+  RUN export MAVEN_GPG_PRIVATE_KEY=$(cat ./maven_private_key)
   RUN gradle publishAllPublicationsToCentralPortal --no-parallel --no-daemon
 
 ci-check:
