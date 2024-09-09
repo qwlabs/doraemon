@@ -28,7 +28,7 @@ check:
 publish:
   FROM +build-base
   COPY . .
-  RUN export MAVEN_GPG_PRIVATE_KEY=$(cat ./maven_private_key)
+  ENV MAVEN_GPG_PRIVATE_KEY=$(cat ./maven_private_key)
   RUN gradle publishAllPublicationsToCentralPortal --no-parallel --no-daemon
 
 ci-check:
