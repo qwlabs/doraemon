@@ -30,10 +30,9 @@ jobs:
 
       - name: publish
         run: |
+          echo "${{ secrets.MAVEN_GPG_PRIVATE_KEY }}" > ./maven_private_key &&
           earthly --ci --allow-privileged --push +ci-publish \
           --PIPELINE_ID=${{ env.PIPELINE_ID }} \
           --MAVEN_SONATYPE_USERNAME=${{ secrets.MAVEN_SONATYPE_USERNAME }} \
           --MAVEN_SONATYPE_PASSWORD=${{ secrets.MAVEN_SONATYPE_PASSWORD }} \
-          --MAVEN_GPG_PRIVATE_KEY_PASSWORD=${MAVEN_GPG_PRIVATE_KEY_PASSWORD}
-        env:
-          MAVEN_GPG_PRIVATE_KEY_PASSWORD: ${{ secrets.MAVEN_GPG_PRIVATE_KEY_PASSWORD }}
+          --MAVEN_GPG_PRIVATE_KEY_PASSWORD=${{ secrets.MAVEN_GPG_PRIVATE_KEY_PASSWORD }}
