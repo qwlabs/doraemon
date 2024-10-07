@@ -1,6 +1,6 @@
 VERSION 0.8
 ARG --global BASE_IMAGE=earthly/dind:alpine
-ARG --global BUILD_IMAGE=gradle:8.10.0-jdk17-alpine
+ARG --global PACKAGE_IMAGE=gradle:8.10.2-jdk17-alpine
 
 FROM ${BASE_IMAGE}
 WORKDIR /app
@@ -13,7 +13,7 @@ ARG --global MAVEN_SONATYPE_PASSWORD
 ARG --global MAVEN_GPG_PRIVATE_KEY_PASSWORD
 
 build-base:
-  FROM ${BUILD_IMAGE}
+  FROM ${PACKAGE_IMAGE}
   ENV GRADLE_USER_HOME=/app
   WORKDIR /app
   CACHE --sharing shared /home/gradle/.gradle

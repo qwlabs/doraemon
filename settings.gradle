@@ -8,11 +8,12 @@ pluginManagement {
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
     }
     plugins {
-        id "${jandexPluginId}" version "${jandexPluginVersion}"
-        id "${grgitPluginId}" version "${grgitPluginVersion}"
-        id "${lombokPluginId}" version "${lombokPluginVersion}"
-        id "${nmcpPluginId}" version "${nmcpPluginVersion}"
-        id "${jmhPluginId}" version "${jmhPluginVersion}"
+        id "org.kordamp.gradle.jandex" version "${jandexPluginVersion}"
+        id "org.ajoberstar.grgit" version "${grgitPluginVersion}"
+        id "io.freefair.lombok" version "${lombokPluginVersion}"
+        id "com.gradleup.nmcp" version "${nmcpPluginVersion}"
+        id "me.champeau.jmh" version "${jmhPluginVersion}"
+        id 'org.hibernate.orm' version "${hibernatePluginVersion}"
     }
 }
 

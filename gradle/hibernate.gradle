@@ -1,0 +1,13 @@
+apply plugin: 'org.hibernate.orm'
+
+hibernate {
+    enhancement {
+        lazyInitialization true
+        dirtyTracking true
+        associationManagement true
+    }
+}
+
+dependencies {
+    annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen:${hibernateVersion}"
+}
