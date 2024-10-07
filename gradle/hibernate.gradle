@@ -12,4 +12,5 @@ dependencies {
     annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen:${hibernateVersion}"
 
     api "org.hibernate:hibernate-core:${hibernateVersion}"
+    api "jakarta.data:jakarta.data-api:${jakartaDataApiVersion}"
 }
