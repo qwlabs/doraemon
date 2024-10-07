@@ -18,18 +18,9 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-sourceSets {
-    main {
-        java {
-            srcDirs += "${layout.buildDirectory}/generated/sources/annotationProcessor/java"
-        }
-    }
-}
-
 test {
     useJUnitPlatform()
 }
-
 
 dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
