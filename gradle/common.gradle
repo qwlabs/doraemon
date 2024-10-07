@@ -1,0 +1,39 @@
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += "${layout.buildDirectory}/generated/sources/annotationProcessor/java"
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+
+dependencies {
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    testImplementation("org.mockito:mockito-junit-jupiter:${mockitoVersion}")
+    testImplementation("org.hamcrest:hamcrest:${hamcrestVersion}")
+}

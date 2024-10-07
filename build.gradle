@@ -17,6 +17,7 @@ plugins {
 
 subprojects {
     apply plugin: 'java-library'
+    apply from: "${rootProject.rootDir}/gradle/common.gradle"
     apply from: "${rootProject.rootDir}/gradle/bom.gradle"
     apply from: "${rootProject.rootDir}/gradle/jandex.gradle"
     apply from: "${rootProject.rootDir}/gradle/version.gradle"
@@ -27,38 +28,4 @@ subprojects {
     apply from: "${rootProject.rootDir}/gradle/build.gradle"
     apply from: "${rootProject.rootDir}/gradle/publication.gradle"
     apply from: "${rootProject.rootDir}/gradle/nmcp.gradle"
-
-    repositories {
-        mavenLocal()
-        mavenCentral()
-    }
-
-
-    compileJava {
-        options.encoding = 'UTF-8'
-        options.compilerArgs << '-parameters'
-    }
-
-    compileTestJava {
-        options.encoding = 'UTF-8'
-    }
-
-    java {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    test {
-        useJUnitPlatform()
-    }
-
-
-    dependencies {
-        testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
-        testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
-        testImplementation("org.mockito:mockito-junit-jupiter:${mockitoVersion}")
-        testImplementation("org.hamcrest:hamcrest:${hamcrestVersion}")
-        testImplementation("org.openjdk.jmh:jmh-core:${jmhVersion}")
-        testImplementation("org.openjdk.jmh:jmh-generator-annprocess:${jmhVersion}")
-    }
 }
