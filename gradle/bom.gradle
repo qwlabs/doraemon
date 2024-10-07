@@ -61,6 +61,6 @@ configurations.all {
         force "org.jboss.resteasy:resteasy-multipart-provider:${resteasyVersion}"
         force "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
         force "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
-
+        force "org.hibernate:hibernate-core:${hibernateVersion}"
     }
 }

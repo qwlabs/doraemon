@@ -1,17 +1,17 @@
 package com.qwlabs.auditing;
 
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
 @MappedSuperclass
 @EntityListeners(AuditingListener.class)
 public class CreatedAuditedEntity {
-    private Instant createdAt;
+    private OffsetDateTime createdAt;
     private String createdBy;
 }

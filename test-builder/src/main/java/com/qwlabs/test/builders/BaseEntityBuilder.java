@@ -7,7 +7,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
 import java.security.Principal;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 public abstract class BaseEntityBuilder<T> implements EntityBuilder<T> {
@@ -20,8 +20,8 @@ public abstract class BaseEntityBuilder<T> implements EntityBuilder<T> {
         return entity;
     }
 
-    protected Instant now() {
-        return Instant.now();
+    protected OffsetDateTime now() {
+        return OffsetDateTime.now();
     }
 
     protected Optional<EntityManager> getEntityManager() {

@@ -10,4 +10,6 @@ hibernate {
 
 dependencies {
     annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen:${hibernateVersion}"
+
+    api "org.hibernate:hibernate-core:${hibernateVersion}"
 }

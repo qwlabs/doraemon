@@ -3,14 +3,14 @@ package com.qwlabs.test.builders;
 
 import com.qwlabs.auditing.CreatedAuditedEntity;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 @SuppressWarnings("checkstyle:VisibilityModifier")
 public abstract class CreatedAuditedEntityBuilder<T extends CreatedAuditedEntity, B extends CreatedAuditedEntityBuilder<T, B>>
         extends BaseEntityBuilder<T> {
     protected String createdBy;
-    protected Instant createdAt;
+    protected OffsetDateTime createdAt;
 
     protected abstract T preBuild();
 
@@ -27,7 +27,7 @@ public abstract class CreatedAuditedEntityBuilder<T extends CreatedAuditedEntity
         return (B) this;
     }
 
-    public B createdAt(Instant createdAt) {
+    public B createdAt(OffsetDateTime createdAt) {
         this.createdAt = createdAt;
         return (B) this;
     }

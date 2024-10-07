@@ -1,6 +1,5 @@
 package com.qwlabs.auditing;
 
-import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.enterprise.inject.spi.CDI;
@@ -8,7 +7,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 
 import java.time.Clock;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -34,20 +33,20 @@ public class AuditingListener {
 
     private static void touchCreated(CreatedAuditedEntity entity) {
         entity.setCreatedAt(Optional.ofNullable(entity.getCreatedAt())
-                .orElseGet(() -> Instant.now(Clock.systemUTC())));
+                .orElseGet(() -> OffsetDateTime.now(Clock.systemUTC())));
         entity.setCreatedBy(Optional.ofNullable(entity.getCreatedBy())
-                .orElseGet(() -> getAuditorId(entity, PersistPhase.PRE_PERSIST).orElse(null)));
+                .orElseGet(() -> getAuditorId(entity).orElse(null)));
     }
 
     private static void touchUpdated(AuditedEntity entity, boolean force) {
-        entity.setUpdatedAt(Instant.now(Clock.systemUTC()));
+        entity.setUpdatedAt(OffsetDateTime.now(Clock.systemUTC()));
         entity.setUpdatedBy(Optional.ofNullable(entity.getUpdatedBy())
             .filter(by -> !force)
-            .orElseGet(() -> getAuditorId(entity, PersistPhase.PRE_UPDATE).orElse(null)));
+            .orElseGet(() -> getAuditorId(entity).orElse(null)));
     }
 
-    private static Optional<String> getAuditorId(Object entity, PersistPhase phase) {
-        return getAuditorIdProvider().get(entity, phase);
+    private static Optional<String> getAuditorId(Object entity) {
+        return getAuditorIdProvider().get(entity);
     }
 
     private static AuditorIdProvider getAuditorIdProvider() {
@@ -57,12 +56,8 @@ public class AuditingListener {
 
     private static class DefaultAuditorIdProvider implements AuditorIdProvider {
         @Override
-        public Optional<String> get(Object entity, PersistPhase phase) {
-            SecurityIdentity identity = CDI.current().select(SecurityIdentity.class).get();
-            if (identity.isAnonymous()) {
-                return Optional.empty();
-            }
-            return Optional.ofNullable(identity.getPrincipal().getName());
+        public Optional<String> get(Object entity) {
+            return Optional.empty();
         }
     }
 }

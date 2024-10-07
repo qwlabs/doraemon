@@ -2,5 +2,5 @@ apply from: "${rootProject.rootDir}/gradle/hibernate.gradle"
 
 dependencies {
     api "jakarta.persistence:jakarta.persistence-api:${jakartaPersistenceApiVersion}"
-    api "io.quarkus:quarkus-security:${quarkusVersion}"
+    api "jakarta.enterprise:jakarta.enterprise.cdi-api:${jakartaCdiApiVersion}"
 }

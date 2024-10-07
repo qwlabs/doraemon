@@ -1,4 +1,5 @@
 dependencies {
     api project(":cdi")
     api project(":auditing")
+    api "io.quarkus:quarkus-security:${quarkusVersion}"
 }
