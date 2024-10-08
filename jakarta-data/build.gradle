@@ -1,0 +1,4 @@
+dependencies {
+    api "com.google.guava:guava:${guavaVersion}"
+    api "jakarta.data:jakarta.data-api:${jakartaDataApiVersion}"
+}
