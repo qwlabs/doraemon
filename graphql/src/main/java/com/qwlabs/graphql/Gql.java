@@ -2,13 +2,12 @@ package com.qwlabs.graphql;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.qwlabs.lang.F2;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 
 @Slf4j
 public class Gql {
@@ -43,11 +42,13 @@ public class Gql {
 
     public String build() {
         Map<String, Object> result = new LinkedHashMap<>();
-        F2.ifPresent(operationName, name -> {
-            result.put("operationName", name);
-        });
+        if (Objects.nonNull(operationName)) {
+            result.put("operationName", operationName);
+        }
         result.put("query", query);
-        Optional.ofNullable(variables).ifPresent(vars -> result.put("variables", variables));
+        if (Objects.nonNull(variables)) {
+            result.put("variables", variables);
+        }
         try {
             return initObjectMapper().writeValueAsString(result);
         } catch (JsonProcessingException e) {

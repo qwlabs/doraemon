@@ -1,7 +1,7 @@
 configurations.all {
-//    collect { configuration ->
-//        configuration.exclude group: 'junit', module: 'junit'
-//    }
+    collect { configuration ->
+        configuration.exclude group: 'com.google.code.findbugs', module: 'jsr305'
+    }
     resolutionStrategy {
         force "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
         force "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"

@@ -1,6 +1,7 @@
 package com.qwlabs.jakarta.data;
 
 import com.google.common.primitives.Longs;
+import jakarta.annotation.Nullable;
 import jakarta.data.page.PageRequest;
 
 import java.util.Optional;
@@ -11,7 +12,7 @@ public interface PageRequests {
         return of(null, first);
     }
 
-    static PageRequest of(String after, int first) {
+    static PageRequest of(@Nullable String after, int first) {
         if (first <= 0) {
             throw new IllegalArgumentException("first can not be less than 1");
         }
