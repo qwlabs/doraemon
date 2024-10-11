@@ -20,6 +20,8 @@ pluginManagement {
 rootProject.name = 'doraemon'
 
 include 'lang'
+include 'auditing'
+include 'auditing-event-listener'
 include 'basic-tree'
 include 'mptt-tree'
 include 'exceptions'
@@ -27,7 +29,7 @@ include 'panache'
 include 'jakarta-json'
 include 'jakarta-data'
 include 'jackson'
-include 'auditing'
+
 include 'validator'
 include 'excel'
 include 'jpa'

@@ -2,5 +2,4 @@ apply from: "${rootProject.rootDir}/gradle/hibernate.gradle"
 
 dependencies {
     api "jakarta.persistence:jakarta.persistence-api:${jakartaPersistenceApiVersion}"
-    api "jakarta.enterprise:jakarta.enterprise.cdi-api:${jakartaCdiApiVersion}"
 }
