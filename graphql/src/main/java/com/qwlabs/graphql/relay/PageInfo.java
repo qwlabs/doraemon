@@ -13,7 +13,9 @@ public class PageInfo {
     private final String startCursor;
     @NotNull
     private final String endCursor;
+    @NotNull
     private final boolean hasPreviousPage;
+    @NotNull
     private final boolean hasNextPage;
 
     public PageInfo(String startCursor, String endCursor,

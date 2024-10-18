@@ -14,13 +14,13 @@ import java.util.List;
 @EqualsAndHashCode
 public class Connection<T> {
     @NotNull
-    private final ImmutableList<Edge<T>> edges;
+    private final ImmutableList<@NotNull Edge<T>> edges;
     @NotNull
     private final PageInfo pageInfo;
     @NotNull
     private final Long totalCount;
 
-    public Connection(List<@NotNull Edge<@NotNull T>> edges,
+    public Connection(List<@NotNull Edge<T>> edges,
                       PageInfo pageInfo,
                       Long totalCount) {
         this.edges = ImmutableList.copyOf(Assert.assertNotNull(edges, () -> "edges cannot be null"));
