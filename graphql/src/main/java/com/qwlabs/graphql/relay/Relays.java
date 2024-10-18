@@ -1,17 +1,13 @@
-package com.qwlabs.graphql;
+package com.qwlabs.graphql.relay;
 
-import com.qwlabs.graphql.relay.Connection;
-import com.qwlabs.graphql.relay.ConnectionCursor;
 import com.qwlabs.jakarta.data.Pages;
-import graphql.relay.DefaultEdge;
-import graphql.relay.DefaultPageInfo;
-import graphql.relay.Edge;
-import graphql.relay.PageInfo;
 import jakarta.annotation.Nullable;
 import jakarta.data.page.Page;
 import jakarta.validation.constraints.NotNull;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -34,13 +30,13 @@ public class Relays {
     }
 
     private static <P> PageInfo buildPageInfo(Page<P> page, List<Edge<P>> edges) {
-        ConnectionCursor startCursor = null;
-        ConnectionCursor endCursor = null;
+        String startCursor = null;
+        String endCursor = null;
         if (!edges.isEmpty()) {
-            startCursor = (ConnectionCursor) edges.get(0).getCursor();
-            endCursor = (ConnectionCursor) edges.get(edges.size() - 1).getCursor();
+            startCursor = edges.get(0).getCursor();
+            endCursor = edges.get(edges.size() - 1).getCursor();
         }
-        return new DefaultPageInfo(
+        return new PageInfo(
             startCursor,
             endCursor,
             page.hasPrevious(),
@@ -54,8 +50,13 @@ public class Relays {
         Iterator<P> iterator = page.content().iterator();
         while (iterator.hasNext()) {
             P node = iterator.next();
-            edges.add(new DefaultEdge<>(node, ConnectionCursor.createCursor(startAt++)));
+            edges.add(new Edge<>(node, createCursor(startAt++)));
         }
         return edges;
+    }
+
+    private static String createCursor(long offset) {
+        byte[] bytes = Long.toString(offset).getBytes(StandardCharsets.UTF_8);
+        return Base64.getEncoder().encodeToString(bytes);
     }
 }
