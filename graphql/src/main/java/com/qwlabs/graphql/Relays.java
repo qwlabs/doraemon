@@ -1,10 +1,8 @@
 package com.qwlabs.graphql;
 
+import com.qwlabs.graphql.relay.Connection;
+import com.qwlabs.graphql.relay.ConnectionCursor;
 import com.qwlabs.jakarta.data.Pages;
-import graphql.relay.Connection;
-import graphql.relay.ConnectionCursor;
-import graphql.relay.DefaultConnection;
-import graphql.relay.DefaultConnectionCursor;
 import graphql.relay.DefaultEdge;
 import graphql.relay.DefaultPageInfo;
 import graphql.relay.Edge;
@@ -32,15 +30,15 @@ public class Relays {
         Objects.requireNonNull(page, "page can not be null.");
         List<Edge<P>> edges = buildEdges(page);
         PageInfo pageInfo = buildPageInfo(page, edges);
-        return new DefaultConnection<>(edges, pageInfo);
+        return new Connection<>(edges, pageInfo, page.totalElements());
     }
 
     private static <P> PageInfo buildPageInfo(Page<P> page, List<Edge<P>> edges) {
         ConnectionCursor startCursor = null;
         ConnectionCursor endCursor = null;
         if (!edges.isEmpty()) {
-            startCursor = edges.get(0).getCursor();
-            endCursor = edges.get(edges.size() - 1).getCursor();
+            startCursor = (ConnectionCursor) edges.get(0).getCursor();
+            endCursor = (ConnectionCursor) edges.get(edges.size() - 1).getCursor();
         }
         return new DefaultPageInfo(
             startCursor,
@@ -56,7 +54,7 @@ public class Relays {
         Iterator<P> iterator = page.content().iterator();
         while (iterator.hasNext()) {
             P node = iterator.next();
-            edges.add(new DefaultEdge<>(node, new DefaultConnectionCursor(String.valueOf(startAt++))));
+            edges.add(new DefaultEdge<>(node, ConnectionCursor.createCursor(startAt++)));
         }
         return edges;
     }
