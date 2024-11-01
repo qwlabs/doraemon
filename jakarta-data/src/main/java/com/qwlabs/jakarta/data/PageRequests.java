@@ -21,11 +21,11 @@ public interface PageRequests {
         return PageRequest.ofPage(pageNumber, first, true);
     }
 
-    static int firstResult(PageRequest request){
+    static int firstResult(PageRequest request) {
         return Long.valueOf((request.page() - 1)).intValue() * request.size();
     }
 
-    static int maxResults(PageRequest request){
+    static int maxResults(PageRequest request) {
         return request.size();
     }
 }
