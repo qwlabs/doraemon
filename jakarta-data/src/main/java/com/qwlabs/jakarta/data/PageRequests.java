@@ -20,4 +20,12 @@ public interface PageRequests {
         var pageNumber = (startAt + first) / first;
         return PageRequest.ofPage(pageNumber, first, true);
     }
+
+    static int firstResult(PageRequest request){
+        return Long.valueOf((request.page() - 1) * request.size()).intValue();
+    }
+
+    static int maxResults(PageRequest request){
+        return request.size();
+    }
 }

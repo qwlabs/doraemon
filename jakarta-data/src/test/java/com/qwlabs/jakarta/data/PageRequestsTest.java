@@ -20,6 +20,26 @@ class PageRequestsTest {
         checkRequest("2", 4, 1L);
     }
 
+    @Test
+    void should_firstResult() {
+        assertThat(PageRequests.firstResult(PageRequests.of("0", 3)), is(0));
+        assertThat(PageRequests.firstResult(PageRequests.of("0", 1)), is(0));
+        assertThat(PageRequests.firstResult(PageRequests.of("1", 2)), is(0));
+        assertThat(PageRequests.firstResult(PageRequests.of("2", 2)), is(2));
+        assertThat(PageRequests.firstResult(PageRequests.of("3", 2)), is(2));
+        assertThat(PageRequests.firstResult(PageRequests.of("4", 2)), is(4));
+    }
+
+    @Test
+    void should_maxResults() {
+        assertThat(PageRequests.maxResults(PageRequests.of("0", 3)), is(3));
+        assertThat(PageRequests.maxResults(PageRequests.of("0", 1)), is(1));
+        assertThat(PageRequests.maxResults(PageRequests.of("1", 2)), is(2));
+        assertThat(PageRequests.maxResults(PageRequests.of("2", 2)), is(2));
+        assertThat(PageRequests.maxResults(PageRequests.of("3", 2)), is(2));
+        assertThat(PageRequests.maxResults(PageRequests.of("4", 2)), is(2));
+    }
+
     void checkRequest(String after, Integer first, long page) {
         var pageRequest = PageRequests.of(after, first);
         assertThat(pageRequest.page(), is(page));
