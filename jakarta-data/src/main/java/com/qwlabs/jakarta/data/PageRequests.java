@@ -22,7 +22,7 @@ public interface PageRequests {
     }
 
     static int firstResult(PageRequest request){
-        return Long.valueOf((request.page() - 1) * request.size()).intValue();
+        return Long.valueOf((request.page() - 1)).intValue() * request.size();
     }
 
     static int maxResults(PageRequest request){
