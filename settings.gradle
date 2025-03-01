@@ -3,9 +3,9 @@ pluginManagement {
         mavenLocal()
         mavenCentral()
         gradlePluginPortal()
-        maven { url 'https://maven.aliyun.com/repository/central' }
-        maven { url 'https://maven.aliyun.com/repository/public' }
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url = 'https://maven.aliyun.com/repository/central' }
+        maven { url = 'https://maven.aliyun.com/repository/public' }
+        maven { url = 'https://maven.aliyun.com/repository/gradle-plugin' }
     }
     plugins {
         id "org.kordamp.gradle.jandex" version "${jandexPluginVersion}"
@@ -13,7 +13,7 @@ pluginManagement {
         id "io.freefair.lombok" version "${lombokPluginVersion}"
         id "com.gradleup.nmcp" version "${nmcpPluginVersion}"
         id "me.champeau.jmh" version "${jmhPluginVersion}"
-        id 'org.hibernate.orm' version "${hibernatePluginVersion}"
+        id "org.hibernate.orm" version "${hibernatePluginVersion}"
     }
 }
 
@@ -26,7 +26,6 @@ include 'basic-tree'
 include 'mptt-tree'
 include 'exceptions'
 include 'panache'
-include 'jakarta-json'
 include 'jakarta-data'
 include 'jackson'
 

@@ -1,4 +1,0 @@
-dependencies {
-    api "jakarta.json:jakarta.json-api:${jakartaJsonApiVersion}"
-}
-checkstyleMain.exclude '**/jakarta/json/**'

@@ -114,24 +114,19 @@ public class LazyRolesSecurityIdentity implements SecurityIdentity {
         if (results.size() == 1) {
             return results.get(0);
         }
-        return Uni.combine().all().unis(results).combinedWith(new Function<List<?>, Boolean>() {
-            @Override
-            public Boolean apply(List<?> o) {
-                Boolean result = null;
-                //if any are true we return true
-                //otherwise if all are null we return null
-                //if some are false and some null we return false
-                for (Object i : o) {
-                    if (i != null) {
-                        boolean val = (boolean) i;
-                        if (val) {
-                            return true;
-                        }
-                        result = false;
+
+        return Uni.combine().all().unis(results).with((objects) -> {
+            Boolean result = null;
+            for (Object i : objects) {
+                if (i != null) {
+                    boolean val = (boolean) i;
+                    if (val) {
+                        return true;
                     }
+                    result = false;
                 }
-                return result;
             }
+            return result;
         });
 
     }
@@ -141,20 +136,13 @@ public class LazyRolesSecurityIdentity implements SecurityIdentity {
     }
 
     public static Builder builder(SecurityIdentity identity) {
-        Builder builder = new Builder()
+        return new Builder()
             .addAttributes(identity.getAttributes())
             .addCredentials(identity.getCredentials())
             .addRoles(identity.getRoles())
-            .addPermissionChecker(new Function<Permission, Uni<Boolean>>() {
-                @Override
-                public Uni<Boolean> apply(Permission permission) {
-                    // sustain previous permission checks
-                    return identity.checkPermission(permission);
-                }
-            })
+            .addPermissionChecker(identity::checkPermission)
             .setPrincipal(identity.getPrincipal())
             .setAnonymous(identity.isAnonymous());
-        return builder;
     }
 
     public static class Builder {
