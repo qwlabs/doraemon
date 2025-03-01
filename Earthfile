@@ -1,6 +1,6 @@
 VERSION 0.8
 ARG --global BASE_IMAGE=earthly/dind:alpine
-ARG --global PACKAGE_IMAGE=gradle:8.13-jdk17-alpine
+ARG --global PACKAGE_IMAGE=gradle:8.12-jdk17-alpine
 
 FROM ${BASE_IMAGE}
 WORKDIR /app
