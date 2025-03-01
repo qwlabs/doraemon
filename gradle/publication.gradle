@@ -11,6 +11,10 @@ task javadocJar(type: Jar) {
     from javadoc
 }
 
+tasks.withType(GenerateModuleMetadata).configureEach {
+    suppressedValidationErrors.add('enforced-platform')
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
