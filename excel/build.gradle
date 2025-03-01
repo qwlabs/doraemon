@@ -3,7 +3,7 @@ dependencies {
     api project(":exceptions")
     api "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
     api "jakarta.enterprise:jakarta.enterprise.cdi-api:${jakartaCdiApiVersion}"
-    api "com.alibaba:easyexcel:${easyExcelVersion}"
+    api "cn.idev.excel:fastexcel:${fastexcelVersion}"
     api "org.apache.poi:poi:${poiVersion}"
     api "org.apache.poi:poi-ooxml:${poiVersion}"
     api "org.apache.poi:poi-ooxml-lite:${poiVersion}"

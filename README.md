@@ -35,7 +35,6 @@ api 'com.qwlabs.doraemon:lang:0.3.*'
 - [jackson](jackson/README.md) Easy to use jackson
 - [jpa](jpa/README.md) Generic jpa naming strategy as refer to spring
 - [lang](lang/README.md) Generic utils for java
-- [mptt-tree](mptt-tree/README.md) The tree use MPTT structure
 - [panache](panache/README.md) Extends panache in paging and native query
 - [q-api](q-api/README.md) Query string condition api definition
 - [q-parser-antlr4](q-parser-antlr4/README.md) Query string condition parser with antlr4

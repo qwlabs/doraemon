@@ -1,8 +1,8 @@
 package com.qwlabs.excel;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.context.AnalysisContext;
-import com.alibaba.excel.event.AnalysisEventListener;
+import cn.idev.excel.FastExcel;
+import cn.idev.excel.context.AnalysisContext;
+import cn.idev.excel.event.AnalysisEventListener;
 import com.google.common.collect.Maps;
 import com.qwlabs.lang.InputStreams;
 import org.apache.commons.compress.utils.Lists;
@@ -43,7 +43,7 @@ public class DataReader {
         }
         InputStreams.reset(inputStream);
         var listener = new Listener(headMapping, headRowStartIndex, dataRowStartIndex, rowField);
-        options.config(EasyExcel.read(inputStream, listener))
+        options.config(FastExcel.read(inputStream, listener))
             .headRowNumber(0)
             .doRead();
         return listener.getData();

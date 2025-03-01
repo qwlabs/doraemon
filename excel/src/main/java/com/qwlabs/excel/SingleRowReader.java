@@ -1,8 +1,8 @@
 package com.qwlabs.excel;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.context.AnalysisContext;
-import com.alibaba.excel.event.AnalysisEventListener;
+import cn.idev.excel.EasyExcel;
+import cn.idev.excel.context.AnalysisContext;
+import cn.idev.excel.event.AnalysisEventListener;
 import com.qwlabs.lang.InputStreams;
 
 import java.io.InputStream;
