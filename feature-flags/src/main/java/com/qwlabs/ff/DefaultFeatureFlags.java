@@ -3,6 +3,7 @@ package com.qwlabs.ff;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
+
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -25,6 +26,6 @@ public class DefaultFeatureFlags implements FeatureFlags {
         return instances.stream()
             .filter(instance -> Objects.equals(instance.feature(), feature))
             .findFirst()
-            .orElseThrow(() -> FFMessages.INSTANCE.featureNotFound(feature));
+            .orElseThrow(() -> Messages.INSTANCE.featureNotFound(feature));
     }
 }

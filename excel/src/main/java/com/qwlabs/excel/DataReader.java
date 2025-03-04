@@ -39,7 +39,7 @@ public class DataReader {
                                           int dataRowStartIndex,
                                           String rowField) {
         if (headRowStartIndex >= dataRowStartIndex) {
-            throw ExcelMessages.INSTANCE.conflictHeadAndDataRowIndex(headRowStartIndex, dataRowStartIndex);
+            throw Messages.INSTANCE.conflictHeadAndDataRowIndex(headRowStartIndex, dataRowStartIndex);
         }
         InputStreams.reset(inputStream);
         var listener = new Listener(headMapping, headRowStartIndex, dataRowStartIndex, rowField);

@@ -1,6 +1,6 @@
 package com.qwlabs.cdi.partition;
 
-import com.qwlabs.cdi.CDIMessages;
+import com.qwlabs.cdi.Messages;
 import com.qwlabs.lang.BufferedCall;
 import com.qwlabs.lang.C2;
 import com.qwlabs.lang.F2;
@@ -59,7 +59,7 @@ public class PartitionInterceptor {
                 return buildPartitionByParameter(context, index);
             }
         }
-        throw CDIMessages.INSTANCE.codeError("Can not found @PartitionBy in method:" + context.getMethod().getName());
+        throw Messages.INSTANCE.codeError("Can not found @PartitionBy in method:" + context.getMethod().getName());
     }
 
     private boolean hasPartitionBy(Annotation[] parameterAnnotations) {
@@ -108,7 +108,7 @@ public class PartitionInterceptor {
                 bufferedCall.add((Collection<E>) data);
                 return;
             }
-            throw CDIMessages.INSTANCE.codeError("PartitionBy can not support type " + type);
+            throw Messages.INSTANCE.codeError("PartitionBy can not support type " + type);
         }
 
         public <R, E> R call(List<E> data, InvocationContext context) throws Exception {
@@ -133,7 +133,7 @@ public class PartitionInterceptor {
             if (Collection.class.isAssignableFrom(type)) {
                 return data;
             }
-            throw CDIMessages.INSTANCE.codeError("PartitionBy can not support type " + type.getName());
+            throw Messages.INSTANCE.codeError("PartitionBy can not support type " + type.getName());
         }
 
         public boolean needCall(int size) {

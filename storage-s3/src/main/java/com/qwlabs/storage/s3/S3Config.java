@@ -1,7 +1,7 @@
 package com.qwlabs.storage.s3;
 
 import com.qwlabs.lang.S2;
-import com.qwlabs.storage.messages.StorageMessages;
+import com.qwlabs.storage.messages.Messages;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,16 +17,16 @@ public class S3Config {
 
     public void validate() {
         if (S2.isBlank(region)) {
-            throw StorageMessages.INSTANCE.lostConfig("region");
+            throw Messages.INSTANCE.lostConfig("region");
         }
         if (S2.isBlank(url)) {
-            throw StorageMessages.INSTANCE.lostConfig("url");
+            throw Messages.INSTANCE.lostConfig("url");
         }
         if (S2.isBlank(accessKey)) {
-            throw StorageMessages.INSTANCE.lostConfig("accessKey");
+            throw Messages.INSTANCE.lostConfig("accessKey");
         }
         if (S2.isBlank(secretKey)) {
-            throw StorageMessages.INSTANCE.lostConfig("secretKey");
+            throw Messages.INSTANCE.lostConfig("secretKey");
         }
     }
 }

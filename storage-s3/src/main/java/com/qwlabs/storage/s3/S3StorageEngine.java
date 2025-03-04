@@ -3,7 +3,7 @@ package com.qwlabs.storage.s3;
 
 import com.google.common.collect.Lists;
 import com.qwlabs.cdi.dispatch.Dispatchable;
-import com.qwlabs.storage.messages.StorageMessages;
+import com.qwlabs.storage.messages.Messages;
 import com.qwlabs.storage.models.CompleteUploadCommand;
 import com.qwlabs.storage.models.GetDownloadUrlCommand;
 import com.qwlabs.storage.models.GetObjectCommand;
@@ -63,7 +63,7 @@ public class S3StorageEngine implements StorageEngine, Dispatchable<String> {
     public StorageObject completeUpload(CompleteUploadCommand command) {
         ListPartsResponse result = s3Client.listParts(command.getBucket(), command.getObjectName(), command.getUploadId());
         if (result.parts().size() != command.getPartCount()) {
-            throw StorageMessages.INSTANCE.invalidPartCount(command.getPartCount(),
+            throw Messages.INSTANCE.invalidPartCount(command.getPartCount(),
                 result.parts().size());
         }
         List<Part> parts = result.parts();

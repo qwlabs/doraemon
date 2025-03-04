@@ -3,7 +3,7 @@ package com.qwlabs.storage.minio;
 
 import com.google.common.collect.Lists;
 import com.qwlabs.cdi.dispatch.Dispatchable;
-import com.qwlabs.storage.messages.StorageMessages;
+import com.qwlabs.storage.messages.Messages;
 import com.qwlabs.storage.models.CompleteUploadCommand;
 import com.qwlabs.storage.models.GetDownloadUrlCommand;
 import com.qwlabs.storage.models.GetObjectCommand;
@@ -66,7 +66,7 @@ public class MinioStorageEngine implements StorageEngine, Dispatchable<String> {
         ListPartsResult result = minioClient.listParts(
             command.getBucket(), command.getObjectName(), command.getUploadId());
         if (result.partList().size() != command.getPartCount()) {
-            throw StorageMessages.INSTANCE.invalidPartCount(command.getPartCount(),
+            throw Messages.INSTANCE.invalidPartCount(command.getPartCount(),
                 result.partList().size());
         }
         List<Part> parts = result.partList();

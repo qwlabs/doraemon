@@ -1,13 +1,13 @@
 package com.qwlabs.storage.services;
 
-import com.qwlabs.cdi.dispatch.DispatchInstance;
 import com.qwlabs.cdi.Primary;
-import com.qwlabs.storage.messages.StorageMessages;
+import com.qwlabs.cdi.dispatch.DispatchInstance;
+import com.qwlabs.storage.messages.Messages;
 import com.qwlabs.storage.models.StoragePlan;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
+
 import java.util.Objects;
 
 @Primary
@@ -26,8 +26,8 @@ public class StoragePlannerDispatcher implements StoragePlanner {
         String businessType = context.getBusinessType();
         Objects.requireNonNull(businessType, "context can not be null.");
         return this.dispatcher.getOptional(context)
-                .map(planner -> planner.plan(context))
-                .orElseThrow(() -> StorageMessages.INSTANCE.notFoundStoragePlanner(businessType));
+            .map(planner -> planner.plan(context))
+            .orElseThrow(() -> Messages.INSTANCE.notFoundStoragePlanner(businessType));
     }
 
 }
