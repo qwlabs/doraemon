@@ -20,8 +20,8 @@ pluginManagement {
 rootProject.name = 'doraemon'
 
 include 'lang'
-include 'auditing'
-include 'auditing-event-listener'
+include 'auditing-core'
+include 'auditing-hibernate'
 include 'basic-tree'
 include 'exceptions'
 include 'panache'

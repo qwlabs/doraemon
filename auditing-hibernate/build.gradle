@@ -1,5 +1,5 @@
 dependencies {
-    api project(":auditing")
+    api project(":auditing-core")
     api "org.hibernate:hibernate-core:${hibernateVersion}"
     api "jakarta.enterprise:jakarta.enterprise.cdi-api:${jakartaCdiApiVersion}"
 }

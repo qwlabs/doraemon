@@ -25,7 +25,7 @@ api 'com.qwlabs.doraemon:lang:0.3.*'
 ```
 
 # Document
-- [auditing](auditing/README.md) Base auditing entity/listener for jpa
+- [auditing](auditing-core/README.md) Base auditing entity for jpa
 - [basic-tree](basic-tree/README.md) Basic Tree definition and operation
 - [cdi](cdi/README.md) CDI Utils and Dispatchable definition for your business code
 - [exceptions](exceptions/README.md) Generic exception definition
