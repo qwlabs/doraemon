@@ -1,0 +1,31 @@
+[versions]
+quarkus = "3.21.2"
+hibernate = "6.6.13.Final"
+hibernate-validator= "8.0.2.Final"
+jandex = "2.1.0"
+grgit = "5.0.0-rc.3"
+lombok-plugin = "8.12.2"
+nmcp = "0.0.8"
+jmh = "0.7.3"
+lombok = "1.18.36"
+slf4j = "2.1.0-alpha1"
+checkstyle-tool = "10.21.3"
+
+[libraries]
+quarkus-platform = { module = "io.quarkus.platform:quarkus-bom", version.ref = "quarkus" }
+
+hibernate-platform = { module = "org.hibernate.orm:hibernate-platform", version.ref = "hibernate" }
+
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+
+slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+
+
+[plugins]
+jandex = {id="org.kordamp.gradle.jandex", version.ref="jandex"}
+grgit = {id="org.ajoberstar.grgit", version.ref="grgit"}
+lombok = {id="io.freefair.lombok", version.ref="lombok-plugin"}
+nmcp = {id="com.gradleup.nmcp", version.ref="nmcp"}
+jmh = {id="me.champeau.jmh", version.ref="jmh"}
+hibernate = {id="org.hibernate.orm", version.ref="hibernate"}
+

@@ -8,17 +8,17 @@ buildscript {
 }
 
 plugins {
-    id 'org.kordamp.gradle.jandex' apply false
-    id 'org.ajoberstar.grgit' apply false
-    id 'me.champeau.jmh' apply false
-    id 'com.gradleup.nmcp' apply false
-    id 'org.hibernate.orm' apply false
+    alias(libs.plugins.jandex) apply false
+    alias(libs.plugins.grgit) apply false
+    alias(libs.plugins.jmh) apply false
+    alias(libs.plugins.nmcp) apply false
+    alias(libs.plugins.lombok) apply false
+    alias(libs.plugins.hibernate) apply false
 }
 
 subprojects {
     apply plugin: 'java-library'
     apply from: "${rootProject.rootDir}/gradle/common.gradle"
-    apply from: "${rootProject.rootDir}/gradle/bom.gradle"
     apply from: "${rootProject.rootDir}/gradle/jandex.gradle"
     apply from: "${rootProject.rootDir}/gradle/version.gradle"
     apply from: "${rootProject.rootDir}/gradle/reversion.gradle"

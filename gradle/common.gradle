@@ -23,6 +23,9 @@ test {
 }
 
 dependencies {
+    implementation(enforcedPlatform(libs.quarkus.platform))
+    implementation(enforcedPlatform(libs.hibernate.platform))
+
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
     testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"

@@ -2,7 +2,7 @@ apply plugin: 'checkstyle'
 apply plugin: 'project-report'
 
 checkstyle {
-    toolVersion = checkstyleToolVersion
+    toolVersion = libs.versions.checkstyle.tool.get()
 }
 
 checkstyleMain {

@@ -7,15 +7,8 @@ pluginManagement {
         maven { url = 'https://maven.aliyun.com/repository/public' }
         maven { url = 'https://maven.aliyun.com/repository/gradle-plugin' }
     }
-    plugins {
-        id "org.kordamp.gradle.jandex" version "${jandexPluginVersion}"
-        id "org.ajoberstar.grgit" version "${grgitPluginVersion}"
-        id "io.freefair.lombok" version "${lombokPluginVersion}"
-        id "com.gradleup.nmcp" version "${nmcpPluginVersion}"
-        id "me.champeau.jmh" version "${jmhPluginVersion}"
-        id "org.hibernate.orm" version "${hibernatePluginVersion}"
-    }
 }
+
 
 rootProject.name = 'doraemon'
 
