@@ -19,6 +19,7 @@ hibernate-platform = { module = "org.hibernate.orm:hibernate-platform", version.
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 
 slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+quarkus-arc = { module = "io.quarkus.arc:arc" }
 
 
 [plugins]
