@@ -1,4 +1,4 @@
 dependencies {
     api project(":lang")
-    api "org.hibernate.validator:hibernate-validator:${hibernateValidatorVersion}"
+    api libs.hibernate.validator
 }

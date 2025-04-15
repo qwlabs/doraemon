@@ -1,6 +1,6 @@
 dependencies {
     api project(":cdi")
     api project(":lang")
-    api "io.quarkus:quarkus-smallrye-fault-tolerance:${quarkusVersion}"
-    api "io.quarkus:quarkus-narayana-jta:${quarkusVersion}"
+    api libs.quarkus.smallrye.fault.tolerance
+    api libs.quarkus.narayana.jta
 }

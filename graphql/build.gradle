@@ -1,5 +1,5 @@
 dependencies {
     api project(":jakarta-data")
-    api "com.graphql-java:graphql-java:${graphqlJavaVersion}"
-    api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    api libs.graphql.java
+    api libs.jackson.databind
 }

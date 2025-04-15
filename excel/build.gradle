@@ -1,10 +1,10 @@
 dependencies {
     api project(":lang")
     api project(":exceptions")
-    api "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
-    api "jakarta.enterprise:jakarta.enterprise.cdi-api:${jakartaCdiApiVersion}"
-    api "cn.idev.excel:fastexcel:${fastexcelVersion}"
-    api "org.apache.poi:poi:${poiVersion}"
-    api "org.apache.poi:poi-ooxml:${poiVersion}"
-    api "org.apache.poi:poi-ooxml-lite:${poiVersion}"
+    api libs.jakarta.validation
+    api libs.jakarta.cdi
+    api libs.fastexcel
+    api libs.poi
+    api libs.poi.ooxml
+    api libs.poi.ooxml.lite
 }

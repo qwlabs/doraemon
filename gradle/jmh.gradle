@@ -17,7 +17,7 @@ jmh {
     batchSize = 8
     forceGC = true
     fork = 1
-    jmhVersion = "${jmhVersion}"
+    jmhVersion = libs.versions.jmh.asProvider().get()
     resultFormat = 'JSON'
     synchronizeIterations = true
 //    humanOutputFile = project.file("${project.buildDir}/reports/jmh/human.txt")
@@ -30,11 +30,11 @@ checkstyleJmh {
 
 
 dependencies {
-    jmh "commons-io:commons-io:2.7"
-    jmh "org.openjdk.jmh:jmh-core:${jmhVersion}"
-    jmh "org.openjdk.jmh:jmh-generator-annprocess:${jmhVersion}"
-    jmh "org.openjdk.jmh:jmh-generator-bytecode:${jmhVersion}"
+    jmh libs.commons.io2
+    jmh libs.jmh.core
+    jmh libs.jmh.generator.annprocess
+    jmh libs.jmh.generator.bytecode
 
-    testImplementation("org.openjdk.jmh:jmh-core:${jmhVersion}")
-    testImplementation("org.openjdk.jmh:jmh-generator-annprocess:${jmhVersion}")
+    testImplementation libs.jmh.core
+    testImplementation libs.jmh.generator.annprocess
 }

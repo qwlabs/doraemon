@@ -1,5 +1,5 @@
 dependencies {
     api project(":lang")
-    api "io.quarkus:quarkus-junit5:${quarkusVersion}"
-    api "org.testcontainers:postgresql:${testcontainersVersion}"
+    api libs.quarkus.junit5
+    api libs.testcontainers.postgresql
 }

@@ -2,11 +2,11 @@ apply from: "${rootProject.rootDir}/gradle/jmh.gradle"
 
 dependencies {
     api project(":lang")
-    api "com.google.guava:guava:${guavaVersion}"
-    api "jakarta.validation:jakarta.validation-api:${jakartaValidationApiVersion}"
-    api "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+    api libs.guava
+    api libs.jakarta.validation
+    api libs.jackson.annotations
 
-    testImplementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
-    testImplementation "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
-    testImplementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    testImplementation libs.jackson.annotations
+    testImplementation libs.jackson.core
+    testImplementation libs.jackson.databind
 }

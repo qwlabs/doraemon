@@ -9,8 +9,8 @@ hibernate {
 }
 
 dependencies {
-    annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen:${hibernateVersion}"
+    annotationProcessor libs.hibernate.jpamodelgen
 
-    api "org.hibernate:hibernate-core:${hibernateVersion}"
-    api "jakarta.data:jakarta.data-api:${jakartaDataApiVersion}"
+    api libs.hibernate.core
+    api libs.jakarta.data
 }

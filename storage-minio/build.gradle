@@ -3,5 +3,5 @@ dependencies {
     api project(":cdi")
     api project(":storage")
     api project(":exceptions")
-    api "io.minio:minio:${minioVersion}"
+    api libs.minio
 }

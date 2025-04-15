@@ -1,6 +1,6 @@
 dependencies {
     api project(":cdi")
     api project(":exceptions")
-    api "com.google.guava:guava:${guavaVersion}"
-    api "io.quarkus:quarkus-security:${quarkusVersion}"
+    api libs.guava
+    api libs.quarkus.security
 }

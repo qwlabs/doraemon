@@ -1,5 +1,5 @@
 dependencies {
     api project(":jackson")
     api project(":q-api")
-    api "org.hibernate:hibernate-core:${hibernateVersion}"
+    api libs.hibernate.core
 }

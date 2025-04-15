@@ -1,32 +1,110 @@
 [versions]
+jandex-plugin = "2.1.0"
+lombok-plugin = "8.12.2"
+jmh-plugin = "0.7.3"
+
 quarkus = "3.21.2"
 hibernate = "6.6.13.Final"
-hibernate-validator= "8.0.2.Final"
-jandex = "2.1.0"
+jandex = "3.2.7"
 grgit = "5.0.0-rc.3"
-lombok-plugin = "8.12.2"
 nmcp = "0.0.8"
-jmh = "0.7.3"
+jmh = "1.37"
 lombok = "1.18.36"
 slf4j = "2.1.0-alpha1"
 checkstyle-tool = "10.21.3"
+jboss-logging-tool = "3.0.4.Final"
+jboos-shrinkwrap = "2.0.0-beta-1"
+jakarta-data = "1.0.1"
+junit-platform-launcher = "1.12.0"
+commons-io2 = "2.7"
+antlr4 = "4.13.1"
+fastexcel = "1.1.0"
+poi="5.3.0"
+minio="8.5.12"
+s3="2.27.21"
 
 [libraries]
 quarkus-platform = { module = "io.quarkus.platform:quarkus-bom", version.ref = "quarkus" }
 
 hibernate-platform = { module = "org.hibernate.orm:hibernate-platform", version.ref = "hibernate" }
+hibernate-core = { module = "org.hibernate:hibernate-core", version.ref = "hibernate" }
+hibernate-jpamodelgen = { module = "org.hibernate.orm:hibernate-jpamodelgen", version.ref = "hibernate" }
+hibernate-validator = { module = "org.hibernate.validator:hibernate-validator" }
+
+jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations" }
+jackson-core = { module = "com.fasterxml.jackson.core:jackson-core" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind" }
+
+
+testcontainers = { module = "org.testcontainers:testcontainers" }
+testcontainers-postgresql = { module = "org.testcontainers:postgresql" }
+
+rest-assured = { module = "io.rest-assured:rest-assured" }
+shrinkwrap-api = { module = "org.jboss.shrinkwrap:shrinkwrap-api", version.ref="jboos-shrinkwrap" }
+
+fastexcel = { module = "cn.idev.excel:fastexcel", version.ref = "fastexcel" }
+
+poi = { module = "org.apache.poi:poi", version.ref = "poi" }
+poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poi" }
+poi-ooxml-lite = { module = "org.apache.poi:poi-ooxml-lite", version.ref = "poi" }
+
+minio = { module = "io.minio:minio", version.ref = "minio" }
+s3 = { module = "software.amazon.awssdk:s3", version.ref = "s3" }
+
+
+vertx-web = { module = "io.vertx:vertx-web" }
+
+graphql-java = { module = "com.graphql-java:graphql-java" }
 
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+antlr4-runtime = { module = "org.antlr:antlr4-runtime" }
 
 slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+
 quarkus-arc = { module = "io.quarkus.arc:arc" }
+quarkus-hibernate-orm-panache = { module = "io.quarkus:quarkus-hibernate-orm-panache" }
+quarkus-cache = { module = "io.quarkus:quarkus-cache" }
+quarkus-vertx-http = { module = "io.quarkus:quarkus-vertx-http" }
+quarkus-junit5 = { module = "io.quarkus:quarkus-junit5" }
+quarkus-keycloak-admin-resteasy-client = { module = "io.quarkus:quarkus-keycloak-admin-resteasy-client" }
+quarkus-security = { module = "io.quarkus:quarkus-security" }
+quarkus-smallrye-graphql = { module = "io.quarkus:quarkus-smallrye-graphql" }
+quarkus-smallrye-fault-tolerance = { module = "io.quarkus:quarkus-smallrye-fault-tolerance" }
+quarkus-narayana-jta = { module = "io.quarkus:quarkus-narayana-jta" }
+
+jakarta-cdi = { module = "jakarta.enterprise:jakarta.enterprise.cdi-api" }
+jakarta-validation = { module = "jakarta.validation:jakarta.validation-api" }
+jakarta-persistence = { module = "jakarta.persistence:jakarta.persistence-api" }
+jakarta-annotation = { module = "jakarta.annotation:jakarta.annotation-api" }
+jakarta-interceptor = { module = "jakarta.interceptor:jakarta.interceptor-api" }
+jakarta-data = { module = "jakarta.data:jakarta.data-api", version.ref = "jakarta-data" }
+
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform-launcher" }
+
+mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter" }
+
+hamcrest = { module = "org.hamcrest:hamcrest" }
+
+jboss-logging = { module = "org.jboss.logging:jboss-logging" }
+jboss-logging-processor = { module = "org.jboss.logging:jboss-logging-processor", version.ref = "jboss-logging-tool" }
+jboss-logging-annotations = { module = "org.jboss.logging:jboss-logging-annotations" }
+
+
+commons-io2 = { module = "commons-io:commons-io", version.ref = "commons-io2" }
+jmh-core = { module = "org.openjdk.jmh:jmh-core", version.ref = "jmh" }
+jmh-generator-annprocess = { module = "org.openjdk.jmh:jmh-generator-annprocess", version.ref = "jmh" }
+jmh-generator-bytecode = { module = "org.openjdk.jmh:jmh-generator-bytecode", version.ref = "jmh" }
+
+guava = { module = "com.google.guava:guava" }
 
 
 [plugins]
-jandex = {id="org.kordamp.gradle.jandex", version.ref="jandex"}
-grgit = {id="org.ajoberstar.grgit", version.ref="grgit"}
-lombok = {id="io.freefair.lombok", version.ref="lombok-plugin"}
-nmcp = {id="com.gradleup.nmcp", version.ref="nmcp"}
-jmh = {id="me.champeau.jmh", version.ref="jmh"}
-hibernate = {id="org.hibernate.orm", version.ref="hibernate"}
+jandex = { id = "org.kordamp.gradle.jandex", version.ref = "jandex-plugin" }
+grgit = { id = "org.ajoberstar.grgit", version.ref = "grgit" }
+lombok = { id = "io.freefair.lombok", version.ref = "lombok-plugin" }
+nmcp = { id = "com.gradleup.nmcp", version.ref = "nmcp" }
+jmh = { id = "me.champeau.jmh", version.ref = "jmh-plugin" }
+hibernate = { id = "org.hibernate.orm", version.ref = "hibernate" }
 

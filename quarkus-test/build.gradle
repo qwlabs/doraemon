@@ -1,4 +1,4 @@
 dependencies {
-    api "io.quarkus:quarkus-junit5:${quarkusVersion}"
-    api "io.rest-assured:rest-assured:${restAssuredVersion}"
+    api libs.quarkus.junit5
+    api libs.rest.assured
 }

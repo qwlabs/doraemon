@@ -1,4 +1,4 @@
 dependencies {
     api project(":cdi")
-    api "io.quarkus:quarkus-vertx-http:${quarkusVersion}"
+    api libs.quarkus.vertx.http
 }
