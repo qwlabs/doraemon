@@ -1,7 +1,7 @@
 package com.qwlabs.security;
 
 import com.google.common.base.Suppliers;
-import com.qwlabs.cdi.dispatch.DispatchInstance;
+import com.qwlabs.cdi.DispatchInstance;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;

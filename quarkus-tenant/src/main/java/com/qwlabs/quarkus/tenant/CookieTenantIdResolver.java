@@ -1,6 +1,6 @@
 package com.qwlabs.quarkus.tenant;
 
-import com.qwlabs.cdi.dispatch.Dispatchable;
+import com.qwlabs.cdi.Dispatchable;
 import com.qwlabs.lang.C2;
 import com.qwlabs.lang.S2;
 import io.vertx.core.http.Cookie;

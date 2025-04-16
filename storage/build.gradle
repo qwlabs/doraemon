@@ -1,6 +1,6 @@
 dependencies {
-    api project(":cdi")
     api project(":exceptions")
+    api project(":jakarta-cdi")
     api libs.jackson.annotations
     api libs.guava
     api libs.jakarta.validation

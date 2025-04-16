@@ -1,4 +1,5 @@
 dependencies {
+    api project(":lang")
     api project(":storage")
     api project(":jackson")
     api libs.quarkus.smallrye.graphql

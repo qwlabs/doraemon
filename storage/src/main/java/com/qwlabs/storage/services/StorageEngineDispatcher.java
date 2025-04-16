@@ -1,7 +1,7 @@
 package com.qwlabs.storage.services;
 
 import com.qwlabs.cdi.Primary;
-import com.qwlabs.cdi.dispatch.DispatchInstance;
+import com.qwlabs.cdi.DispatchInstance;
 import com.qwlabs.storage.messages.Messages;
 import com.qwlabs.storage.models.CompleteUploadCommand;
 import com.qwlabs.storage.models.GetDownloadUrlCommand;
@@ -24,7 +24,7 @@ public class StorageEngineDispatcher implements StorageEngine {
 
     @Inject
     public StorageEngineDispatcher(Instance<StorageEngine> instance) {
-        this.dispatcher = DispatchInstance.of(instance, true);
+        this.dispatcher = DispatchInstance.of(instance);
     }
 
     private StorageEngine get(String provider) {

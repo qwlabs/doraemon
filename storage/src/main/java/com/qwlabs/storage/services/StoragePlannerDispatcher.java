@@ -1,7 +1,7 @@
 package com.qwlabs.storage.services;
 
 import com.qwlabs.cdi.Primary;
-import com.qwlabs.cdi.dispatch.DispatchInstance;
+import com.qwlabs.cdi.DispatchInstance;
 import com.qwlabs.storage.messages.Messages;
 import com.qwlabs.storage.models.StoragePlan;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,7 +17,7 @@ public class StoragePlannerDispatcher implements StoragePlanner {
 
     @Inject
     public StoragePlannerDispatcher(Instance<StoragePlanner> instance) {
-        this.dispatcher = DispatchInstance.of(instance, true);
+        this.dispatcher = DispatchInstance.of(instance);
     }
 
     @Override

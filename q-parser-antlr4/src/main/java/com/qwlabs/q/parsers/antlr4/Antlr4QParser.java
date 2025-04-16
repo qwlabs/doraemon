@@ -1,7 +1,7 @@
 package com.qwlabs.q.parsers.antlr4;
 
 import com.google.common.base.Strings;
-import com.qwlabs.cdi.dispatch.Dispatchable;
+import com.qwlabs.cdi.Dispatchable;
 import com.qwlabs.q.conditions.EmptyQCondition;
 import com.qwlabs.q.conditions.QCondition;
 import com.qwlabs.q.parsers.QParser;

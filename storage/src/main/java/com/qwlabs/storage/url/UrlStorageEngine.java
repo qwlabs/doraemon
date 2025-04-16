@@ -1,7 +1,7 @@
 package com.qwlabs.storage.url;
 
 
-import com.qwlabs.cdi.dispatch.Dispatchable;
+import com.qwlabs.cdi.Dispatchable;
 import com.qwlabs.storage.messages.Messages;
 import com.qwlabs.storage.models.CompleteUploadCommand;
 import com.qwlabs.storage.models.GetDownloadUrlCommand;

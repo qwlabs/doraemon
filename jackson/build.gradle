@@ -1,4 +1,5 @@
 dependencies {
-    api project(":cdi")
+    api project(":jakarta-cdi")
+    api libs.guava
     api libs.jackson.databind
 }

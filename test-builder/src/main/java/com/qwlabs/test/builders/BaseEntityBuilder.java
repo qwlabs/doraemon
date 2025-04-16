@@ -1,6 +1,6 @@
 package com.qwlabs.test.builders;
 
-import com.qwlabs.cdi.SafeCDI;
+import com.qwlabs.cdi.CDI2;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.inject.Instance;
 import jakarta.persistence.EntityManager;
@@ -25,12 +25,12 @@ public abstract class BaseEntityBuilder<T> implements EntityBuilder<T> {
     }
 
     protected Optional<EntityManager> getEntityManager() {
-        return SafeCDI.select(EntityManager.class)
+        return CDI2.select(EntityManager.class)
             .map(Instance::get);
     }
 
     protected Optional<String> getAuditorId() {
-        return SafeCDI.select(SecurityIdentity.class)
+        return CDI2.select(SecurityIdentity.class)
             .map(Instance::get)
             .filter(identity -> !identity.isAnonymous())
             .map(SecurityIdentity::getPrincipal)

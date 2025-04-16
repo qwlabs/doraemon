@@ -1,6 +1,6 @@
 dependencies {
     api project(":lang")
-    api project(":cdi")
+    api project(":jakarta-cdi")
     api project(":quarkus-cache")
     api project(":exceptions")
 }

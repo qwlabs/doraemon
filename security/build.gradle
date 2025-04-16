@@ -1,5 +1,6 @@
 dependencies {
-    api project(":cdi")
+    api project(":lang")
+    api project(":jakarta-cdi")
     api project(":exceptions")
     api libs.guava
     api libs.quarkus.security

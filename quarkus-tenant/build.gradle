@@ -1,4 +1,5 @@
 dependencies {
-    api project(":cdi")
+    api project(":lang")
+    api project(":jakarta-cdi")
     api libs.quarkus.vertx.http
 }

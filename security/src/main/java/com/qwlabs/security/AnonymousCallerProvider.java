@@ -1,6 +1,6 @@
 package com.qwlabs.security;
 
-import com.qwlabs.cdi.dispatch.DispatchInstance;
+import com.qwlabs.cdi.DispatchInstance;
 import io.quarkus.security.identity.SecurityIdentity;
 
 public interface AnonymousCallerProvider {

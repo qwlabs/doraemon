@@ -1,6 +1,6 @@
 package com.qwlabs.q.cdi;
 
-import com.qwlabs.cdi.dispatch.DispatchInstance;
+import com.qwlabs.cdi.DispatchInstance;
 import com.qwlabs.exceptions.ServiceException;
 import com.qwlabs.lang.S2;
 import com.qwlabs.q.Messages;
@@ -25,8 +25,8 @@ public class QEngineImpl implements QEngine {
     @Inject
     public QEngineImpl(Instance<QFormatter> formatters,
                        Instance<QParser> parsers) {
-        this.formatters = DispatchInstance.of(formatters, true);
-        this.parsers = DispatchInstance.of(parsers, true);
+        this.formatters = DispatchInstance.of(formatters);
+        this.parsers = DispatchInstance.of(parsers);
     }
 
     @Override

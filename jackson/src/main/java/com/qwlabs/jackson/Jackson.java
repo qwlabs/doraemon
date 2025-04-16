@@ -8,9 +8,9 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Ints;
-import com.qwlabs.cdi.SafeCDI;
+import com.qwlabs.cdi.CDI2;
 import jakarta.annotation.Nullable;
-import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Provider;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -31,9 +31,8 @@ public final class Jackson {
 
     private static ObjectMapper get() {
         if (objectMapper == null) {
-            Jackson.objectMapper = SafeCDI.current()
-                .map(cdi -> cdi.select(ObjectMapper.class))
-                .map(Instance::get)
+            Jackson.objectMapper = CDI2.select(ObjectMapper.class)
+                .map(Provider::get)
                 .orElseGet(ObjectMapper::new);
         }
         return Jackson.objectMapper;
@@ -98,10 +97,10 @@ public final class Jackson {
 
     public static <T> List<T> asList(@Nullable JsonNode node, Function<JsonNode, T> mapper) {
         if (Objects.isNull(node)) {
-            return (List<T>) null;
+            return null;
         }
         if (!node.isArray()) {
-            return (List<T>) null;
+            return null;
         }
         List<T> result = Lists.newArrayList();
         node.iterator().forEachRemaining(element -> result.add(mapper.apply(element)));

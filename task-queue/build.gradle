@@ -1,5 +1,4 @@
 dependencies {
-    api project(":cdi")
     api project(":lang")
     api libs.quarkus.smallrye.fault.tolerance
     api libs.quarkus.narayana.jta

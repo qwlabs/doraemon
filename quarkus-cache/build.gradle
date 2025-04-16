@@ -1,4 +1,4 @@
 dependencies {
-    api project(":cdi")
+    api project(":jakarta-cdi")
     api libs.quarkus.cache
 }

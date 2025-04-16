@@ -1,6 +1,5 @@
 dependencies {
     api project(":lang")
-    api project(":cdi")
     api project(":storage")
     api project(":exceptions")
     api libs.minio
